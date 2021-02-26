@@ -1,0 +1,175 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the WITH clause and defines the physical system that backs this table. This example uses the datagen connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple SELECT statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:17:33.806",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614267718812_631245959",
+      "id": "paragraph_1614267718812_631245959",
+      "dateCreated": "2021-02-25 23:41:58.812",
+      "dateStarted": "2021-02-26 11:17:33.815",
+      "dateFinished": "2021-02-26 11:17:33.831",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS orders;\n\nCREATE TABLE orders (\n    order_uid  BIGINT,\n    product_id BIGINT,\n    price      DOUBLE,\n    order_time TIMESTAMP(3)\n) WITH (\n    \u0027connector\u0027 \u003d \u0027datagen\u0027\n);\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:16:24.439",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614263971802_451683322",
+      "id": "paragraph_1614263971802_451683322",
+      "dateCreated": "2021-02-25 22:39:31.803",
+      "dateStarted": "2021-02-26 11:16:24.463",
+      "dateFinished": "2021-02-26 11:16:26.043",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT * FROM orders \nORDER BY order_time DESC LIMIT 10;\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:16:27.636",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "order_uid": "string",
+                      "product_id": "string",
+                      "price": "string",
+                      "order_time": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/9c231364f3c735c1d66d1477a4ac1135"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614264008246_345717910",
+      "id": "paragraph_1614264008246_345717910",
+      "dateCreated": "2021-02-25 22:40:08.246",
+      "dateStarted": "2021-02-26 11:16:27.652",
+      "dateFinished": "2021-02-26 11:16:48.392",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 22:41:34.177",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614264094177_424155746",
+      "id": "paragraph_1614264094177_424155746",
+      "dateCreated": "2021-02-25 22:41:34.177",
+      "status": "READY"
+    }
+  ],
+  "name": "01 Creating Tables",
+  "id": "2FXZ2C2NN",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

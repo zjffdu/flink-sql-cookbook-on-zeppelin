@@ -1,0 +1,177 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how to use [built-in date and time functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/systemFunctions.html#temporal-functions) to manipulate temporal fields.\n\nThe source table (`subscriptions`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\n#### Date and Time Functions\n\nWorking with dates and timestamps is commonplace in SQL, but your input may come in different types, formats or even timezones. Flink SQL has multiple built-in functions that are useful to deal with this kind of situation and make it convenient to handle temporal fields.\n\nAssume you have a table with service subscriptions and that you want to continuously [filter](../../foundations/04/04_where.md) these subscriptions to find the ones that have associated payment methods expiring in less than 30 days. The `start_date` and `end_date` are [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time) (i.e. epochs) — which are not very human-readable and should be converted. Also, you want to parse the `payment_expiration` timestamp into its corresponding day, month and year parts. What are some functions that would be useful?\n\n* `TO_TIMESTAMP(string[, format])`: converts a `STRING` value to a `TIMESTAMP` using the specified format (default: \u0027yyyy-MM-dd HH:mm:ss\u0027)\n\n* `FROM_UNIXTIME(numeric[, string])`: converts an epoch to a formatted `STRING` (default: \u0027yyyy-MM-dd HH:mm:ss\u0027)\n\n* `DATE_FORMAT(timestamp, string)`: converts a `TIMESTAMP` to a `STRING` using the specified format\n\n* `EXTRACT(timeintervalunit FROM temporal)`: returns a `LONG` extracted from the specified date part of a temporal field (e.g. `DAY`,`MONTH`,`YEAR`)\n\n* `TIMESTAMPDIFF(unit, timepoint1, timepoint2)`: returns the number of time units (`SECOND`, `MINUTE`, `HOUR`, `DAY`, `MONTH` or `YEAR`) between `timepoint1` and `timepoint2`\n\n* `CURRENT_TIMESTAMP`: returns the current SQL timestamp (UTC)\n\nFor a complete list of built-in date and time functions, check the Flink [documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/systemFunctions.html#temporal-functions).\n\n\u003e As an exercise, you can try to reproduce the same filtering condition using `TIMESTAMPADD` instead.\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:24:33.279",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614317029726_1375528643",
+      "id": "paragraph_1614317029726_1375528643",
+      "dateCreated": "2021-02-26 13:23:49.726",
+      "dateStarted": "2021-02-26 13:24:18.069",
+      "dateFinished": "2021-02-26 13:24:18.095",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nDROP TABLE IF EXISTS subscriptions;\n\nCREATE TABLE subscriptions ( \n    id STRING,\n    start_date INT,\n    end_date INT,\n    payment_expiration TIMESTAMP(3)\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.id.expression\u0027 \u003d \u0027#{Internet.uuid}\u0027, \n  \u0027fields.start_date.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271576141834\u0027\u0027,\u0027\u00271607764234\u0027\u0027}\u0027,\n  \u0027fields.end_date.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271609060234\u0027\u0027,\u0027\u00271639300234\u0027\u0027}\u0027,\n  \u0027fields.payment_expiration.expression\u0027 \u003d \u0027#{date.future \u0027\u0027365\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:17:36.350",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305834031_217311768",
+      "id": "paragraph_1614305834031_217311768",
+      "dateCreated": "2021-02-26 10:17:14.031",
+      "dateStarted": "2021-02-26 10:17:36.360",
+      "dateFinished": "2021-02-26 10:17:37.206",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  id,\n  TO_TIMESTAMP(FROM_UNIXTIME(start_date)) AS start_date,\n  TO_TIMESTAMP(FROM_UNIXTIME(end_date)) AS end_date,\n  DATE_FORMAT(payment_expiration,\u0027YYYYww\u0027) AS exp_yweek,\n  EXTRACT(DAY FROM payment_expiration) AS exp_day,     --same as DAYOFMONTH(ts)\n  EXTRACT(MONTH FROM payment_expiration) AS exp_month, --same as MONTH(ts)\n  EXTRACT(YEAR FROM payment_expiration) AS exp_year    --same as YEAR(ts)\nFROM subscriptions\nWHERE \n  TIMESTAMPDIFF(DAY,CURRENT_TIMESTAMP,payment_expiration) \u003c 30\nORDER BY start_date DESC\nLIMIT 10;\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:23:49.010",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "id": "string",
+                      "start_date": "string",
+                      "end_date": "string",
+                      "exp_yweek": "string",
+                      "exp_day": "string",
+                      "exp_month": "string",
+                      "exp_year": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/d42017645cd10393a87c40bc8412cf06"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305846680_805424590",
+      "id": "paragraph_1614305846680_805424590",
+      "dateCreated": "2021-02-26 10:17:26.680",
+      "dateStarted": "2021-02-26 10:18:22.682",
+      "dateFinished": "2021-02-26 10:18:40.880",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:17:47.535",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305867535_146646646",
+      "id": "paragraph_1614305867535_146646646",
+      "dateCreated": "2021-02-26 10:17:47.535",
+      "status": "READY"
+    }
+  ],
+  "name": "01 Working with Dates and Timestamps",
+  "id": "2G1WY9HY2",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

@@ -1,0 +1,174 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how to filter server logs in real-time using a standard `WHERE` clause.\n\nThe table it uses `server_logs` is backed by the [`faker` connector](https://github.com/knaufk/flink-faker) which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in `datagen` connector used for example in the first recipe.\n\nYou can continuously filter these logs for those requests that experience authx issues with a simple `SELECT` statement with a `WHERE` clause filtering on the auth related HTTP status codes. \n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:38:25.206",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614267953363_1697493143",
+      "id": "paragraph_1614267953363_1697493143",
+      "dateCreated": "2021-02-25 23:45:53.363",
+      "dateStarted": "2021-02-26 11:38:25.210",
+      "dateFinished": "2021-02-26 11:38:25.226",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n\n\n  ",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:38:31.718",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265116139_298210191",
+      "id": "paragraph_1614265116139_298210191",
+      "dateCreated": "2021-02-25 22:58:36.139",
+      "dateStarted": "2021-02-26 11:38:31.728",
+      "dateFinished": "2021-02-26 11:38:32.742",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  log_time, \n  request_line,\n  status_code \nFROM server_logs\nWHERE\n  status_code IN (\u0027403\u0027, \u0027401\u0027) \nORDER BY log_time DESC LIMIT 10\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:38:54.198",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "log_time": "string",
+                      "request_line": "string",
+                      "status_code": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/d6d7fef07892b068e32171f5de23b2c3"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265141086_666927857",
+      "id": "paragraph_1614265141086_666927857",
+      "dateCreated": "2021-02-25 22:59:01.086",
+      "dateStarted": "2021-02-26 11:38:54.209",
+      "dateFinished": "2021-02-26 11:40:04.829",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 22:59:26.795",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265166795_238623732",
+      "id": "paragraph_1614265166795_238623732",
+      "dateCreated": "2021-02-25 22:59:26.795",
+      "status": "READY"
+    }
+  ],
+  "name": "04 Filtering Data",
+  "id": "2FY1Q15QK",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

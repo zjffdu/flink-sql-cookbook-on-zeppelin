@@ -1,0 +1,174 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how you can correlate events using a `LATERAL` join.\n\nA recent addition to the SQL standard is the `LATERAL` join, which allows you to combine the power of a correlated subquery with the expressiveness of a join. \n\nGiven a table with people\u0027s addresses, you need to find the two most populous cities for each state and continuously update those rankings as people move. The input table of `People` contains a uid for each person and their address and when they moved there.\n\nThe first step is to calculate each city\u0027s population using a continuous aggregation. While this is simple enough, the real power of Flink SQL comes when people move. By using deduplication. Flink will automatically issue a retraction for a persons old city when they move. So if John moves from New York to Los Angelos, the population for New York will automatically go down by 1. This gives us the power change-data-capture without having to invest in the actual infrastructure of setting it up!\n\nWith this dynamic population table at hand, you are ready to solve the original problem using a `LATERAL` table join. Unlike a normal join, lateral joins allow the subquery to correlate with columns from other arguments in the `FROM` clause. And unlike a regular subquery, as a join, the lateral can return multiple rows. You can now have a sub-query correlated with every individual state, and for every state it ranks by population and returns the top 2 cities.\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:23:11.152",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614316927145_278384972",
+      "id": "paragraph_1614316927145_278384972",
+      "dateCreated": "2021-02-26 13:22:07.145",
+      "dateStarted": "2021-02-26 13:23:11.156",
+      "dateFinished": "2021-02-26 13:23:11.180",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS People;\n\nCREATE TABLE People (\n    id           INT,\n    city         STRING,\n    state        STRING,\n    arrival_time TIMESTAMP(3),\n    WATERMARK FOR arrival_time AS arrival_time - INTERVAL \u00271\u0027 MINUTE \n) WITH (\n    \u0027connector\u0027 \u003d \u0027faker\u0027,\n    \u0027fields.id.expression\u0027    \u003d \u0027#{number.numberBetween \u0027\u00271\u0027\u0027,\u0027\u0027100\u0027\u0027}\u0027,\n    \u0027fields.city.expression\u0027  \u003d \u0027#{regexify \u0027\u0027(Newmouth|Newburgh|Portport|Southfort|Springfield){1}\u0027\u0027}\u0027,\n    \u0027fields.state.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(New York|Illinois|California|Washington){1}\u0027\u0027}\u0027,\n    \u0027fields.arrival_time.expression\u0027 \u003d \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n    \u0027rows-per-second\u0027          \u003d \u002710\u0027\n); \n\n\nDROP VIEW IF EXISTS CurrentPopulation;\n\nCREATE VIEW CurrentPopulation AS\nSELECT \n    city,\n    state,\n    COUNT(*) as population\nFROM (\n    SELECT\n        city,\n        state,\n        ROW_NUMBER() OVER (PARTITION BY id ORDER BY arrival_time DESC) AS rownum\n    FROM People\n)\nWHERE rownum \u003d 1\nGROUP BY city, state;",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:15:33.014",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305676693_319393607",
+      "id": "paragraph_1614305676693_319393607",
+      "dateCreated": "2021-02-26 10:14:36.693",
+      "dateStarted": "2021-02-26 10:15:33.023",
+      "dateFinished": "2021-02-26 10:15:53.304",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT\n    state,\n    city,\n    population\nFROM \n    (SELECT DISTINCT state FROM CurrentPopulation) States,\n    LATERAL (\n        SELECT city, population\n        FROM CurrentPopulation\n        WHERE state \u003d States.state\n        ORDER BY population DESC\n        LIMIT 2\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:22:04.824",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "state": "string",
+                      "city": "string",
+                      "population": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/202e01312f9dc27c71d8cb37529a8b5f"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305708940_1594333975",
+      "id": "paragraph_1614305708940_1594333975",
+      "dateCreated": "2021-02-26 10:15:08.940",
+      "dateStarted": "2021-02-26 10:16:08.740",
+      "dateFinished": "2021-02-26 10:16:24.488",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:16:08.725",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305768725_733914734",
+      "id": "paragraph_1614305768725_733914734",
+      "dateCreated": "2021-02-26 10:16:08.725",
+      "status": "READY"
+    }
+  ],
+  "name": "06 Lateral Table Join",
+  "id": "2G1VYGDFE",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

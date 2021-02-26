@@ -1,0 +1,175 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how you can use Flink SQL to detect patterns in a stream of events with `MATCH_RECOGNIZE`.\n\nA common (but historically complex) task in SQL day-to-day work is to identify meaningful sequences of events in a data set — also known as Complex Event Processing (CEP). This becomes even more relevant when dealing with streaming data, as you want to react quickly to known patterns or changing trends to deliver up-to-date business insights. In Flink SQL, you can easily perform this kind of tasks using the standard SQL clause [`MATCH_RECOGNIZE`](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html).\n\n## Breaking down MATCH_RECOGNIZE\n\nIn this example, you want to find users that downgraded their service subscription from one of the premium tiers (`type IN (\u0027premium\u0027,\u0027platinum\u0027)`) to the basic tier. \n\n#### Input\n\nThe input argument of `MATCH_RECOGNIZE` will be a row pattern table based on `subscriptions`. As a first step, logical partitioning and ordering must be applied to the input row pattern table to ensure that event processing is correct and deterministic:\n\n```sql\nPARTITION BY user_id \nORDER BY proc_time\n```\n\n#### Output\n\nRow pattern columns are then defined in the `MEASURES` clause, which can be thought of as the `SELECT` of `MATCH_RECOGNIZE`. If you\u0027re interested in getting the type of premium subscription associated with the last event before the downgrade, you can fetch it using the [logical offset](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html#logical-offsets) operator `LAST`. The downgrade date can be extrapolated from the `start_date` of the first basic subscription event following any existing premium one(s).\n\n```sql\nMEASURES\n  LAST(PREMIUM.type) AS premium_type,\n  AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n  BASIC.start_date AS downgrade_date\nAFTER MATCH SKIP PAST LAST ROW\n```\n\n#### Pattern Definition\n\nPatterns are specified in the `PATTERN` clause using row-pattern variables (i.e. event types) and regular expressions. These variables must also be associated with the matching conditions that events must meet to be included in the pattern, using the `DEFINE` clause. Here, you are interested in matching one or more premium subscription events (`PREMIUM+`) followed by a basic subscription event (`BASIC`):\n\n```sql\nPATTERN (PREMIUM+ BASIC)\nDEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\nBASIC AS BASIC.type \u003d \u0027basic\u0027);\n```\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:33:19.130",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614313983592_107698209",
+      "id": "paragraph_1614313983592_107698209",
+      "dateCreated": "2021-02-26 12:33:03.592",
+      "dateStarted": "2021-02-26 12:33:19.133",
+      "dateFinished": "2021-02-26 12:33:19.172",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS subscriptions;\n\nCREATE TABLE subscriptions ( \n    id STRING,\n    user_id INT,\n    type STRING,\n    start_date TIMESTAMP(3),\n    end_date TIMESTAMP(3),\n    payment_expiration TIMESTAMP(3),\n    proc_time AS PROCTIME()\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.id.expression\u0027 \u003d \u0027#{Internet.uuid}\u0027, \n  \u0027fields.user_id.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271\u0027\u0027,\u0027\u002750\u0027\u0027}\u0027,\n  \u0027fields.type.expression\u0027\u003d \u0027#{regexify \u0027\u0027(basic|premium|platinum){1}\u0027\u0027}\u0027,\n  \u0027fields.start_date.expression\u0027 \u003d \u0027#{date.past \u0027\u002730\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027,\n  \u0027fields.end_date.expression\u0027 \u003d \u0027#{date.future \u0027\u002715\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027,\n  \u0027fields.payment_expiration.expression\u0027 \u003d \u0027#{date.future \u0027\u0027365\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:33:29.115",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304752771_1974165087",
+      "id": "paragraph_1614304752771_1974165087",
+      "dateCreated": "2021-02-26 09:59:12.771",
+      "dateStarted": "2021-02-26 12:33:29.117",
+      "dateFinished": "2021-02-26 12:33:29.917",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT * \nFROM subscriptions\n     MATCH_RECOGNIZE (PARTITION BY user_id \n                      ORDER BY proc_time\n                      MEASURES\n                        LAST(PREMIUM.type) AS premium_type,\n                        AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n                        BASIC.start_date AS downgrade_date\n                      AFTER MATCH SKIP PAST LAST ROW\n                      --Pattern: one or more \u0027premium\u0027 or \u0027platinum\u0027 subscription events (PREMIUM)\n                      --followed by a \u0027basic\u0027 subscription event (BASIC) for the same `user_id`\n                      PATTERN (PREMIUM+ BASIC)\n                      DEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\n                             BASIC AS BASIC.type \u003d \u0027basic\u0027)\nORDER BY downgrade_date DESC\nLIMIT 10;\n    \n    ",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:33:47.241",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "user_id": "string",
+                      "premium_type": "string",
+                      "premium_avg_duration": "string",
+                      "downgrade_date": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/d245ee1e03d08633af416954cbd18e09"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304878963_1234532072",
+      "id": "paragraph_1614304878963_1234532072",
+      "dateCreated": "2021-02-26 10:01:18.963",
+      "dateStarted": "2021-02-26 12:33:47.261",
+      "dateFinished": "2021-02-26 12:34:13.186",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:01:36.350",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304896350_1586012396",
+      "id": "paragraph_1614304896350_1586012396",
+      "dateCreated": "2021-02-26 10:01:36.350",
+      "status": "READY"
+    }
+  ],
+  "name": "08 Detecting patterns with MATCH_RECOGNIZE",
+  "id": "2FYC4KQ45",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

@@ -1,0 +1,67 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nbulb: In this recipe, we will de-normalize a simple star schema with an n-way temporal table join. \t \n  \n[Star schemas](https://en.wikipedia.org/wiki/Star_schema) are a popular way of normalizing data within a data warehouse. At the center of a star schema is a **fact table** whose rows contain metrics, measurements, and other facts about the world. Surrounding fact tables are one or more **dimension tables** which have metadata useful for enriching facts when computing queries.  \nYou are running a small data warehouse for a railroad company which consists of a fact table (`train_activity`) and three dimension tables (`stations`, `booking_channels`, and `passengers`). All inserts to the fact table, and all updates to the dimension tables, are mirrored to Apache Kafka. Records in the fact table are interpreted as inserts only, and so the table is backed by the [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`);. In contrast, the records in the dimensional tables are upserts based on a primary key, which requires the [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`).\t \n\nWith Flink SQL you can now easily join all dimensions to our fact table using a 5-way temporal table join. Temporal table joins take an arbitrary table (left input/probe site) and correlate each row to the corresponding row’s relevant version in a versioned table (right input/build side). Flink uses the SQL syntax of ``FOR SYSTEM_TIME AS OF`` to perform this operation. Using a temporal table join leads to consistent, reproducible results when joining a fact table with more (slowly) changing dimensional tables. Every event (row in the fact table) is joined to its corresponding value of each dimension based on when the event occurred in the real world. \n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:21:43.266",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305636615_1009654891",
+      "id": "paragraph_1614305636615_1009654891",
+      "dateCreated": "2021-02-26 10:13:56.615",
+      "dateStarted": "2021-02-26 13:21:43.269",
+      "dateFinished": "2021-02-26 13:21:43.317",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%md\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:21:10.006",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614316870006_1898527227",
+      "id": "paragraph_1614316870006_1898527227",
+      "dateCreated": "2021-02-26 13:21:10.006",
+      "status": "READY"
+    }
+  ],
+  "name": "05 Real Time Star Schema Denormalization (N-Way Join)",
+  "id": "2G1ZCV2GP",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

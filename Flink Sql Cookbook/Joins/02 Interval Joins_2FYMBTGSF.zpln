@@ -1,0 +1,175 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how you can perform joins between tables with events that are related in a temporal context.\n\n## Why Interval Joins?\n\nIn a previous recipe, you learned about using _regular joins_ in Flink SQL. This kind of join works well for some scenarios, but for others a more efficient type of join is required to keep resource utilization from growing indefinitely.\n\nOne of the ways to optimize joining operations in Flink SQL is to use [_interval joins_](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/joins.html#interval-joins). An interval join is defined by a join predicate that checks if the time attributes of the input events are within certain time constraints (i.e. a time window).\n\n## Using Interval Joins\n\nSuppose you want to join events of two tables that correlate to each other in the [order fulfillment lifecycle](https://en.wikipedia.org/wiki/Order_fulfillment) (`orders` and `shipments`) and that are under a Service-level Aggreement (SLA) of **3 days**. To reduce the amount of input rows Flink has to retain and optimize the join operation, you can define a time constraint in the `WHERE` clause to bound the time on both sides to that specific interval using a `BETWEEN` predicate.\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:18:43.249",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614316707292_565283423",
+      "id": "paragraph_1614316707292_565283423",
+      "dateCreated": "2021-02-26 13:18:27.292",
+      "dateStarted": "2021-02-26 13:18:43.250",
+      "dateFinished": "2021-02-26 13:18:43.277",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS orders;\n\nCREATE TABLE orders (\n  id INT,\n  order_time AS TIMESTAMPADD(DAY, CAST(FLOOR(RAND()*(1-5+1)+5)*(-1) AS INT), CURRENT_TIMESTAMP)\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027datagen\u0027,\n  \u0027rows-per-second\u0027\u003d\u002710\u0027,\n  \u0027fields.id.kind\u0027\u003d\u0027sequence\u0027,\n  \u0027fields.id.start\u0027\u003d\u00271\u0027,\n  \u0027fields.id.end\u0027\u003d\u00271000\u0027\n);\n\nDROP TABLE IF EXISTS shipments;\n\nCREATE TABLE shipments (\n  id INT,\n  order_id INT,\n  shipment_time AS TIMESTAMPADD(DAY, CAST(FLOOR(RAND()*(1-5+1)) AS INT), CURRENT_TIMESTAMP)\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027datagen\u0027,\n  \u0027rows-per-second\u0027\u003d\u00275\u0027,\n  \u0027fields.id.kind\u0027\u003d\u0027random\u0027,\n  \u0027fields.id.min\u0027\u003d\u00270\u0027,\n  \u0027fields.order_id.kind\u0027\u003d\u0027sequence\u0027,\n  \u0027fields.order_id.start\u0027\u003d\u00271\u0027,\n  \u0027fields.order_id.end\u0027\u003d\u00271000\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:08:43.655",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305279491_945824539",
+      "id": "paragraph_1614305279491_945824539",
+      "dateCreated": "2021-02-26 10:07:59.491",
+      "dateStarted": "2021-02-26 10:08:43.664",
+      "dateFinished": "2021-02-26 10:08:44.705",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT\n  o.id AS order_id,\n  o.order_time,\n  s.shipment_time,\n  TIMESTAMPDIFF(DAY,o.order_time,s.shipment_time) AS day_diff\nFROM orders o\nJOIN shipments s ON o.id \u003d s.order_id\nWHERE \n    o.order_time BETWEEN s.shipment_time - INTERVAL \u00273\u0027 DAY AND s.shipment_time\nORDER BY order_time DESC\nLIMIT 10;\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:18:26.703",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "order_id": "string",
+                      "order_time": "string",
+                      "shipment_time": "string",
+                      "day_diff": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/86a3dc8e59db03052aa439a29a4eba23"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305302690_1560304565",
+      "id": "paragraph_1614305302690_1560304565",
+      "dateCreated": "2021-02-26 10:08:22.690",
+      "dateStarted": "2021-02-26 10:10:38.764",
+      "dateFinished": "2021-02-26 10:10:51.156",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:09:02.042",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305342041_1071723300",
+      "id": "paragraph_1614305342041_1071723300",
+      "dateCreated": "2021-02-26 10:09:02.042",
+      "status": "READY"
+    }
+  ],
+  "name": "02 Interval Joins",
+  "id": "2FYMBTGSF",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

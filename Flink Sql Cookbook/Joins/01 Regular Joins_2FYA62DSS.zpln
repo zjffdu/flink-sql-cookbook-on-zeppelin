@@ -1,0 +1,173 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n:bulb: This example will show how you can use joins to correlate rows across multiple tables.\n\nFlink SQL supports complex and flexible join operations over continuous tables.There are several different types of joins to account for the wide variety of semantics queries may require.\n\nRegular joins are the most generic and flexible type of join. These include the standard `INNER` and `[FULL|LEFT|RIGHT] OUTER` joins that are available in most modern databases. \n\nSuppose we have a [NOC list](https://en.wikipedia.org/wiki/Non-official_cover) of secret agents all over the world. Your mission if you choose to accept it, is to join this table with another containin the agents real name.\n\nIn Flink SQL, this can be achieved using a simple `INNER JOIN`. Flink will join the tables using an equi-join predicate on the `agent_id` and output a new row everytime there is a match.\n\nHowever, there is something to be careful of. Flink must retain every input row as part of the join to potentially join it with the other table in the future. \nThis means the queries resource requirements will grow indefinitely and will eventually fail. While this type of join is useful in some scenarios, other joins are more powerful in a streaming context and significantly more space-efficient.\n\nIn this example, both tables are bounded to remain space efficient.",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:17:52.406",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614316653435_771824735",
+      "id": "paragraph_1614316653435_771824735",
+      "dateCreated": "2021-02-26 13:17:33.438",
+      "dateStarted": "2021-02-26 13:17:52.425",
+      "dateFinished": "2021-02-26 13:17:52.574",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS NOC;\n\nCREATE TABLE NOC (\n  agent_id STRING,\n  codename STRING\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.agent_id.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(1|2|3|4|5){1}\u0027\u0027}\u0027,\n  \u0027fields.codename.expression\u0027 \u003d \u0027#{superhero.name}\u0027,\n  \u0027number-of-rows\u0027 \u003d \u002710\u0027\n);\n\nDROP TABLE IF EXISTS RealNames;\n\nCREATE TABLE RealNames (\n  agent_id STRING,\n  name     STRING\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.agent_id.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(1|2|3|4|5){1}\u0027\u0027}\u0027,\n  \u0027fields.name.expression\u0027 \u003d \u0027#{Name.full_name}\u0027,\n  \u0027number-of-rows\u0027 \u003d \u002710\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:06:52.684",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305028935_1653205277",
+      "id": "paragraph_1614305028935_1653205277",
+      "dateCreated": "2021-02-26 10:03:48.936",
+      "dateStarted": "2021-02-26 10:06:52.691",
+      "dateFinished": "2021-02-26 10:06:53.732",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT\n    name,\n    codename\nFROM NOC\nINNER JOIN RealNames ON NOC.agent_id \u003d RealNames.agent_id;\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 13:17:10.651",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "name": "string",
+                      "codename": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/8b568fc439d250170c3c0684e536efd1"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305202536_606838204",
+      "id": "paragraph_1614305202536_606838204",
+      "dateCreated": "2021-02-26 10:06:42.536",
+      "dateStarted": "2021-02-26 10:07:05.548",
+      "dateFinished": "2021-02-26 10:07:10.928",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 10:07:05.546",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614305225546_2102469394",
+      "id": "paragraph_1614305225546_2102469394",
+      "dateCreated": "2021-02-26 10:07:05.546",
+      "status": "READY"
+    }
+  ],
+  "name": "01 Regular Joins",
+  "id": "2FYA62DSS",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

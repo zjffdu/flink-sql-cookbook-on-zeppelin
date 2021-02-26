@@ -1,0 +1,185 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how and why to create a temporary table using SQL DDL.\n\nNon-temporary tables in Flink SQL are stored in a catalog, while temporary tables only live within the current session. You can use a temporary table instead of a regular (catalog) table, if it is only meant to be used within the current session.\n\nThis example is exactly the same as Inserting Into Tables except that both `server_logs` and `client_errors` are created as temporary tables.\n\n## Why Temporary Tables?\nFor result tables like `client_errors` that no one can ever read from (because of its type `blackhole`) it makes a lot of sense to use a temporary table instead of publishing its metadata in a catalog.\n\nFurthermore, temporary tables allow you to create fully self-contained scripts, which is why we will mostly use those in the Flink SQL Cookbook.",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:34:03.825",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614267879471_225252437",
+      "id": "paragraph_1614267879471_225252437",
+      "dateCreated": "2021-02-25 23:44:39.472",
+      "dateStarted": "2021-02-26 11:34:03.825",
+      "dateFinished": "2021-02-26 11:34:03.845",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TEMPORARY TABLE IF EXISTS server_logs_temp;\n\nCREATE TEMPORARY TABLE server_logs_temp ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:50:11.049",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614264882150_819187836",
+      "id": "paragraph_1614264882150_819187836",
+      "dateCreated": "2021-02-25 22:54:42.150",
+      "dateStarted": "2021-02-26 11:50:11.072",
+      "dateFinished": "2021-02-26 11:50:12.011",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TEMPORARY TABLE IF EXISTS client_errors_temp;\n\nCREATE TEMPORARY TABLE client_errors_temp (\n  log_time TIMESTAMP(3),\n  request_line STRING,\n  status_code STRING,\n  size INT\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:50:18.337",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614264932930_876258121",
+      "id": "paragraph_1614264932930_876258121",
+      "dateCreated": "2021-02-25 22:55:32.930",
+      "dateStarted": "2021-02-26 11:50:18.354",
+      "dateFinished": "2021-02-26 11:50:19.213",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nINSERT INTO client_errors_temp\nSELECT \n  log_time,\n  request_line,\n  status_code,\n  size\nFROM server_logs_temp\nWHERE \n  status_code SIMILAR TO \u00274[0-9][0-9]\u0027",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:50:24.615",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/eb04ef6dd99c8eccb92da19c65c8dfad"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614264958394_1745571437",
+      "id": "paragraph_1614264958394_1745571437",
+      "dateCreated": "2021-02-25 22:55:58.394",
+      "dateStarted": "2021-02-26 11:50:24.628",
+      "dateFinished": "2021-02-26 11:50:40.341",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 22:56:45.200",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265005199_360947962",
+      "id": "paragraph_1614265005199_360947962",
+      "dateCreated": "2021-02-25 22:56:45.199",
+      "status": "READY"
+    }
+  ],
+  "name": "03 Working with Temporary Tables",
+  "id": "2G19ENM4Q",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "flink-shared_process": [
+      {
+        "name": "duration",
+        "object": "12 seconds",
+        "noteId": "2G19ENM4Q",
+        "paragraphId": "paragraph_1614264958394_1745571437"
+      }
+    ]
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

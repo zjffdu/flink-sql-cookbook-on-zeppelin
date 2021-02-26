@@ -1,0 +1,183 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:40:49.867",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614268004818_923961985",
+      "id": "paragraph_1614268004818_923961985",
+      "dateCreated": "2021-02-25 23:46:44.818",
+      "dateStarted": "2021-02-26 11:40:49.870",
+      "dateFinished": "2021-02-26 11:40:49.932",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:41:27.655",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265474939_121202527",
+      "id": "paragraph_1614265474939_121202527",
+      "dateCreated": "2021-02-25 23:04:34.939",
+      "dateStarted": "2021-02-26 11:41:22.854",
+      "dateFinished": "2021-02-26 11:41:23.909",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\n-- Sample user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A\n-- Regex pattern: \u0027[^\\/]+\u0027 (Match everything before \u0027/\u0027)\nSELECT \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027) AS browser,\n  status_code, \n  COUNT(*) AS cnt_status\nFROM server_logs\nGROUP BY \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027),\n  status_code;\n  \n  ",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 11:41:32.821",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {
+                  "xLabelStatus": "default",
+                  "rotate": {
+                    "degree": "-45"
+                  }
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "browser",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "status_code",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "cnt_status",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/4f20005c80aed0ad6dc41b5bb1b0fb4c"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265500959_774321427",
+      "id": "paragraph_1614265500959_774321427",
+      "dateCreated": "2021-02-25 23:05:00.959",
+      "dateStarted": "2021-02-26 11:41:32.844",
+      "dateFinished": "2021-02-26 11:41:46.865",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-25 23:05:23.045",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614265523044_544403182",
+      "id": "paragraph_1614265523044_544403182",
+      "dateCreated": "2021-02-25 23:05:23.045",
+      "status": "READY"
+    }
+  ],
+  "name": "05 Aggregating Data",
+  "id": "2FYNFVHG9",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

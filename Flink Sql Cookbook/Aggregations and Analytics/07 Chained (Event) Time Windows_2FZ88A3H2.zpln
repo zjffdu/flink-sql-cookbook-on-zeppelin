@@ -1,0 +1,249 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\nThis example will show how to efficiently aggregate time series data on two different levels of granularity.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nBased on our `server_logs` table we would like to compute the average request size over one minute **as well as five minute (event) windows.** For this, you could run two queries, similar to the one in Aggregating Time Series Data. At the end of the page is the script and resulting JobGraph from this approach. \n\nIn the main part, we will follow a slightly more efficient approach that chains the two aggregations: the one-minute aggregation output serves as the five-minute aggregation input.\n\nWe then use `runAsOne` to write out the two result tables. To keep this example self-contained, we use two tables of type `blackhole` instead of `kafka`, `filesystem`, or any other [connectors](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/). ",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:31:03.134",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614313809667_126135129",
+      "id": "paragraph_1614313809667_126135129",
+      "dateCreated": "2021-02-26 12:30:09.667",
+      "dateStarted": "2021-02-26 12:31:03.129",
+      "dateFinished": "2021-02-26 12:31:03.164",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    log_time TIMESTAMP(3),\n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    request_line STRING, \n    status_code STRING, \n    size INT, \n    WATERMARK FOR log_time AS log_time - INTERVAL \u002715\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027#{regexify \u0027\u0027(morsapaes|knauf|sjwiesman){1}\u0027\u0027}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:31:10.680",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304339896_1045253871",
+      "id": "paragraph_1614304339896_1045253871",
+      "dateCreated": "2021-02-26 09:52:19.896",
+      "dateStarted": "2021-02-26 12:31:10.712",
+      "dateFinished": "2021-02-26 12:31:11.499",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS avg_request_size_1m;\n\nCREATE TABLE avg_request_size_1m (\n  window_start TIMESTAMP(3),\n  window_end TIMESTAMP(3),\n  avg_size BIGINT\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:31:27.312",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304362241_1160995788",
+      "id": "paragraph_1614304362241_1160995788",
+      "dateCreated": "2021-02-26 09:52:42.241",
+      "dateStarted": "2021-02-26 12:31:27.321",
+      "dateFinished": "2021-02-26 12:31:28.185",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS avg_request_size_5m;\n\nCREATE TABLE avg_request_size_5m (\n  window_start TIMESTAMP(3),\n  window_end TIMESTAMP(3),\n  avg_size BIGINT\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:31:29.268",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304382217_422996202",
+      "id": "paragraph_1614304382217_422996202",
+      "dateCreated": "2021-02-26 09:53:02.217",
+      "dateStarted": "2021-02-26 12:31:29.274",
+      "dateFinished": "2021-02-26 12:31:30.037",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP VIEW IF EXISTS server_logs_window_1m;\n\nCREATE VIEW server_logs_window_1m AS \nSELECT  \n  TUMBLE_START(log_time, INTERVAL \u00271\u0027 MINUTE) AS window_start,\n  TUMBLE_ROWTIME(log_time, INTERVAL \u00271\u0027 MINUTE) AS window_end,\n  SUM(size) AS total_size,\n  COUNT(*) AS num_requests\nFROM server_logs\nGROUP BY \n  TUMBLE(log_time, INTERVAL \u00271\u0027 MINUTE);\n\n\nDROP VIEW IF EXISTS server_logs_window_5m;\n\nCREATE VIEW server_logs_window_5m AS \nSELECT \n  TUMBLE_START(window_end, INTERVAL \u00275\u0027 MINUTE) AS window_start,\n  TUMBLE_ROWTIME(window_end, INTERVAL \u00275\u0027 MINUTE) AS window_end,\n  SUM(total_size) AS total_size,\n  SUM(num_requests) AS num_requests\nFROM server_logs_window_1m\nGROUP BY \n  TUMBLE(window_end, INTERVAL \u00275\u0027 MINUTE);\n  ",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:31:37.435",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304436053_2145075386",
+      "id": "paragraph_1614304436053_2145075386",
+      "dateCreated": "2021-02-26 09:53:56.053",
+      "dateStarted": "2021-02-26 12:31:33.468",
+      "dateFinished": "2021-02-26 12:31:34.302",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(runAsOne\u003dtrue)\n\nINSERT INTO avg_request_size_1m SELECT\n  window_start,\n  window_end, \n  total_size/num_requests AS avg_size\nFROM server_logs_window_1m;\n\nINSERT INTO avg_request_size_5m SELECT\n  window_start,\n  window_end, \n  total_size/num_requests AS avg_size\nFROM server_logs_window_5m;\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 12:31:41.628",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://localhost:8081#/job/c34cc9fab06d3a9be8ad7646c1c60161"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304458895_529580474",
+      "id": "paragraph_1614304458895_529580474",
+      "dateCreated": "2021-02-26 09:54:18.895",
+      "dateStarted": "2021-02-26 12:31:41.644",
+      "dateFinished": "2021-02-26 09:58:50.244",
+      "status": "RUNNING"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-02-26 09:57:03.613",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1614304623613_747935414",
+      "id": "paragraph_1614304623613_747935414",
+      "dateCreated": "2021-02-26 09:57:03.613",
+      "status": "READY"
+    }
+  ],
+  "name": "07 Chained (Event) Time Windows",
+  "id": "2FZ88A3H2",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "flink-shared_process": [
+      {
+        "name": "duration",
+        "object": "1 hours 3 minutes 47 seconds",
+        "noteId": "2FZ88A3H2",
+        "paragraphId": "paragraph_1614304458895_529580474"
+      }
+    ]
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
