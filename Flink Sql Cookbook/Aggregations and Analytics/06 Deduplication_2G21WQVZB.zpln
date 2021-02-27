@@ -3,7 +3,7 @@
     {
       "text": "%md\n\n\nThis example will show how you can identify and filter out duplicates in a stream of events.\n\nThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same `order_id`, and that you\u0027re only interested in keeping the most recent event for downstream processing.\n\nAs a first step, you can use a combination of the `COUNT` function and the `HAVING` clause to check if and which orders have more than one event; and then filter out these events using `ROW_NUMBER()`. In practice, deduplication is a special case of Top-N aggregation, where N is 1 (`rownum \u003d 1`) and the ordering column is either the processing or event time of events.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:28:31.406",
+      "dateUpdated": "2021-02-27 15:12:03.489",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },
@@ -138,7 +138,7 @@
       "dateCreated": "2021-02-26 09:50:59.692",
       "dateStarted": "2021-02-26 12:28:53.807",
       "dateFinished": "2021-02-26 09:51:36.961",
-      "status": "RUNNING"
+      "status": "ABORT"
     },
     {
       "text": "%flink.ssql(type\u003dupdate)\n\n--Use deduplication to keep only the latest record for each `order_id`\nSELECT\n  order_id,\n  order_time\nFROM (\n  SELECT id AS order_id,\n         order_time,\n         ROW_NUMBER() OVER (PARTITION BY id ORDER BY order_time) AS rownum\n  FROM orders\n     )\nWHERE rownum \u003d 1;\nORDER BY order_time DESC\nLIMIT 10;\n\n",

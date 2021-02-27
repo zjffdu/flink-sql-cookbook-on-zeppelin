@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can use the set operation `UNION ALL` to combine several streams of data.\n\nSee [our documentation](https://ci.apache.org/projects/flink/flink-docs-master/docs/dev/table/sql/queries/#set-operations)\nfor a full list of fantastic set operations Apache Flink supports.\n\n\n## The Sources\n\nThe examples assumes you are building an application that is tracking visits :raccoon: on foreign planets :chestnut:. There are three sources of visits. The universe of Rick and Morty, the very real world of NASA and such, and the not so real world of Hitchhikers Guide To The Galaxy.\n\nAll three tables are `unbound` and backed by the [`faker` connector](https://github.com/knaufk/flink-faker).\n\nAll sources of tracked visits have the `location` and `visit_time` in commmon. Some have `visitors` some have\n`spacecrafts` and one has both.",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 13:25:25.459",
+      "dateUpdated": "2021-02-27 15:22:03.747",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

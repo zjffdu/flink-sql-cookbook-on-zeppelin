@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how to aggregate time-series data in real-time using a `SESSION` window.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\n#### What are Session Windows?\n\nIn a [previous recipe](../01/01_group_by_window.md), you learned about _tumbling windows_. Another way to group time-series data is using [_session windows_](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/sql/queries.html#group-windows), which aggregate records into _sessions_ that represent periods of activity followed by gaps of idleness. Think, for example, of user sessions on a website: a user will be active for a given period of time, then leave the website; and each user will be active at different times. To analyze user behaviour, it\u0027s useful to aggregate their actions on the website for each period of activity (i.e. _session_).\n\nUnlike tumbling windows, session windows don\u0027t have a fixed duration and are tracked independenlty across keys (i.e. windows of different keys will have different durations).\n\n#### Using Session Windows\n\nTo count the number of \"Forbidden\" (403) requests per user over the duration of a session, you can use the `SESSION` built-in group window function. In this example, a session is bounded by a gap of idleness of 10 seconds (`INTERVAL \u002710\u0027 SECOND`). This means that requests that occur within 10 seconds of the last seen request for each user will be merged into the same session window; and any request that occurs outside of this gap will trigger the creation of a new session window.\n\n\u003e Tip: You can use the `SESSION_START` and `SESSION_ROWTIME` [auxiliary functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/sql/queries.html#selecting-group-window-start-and-end-timestamps) to check the lower and upper bounds of session windows.",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:14:05.236",
+      "dateUpdated": "2021-02-27 15:11:44.577",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

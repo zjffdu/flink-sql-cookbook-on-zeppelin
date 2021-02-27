@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can use (temporary) views to reuse code and to structure long queries and scripts. \n\n`CREATE (TEMPORARY) VIEW` defines a view from a query. **A view is not physically materialized.** Instead, the query is run every time the view is referenced in a query.\n\nTemporary views are very useful to structure and decompose more complicated queries and to re-use queries within a longer script.Non-temporary views - stored in a persistent [catalog](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html) - can also be used to share common queries within your organization, e.g. common filters or pre-processing steps.  \n\nHere, we create a view on the `server_logs` that only contains successful requests. This view encapsulates the logic of filtering the logs based on certain `status_code`s. This logic can subsequently be used by any query or script that has access to the catalog.   \n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:48:23.354",
+      "dateUpdated": "2021-02-27 15:14:42.478",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

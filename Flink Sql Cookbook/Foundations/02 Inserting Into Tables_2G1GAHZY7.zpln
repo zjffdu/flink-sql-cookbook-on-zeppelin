@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis recipe shows how to insert rows into a table so that downstream applications can read them.\n\nAs outlined in the first recipe Flink SQL operates on tables, that are stored in external systems. To publish results of a query for consumption by downstream applications, you write the results of a query into a table. This table can be read by Flink SQL, or directly by connecting to the external system that is storing the data (e.g. an ElasticSearch index.)\n\nThis example takes the `server_logs` tables, filters for client errors, and writes these logs into another table called `client_errors`. Any number of external systems could back the result table, including Apache Kafka, Apache Hive, ElasticSearch, JDBC, among many others. To keep this example self-contained, `client_errors` is of type `blackhole`: instead of actually writing the data to an external system, the table discards any rows written to it.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:21:01.751",
+      "dateUpdated": "2021-02-27 15:14:10.496",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

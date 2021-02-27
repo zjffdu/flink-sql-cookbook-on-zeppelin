@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the WITH clause and defines the physical system that backs this table. This example uses the datagen connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple SELECT statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:17:33.806",
+      "dateUpdated": "2021-02-27 15:00:33.077",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },
@@ -30,8 +30,8 @@
       "jobName": "paragraph_1614267718812_631245959",
       "id": "paragraph_1614267718812_631245959",
       "dateCreated": "2021-02-25 23:41:58.812",
-      "dateStarted": "2021-02-26 11:17:33.815",
-      "dateFinished": "2021-02-26 11:17:33.831",
+      "dateStarted": "2021-02-27 15:00:24.277",
+      "dateFinished": "2021-02-27 15:00:26.924",
       "status": "FINISHED"
     },
     {

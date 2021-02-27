@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can sort a table, particularly unbounded tables. \n\nFlink SQL supports `ORDER BY`. Bounded Tables can be sorted by any column, descending or ascending. \n\nTo use `ORDER BY` on unbounded tables like `server_logs` the primary sorting key needs to be a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) like `log_time`.\n\nIn first example below, we are sorting the `server_logs` by `log_time`. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the `window_time` (a time attribute) and the `cnt_browser` (descending), so that the browser with the highest number of logs is at the top of each window.",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:43:41.422",
+      "dateUpdated": "2021-02-27 15:14:37.115",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

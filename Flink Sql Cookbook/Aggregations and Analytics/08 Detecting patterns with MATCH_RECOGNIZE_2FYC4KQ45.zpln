@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can use Flink SQL to detect patterns in a stream of events with `MATCH_RECOGNIZE`.\n\nA common (but historically complex) task in SQL day-to-day work is to identify meaningful sequences of events in a data set — also known as Complex Event Processing (CEP). This becomes even more relevant when dealing with streaming data, as you want to react quickly to known patterns or changing trends to deliver up-to-date business insights. In Flink SQL, you can easily perform this kind of tasks using the standard SQL clause [`MATCH_RECOGNIZE`](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html).\n\n## Breaking down MATCH_RECOGNIZE\n\nIn this example, you want to find users that downgraded their service subscription from one of the premium tiers (`type IN (\u0027premium\u0027,\u0027platinum\u0027)`) to the basic tier. \n\n#### Input\n\nThe input argument of `MATCH_RECOGNIZE` will be a row pattern table based on `subscriptions`. As a first step, logical partitioning and ordering must be applied to the input row pattern table to ensure that event processing is correct and deterministic:\n\n```sql\nPARTITION BY user_id \nORDER BY proc_time\n```\n\n#### Output\n\nRow pattern columns are then defined in the `MEASURES` clause, which can be thought of as the `SELECT` of `MATCH_RECOGNIZE`. If you\u0027re interested in getting the type of premium subscription associated with the last event before the downgrade, you can fetch it using the [logical offset](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html#logical-offsets) operator `LAST`. The downgrade date can be extrapolated from the `start_date` of the first basic subscription event following any existing premium one(s).\n\n```sql\nMEASURES\n  LAST(PREMIUM.type) AS premium_type,\n  AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n  BASIC.start_date AS downgrade_date\nAFTER MATCH SKIP PAST LAST ROW\n```\n\n#### Pattern Definition\n\nPatterns are specified in the `PATTERN` clause using row-pattern variables (i.e. event types) and regular expressions. These variables must also be associated with the matching conditions that events must meet to be included in the pattern, using the `DEFINE` clause. Here, you are interested in matching one or more premium subscription events (`PREMIUM+`) followed by a basic subscription event (`BASIC`):\n\n```sql\nPATTERN (PREMIUM+ BASIC)\nDEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\nBASIC AS BASIC.type \u003d \u0027basic\u0027);\n```\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:33:19.130",
+      "dateUpdated": "2021-02-27 15:12:15.364",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

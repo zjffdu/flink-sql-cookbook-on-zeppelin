@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how to efficiently aggregate time series data on two different levels of granularity.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nBased on our `server_logs` table we would like to compute the average request size over one minute **as well as five minute (event) windows.** For this, you could run two queries, similar to the one in Aggregating Time Series Data. At the end of the page is the script and resulting JobGraph from this approach. \n\nIn the main part, we will follow a slightly more efficient approach that chains the two aggregations: the one-minute aggregation output serves as the five-minute aggregation input.\n\nWe then use `runAsOne` to write out the two result tables. To keep this example self-contained, we use two tables of type `blackhole` instead of `kafka`, `filesystem`, or any other [connectors](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/). ",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:31:03.134",
+      "dateUpdated": "2021-02-27 15:12:09.422",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },
@@ -205,7 +205,7 @@
       "dateCreated": "2021-02-26 09:54:18.895",
       "dateStarted": "2021-02-26 12:31:41.644",
       "dateFinished": "2021-02-26 09:58:50.244",
-      "status": "RUNNING"
+      "status": "ABORT"
     },
     {
       "text": "%flink.ssql\n",

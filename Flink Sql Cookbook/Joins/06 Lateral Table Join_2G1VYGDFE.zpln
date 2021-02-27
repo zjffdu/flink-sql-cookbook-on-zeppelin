@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can correlate events using a `LATERAL` join.\n\nA recent addition to the SQL standard is the `LATERAL` join, which allows you to combine the power of a correlated subquery with the expressiveness of a join. \n\nGiven a table with people\u0027s addresses, you need to find the two most populous cities for each state and continuously update those rankings as people move. The input table of `People` contains a uid for each person and their address and when they moved there.\n\nThe first step is to calculate each city\u0027s population using a continuous aggregation. While this is simple enough, the real power of Flink SQL comes when people move. By using deduplication. Flink will automatically issue a retraction for a persons old city when they move. So if John moves from New York to Los Angelos, the population for New York will automatically go down by 1. This gives us the power change-data-capture without having to invest in the actual infrastructure of setting it up!\n\nWith this dynamic population table at hand, you are ready to solve the original problem using a `LATERAL` table join. Unlike a normal join, lateral joins allow the subquery to correlate with columns from other arguments in the `FROM` clause. And unlike a regular subquery, as a join, the lateral can return multiple rows. You can now have a sub-query correlated with every individual state, and for every state it ranks by population and returns the top 2 cities.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 13:23:11.152",
+      "dateUpdated": "2021-02-27 15:21:43.779",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

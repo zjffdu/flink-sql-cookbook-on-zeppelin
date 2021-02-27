@@ -3,7 +3,7 @@
     {
       "text": "%md\n\n\u003cbr/\u003e\n\nThis example will show how to continuously calculate the \"Top-N\" rows based on a given attribute, using an `OVER` window and the `ROW_NUMBER()` function.\n\nThe source table (`spells_cast`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nThe Ministry of Magic tracks every spell a wizard casts throughout Great Britain and wants to know every wizard\u0027s Top 2 all-time favorite spells. \n\nFlink SQL can be used to calculate continuous aggregations, so if we know each spell a wizard has cast, we can maintain a continuous total of how many times they have cast that spell. \n\n```sql\nSELECT wizard, spell, COUNT(*) AS times_cast\nFROM spells_cast\nGROUP BY wizard;\n```\n\nThis result can be used in an `OVER` window to calculate a [Top-N](https://docs.ververica.com/user_guide/sql_development/queries.html#top-n). The rows are partitioned using the `wizard` column, and are then ordered based on the count of spell casts (`times_cast DESC`).  The built-in function `ROW_NUMBER()` assigns a unique, sequential number to each row, starting from one, according to the rows\u0027 ordering within the partition. Finally, the results are filtered for only those rows with a `row_num \u003c\u003d 2` to find each wizard\u0027s top 2 favorite spells. \n\nWhere Flink is most potent in this query is its ability to issue retractions. As wizards cast more spells, their top 2 will change. When this occurs, Flink will issue a retraction, modifying its output, so the result is always correct and up to date. \n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:26:01.744",
+      "dateUpdated": "2021-02-27 15:11:57.609",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },

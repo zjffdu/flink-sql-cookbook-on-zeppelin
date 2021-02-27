@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how to filter server logs in real-time using a standard `WHERE` clause.\n\nThe table it uses `server_logs` is backed by the [`faker` connector](https://github.com/knaufk/flink-faker) which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in `datagen` connector used for example in the first recipe.\n\nYou can continuously filter these logs for those requests that experience authx issues with a simple `SELECT` statement with a `WHERE` clause filtering on the auth related HTTP status codes. \n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:38:25.206",
+      "dateUpdated": "2021-02-27 15:14:22.374",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "results": {},
         "enabled": true
       },
