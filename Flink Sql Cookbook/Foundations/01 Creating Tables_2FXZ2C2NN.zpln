@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the WITH clause and defines the physical system that backs this table. This example uses the datagen connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple SELECT statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.",
+      "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the WITH clause and defines the physical system that backs this table. This example uses the datagen connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple SELECT statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\n\n本例子将展示怎么使用 DDl SQL 来创建表\n\nFlink SQL 能想操作传统数据库一样操作逻辑表。但是它通常只操作外部表而不内部维护表。\n\n定义表分为2部分；分别是设计逻辑 schema 和连接器的配置。逻辑 schema 定义了表中的字段及其类型它也是查询操作的对象。连接器配置在 WITH 语句中，它定义了逻辑表依赖的物理储存。本例使用 datagen 连接器的在内存中生成数据，便于测试查询。\n\n你可以通过运行一条简单的 SELETE 语句来测试这个表。在 Zeppelin 中你可以在UI上看到查询的结果。在下面的例子中你将看到最近的10条吉利。",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:00:33.077",
+      "dateUpdated": "2021-03-04 11:51:40.825",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -37,7 +37,7 @@
     {
       "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS orders;\n\nCREATE TABLE orders (\n    order_uid  BIGINT,\n    product_id BIGINT,\n    price      DOUBLE,\n    order_time TIMESTAMP(3)\n) WITH (\n    \u0027connector\u0027 \u003d \u0027datagen\u0027\n);\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:16:24.439",
+      "dateUpdated": "2021-03-04 10:53:48.061",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -56,14 +56,23 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614263971802_451683322",
       "id": "paragraph_1614263971802_451683322",
       "dateCreated": "2021-02-25 22:39:31.803",
-      "dateStarted": "2021-02-26 11:16:24.463",
-      "dateFinished": "2021-02-26 11:16:26.043",
+      "dateStarted": "2021-03-04 10:53:48.142",
+      "dateFinished": "2021-03-04 10:54:14.637",
       "status": "FINISHED"
     },
     {
