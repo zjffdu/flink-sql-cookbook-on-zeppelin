@@ -78,7 +78,7 @@
     {
       "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  log_time, \n  request_line,\n  status_code \nFROM server_logs\nWHERE\n  status_code IN (\u0027403\u0027, \u0027401\u0027) \nORDER BY log_time DESC LIMIT 10\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:38:54.198",
+      "dateUpdated": "2021-03-04 14:27:20.396",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -118,7 +118,8 @@
                 }
               },
               "commonSetting": {}
-            }
+            },
+            "helium": {}
           }
         },
         "enabled": true
@@ -126,6 +127,19 @@
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "log_time\trequest_line\tstatus_code\n2021-03-04T14:27:29\tGET cart.html /HTTP/1.0\t401\n2021-03-04T14:27:29\tGET cart.html /HTTP/1.0\t403\n2021-03-04T14:27:29\tGET /search.html /HTTP/1.0\t403\n2021-03-04T14:27:29\tPUT cart.html HTTP/2\t403\n2021-03-04T14:27:29\tPOST /prod.html HTTP/1.1\t401\n2021-03-04T14:27:29\tGET /search.html HTTP/2\t401\n2021-03-04T14:27:29\tPUT cart.html /HTTP/1.0\t403\n2021-03-04T14:27:30\tGET cart.html /HTTP/1.0\t403\n2021-03-04T14:27:30\tGET /prod.html HTTP/2\t403\n2021-03-04T14:27:30\tGET /search.html HTTP/2\t401\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT \n  log_time, \n  request_line,\n  status_code \nFROM server_logs\nWHERE\n  status_code IN (\u0027403\u0027, \u0027401\u0027) \nORDER BY log_time DESC LIMIT 10\njava.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:172)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:105)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:89)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.callSelect(FlinkSqlInterrpeter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.callCommand(FlinkSqlInterrpeter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.runSqlList(FlinkSqlInterrpeter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.internalInterpret(FlinkSqlInterrpeter.java:111)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:47)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:852)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:744)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: cf2cec11b7c9772131c8127e26c4b10a)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:125)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$22(RestClusterClient.java:665)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:394)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:575)\n\tat java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:943)\n\tat java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:456)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:123)\n\t... 19 more\n\n"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {
@@ -136,7 +150,7 @@
           "group": "flink",
           "values": [
             {
-              "jobUrl": "http://localhost:8081#/job/d6d7fef07892b068e32171f5de23b2c3"
+              "jobUrl": "http://localhost:8081#/job/cf2cec11b7c9772131c8127e26c4b10a"
             }
           ],
           "interpreterSettingId": "flink"
@@ -146,8 +160,8 @@
       "jobName": "paragraph_1614265141086_666927857",
       "id": "paragraph_1614265141086_666927857",
       "dateCreated": "2021-02-25 22:59:01.086",
-      "dateStarted": "2021-02-26 11:38:54.209",
-      "dateFinished": "2021-02-26 11:40:04.829",
+      "dateStarted": "2021-03-04 14:26:16.464",
+      "dateFinished": "2021-03-04 14:27:37.612",
       "status": "ABORT"
     },
     {
