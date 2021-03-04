@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to filter server logs in real-time using a standard `WHERE` clause.\n\nThe table it uses `server_logs` is backed by the [`faker` connector](https://github.com/knaufk/flink-faker) which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in `datagen` connector used for example in the first recipe.\n\nYou can continuously filter these logs for those requests that experience authx issues with a simple `SELECT` statement with a `WHERE` clause filtering on the auth related HTTP status codes. \n\n",
+      "text": "%md\n\nThis example will show how to filter server logs in real-time using a standard `WHERE` clause.\n\nThe table it uses `server_logs` is backed by the [`faker` connector](https://github.com/knaufk/flink-faker) which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in `datagen` connector used for example in the first recipe.\n\nYou can continuously filter these logs for those requests that experience authx issues with a simple `SELECT` statement with a `WHERE` clause filtering on the auth related HTTP status codes. \n\n本例将展示怎样使用 `WHERE` 语言实时过滤服务器日志。\n\n例子中使用的表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据，以方便查询测试。因此，它是在第一个例子中使用的内置连接器 `datagen` 的一个替代品。\n\n你可以不断的过滤出含有认证问题的请求日志，通过简单的 SELECT 语句 以及 WHERE 条件语句删选认证相关的HTTP 状态码。",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:14:22.374",
+      "dateUpdated": "2021-03-04 14:25:02.819",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -37,7 +37,7 @@
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n\n\n  ",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:38:31.718",
+      "dateUpdated": "2021-03-04 14:25:10.186",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -56,14 +56,23 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614265116139_298210191",
       "id": "paragraph_1614265116139_298210191",
       "dateCreated": "2021-02-25 22:58:36.139",
-      "dateStarted": "2021-02-26 11:38:31.728",
-      "dateFinished": "2021-02-26 11:38:32.742",
+      "dateStarted": "2021-03-04 14:25:10.221",
+      "dateFinished": "2021-03-04 14:25:10.682",
       "status": "FINISHED"
     },
     {
