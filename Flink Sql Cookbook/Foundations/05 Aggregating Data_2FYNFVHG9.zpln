@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n\n本例将暂时怎样使用标准的 `GROUP BY` 语句来实时聚合服务器日志。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据\n\n为了计算每种状态码中每种连览器发送的日志的数量，我们可以结合使用 `COUNT` 聚合行数与  `GROUP BY` 条件语句。由于 `user_agent` 字段包含很多信息，你可以使用内置[字符串函数](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\n对流表进行 `GROUP BY` 将产生不断更新的结果，所以你将看到随着数据的流入每种浏览器的聚合结果不断的改变。",
+      "text": "%md\n\nThis example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n\n本例将暂时怎样使用标准的 `GROUP BY` 语句来实时聚合服务器日志。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n为了计算每种状态码中每种连览器发送的日志的数量，我们可以结合使用 `COUNT` 聚合行数与  `GROUP BY` 条件语句。由于 `user_agent` 字段包含很多信息，你可以使用内置[字符串函数](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\n对流表进行 `GROUP BY` 将产生不断更新的结果，所以你将看到随着数据的流入每种浏览器的聚合结果不断的改变。",
       "user": "anonymous",
-      "dateUpdated": "2021-03-04 14:41:44.559",
+      "dateUpdated": "2021-03-06 12:57:24.741",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -78,7 +78,7 @@
     {
       "text": "%flink.ssql(type\u003dupdate)\n\n-- Sample user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A\n-- Regex pattern: \u0027[^\\/]+\u0027 (Match everything before \u0027/\u0027)\nSELECT \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027) AS browser,\n  status_code, \n  COUNT(*) AS cnt_status\nFROM server_logs\nGROUP BY \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027),\n  status_code;\n  \n  ",
       "user": "anonymous",
-      "dateUpdated": "2021-03-04 14:43:19.367",
+      "dateUpdated": "2021-03-05 05:39:13.724",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -102,6 +102,25 @@
                   "rotate": {
                     "degree": "-45"
                   }
+                },
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "browser": "string",
+                      "status_code": "string",
+                      "cnt_status": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
                 }
               },
               "commonSetting": {},
