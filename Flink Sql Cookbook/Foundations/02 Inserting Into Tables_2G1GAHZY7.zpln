@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis recipe shows how to insert rows into a table so that downstream applications can read them.\n\nAs outlined in the first recipe Flink SQL operates on tables, that are stored in external systems. To publish results of a query for consumption by downstream applications, you write the results of a query into a table. This table can be read by Flink SQL, or directly by connecting to the external system that is storing the data (e.g. an ElasticSearch index.)\n\nThis example takes the `server_logs` tables, filters for client errors, and writes these logs into another table called `client_errors`. Any number of external systems could back the result table, including Apache Kafka, Apache Hive, ElasticSearch, JDBC, among many others. To keep this example self-contained, `client_errors` is of type `blackhole`: instead of actually writing the data to an external system, the table discards any rows written to it.\n\n这个事例展示了怎么向表中插入数据以便下游应用使用这些数据。\n\n如果第一个方法所示，Flink SQL 操作储存在外部的表。通过将查询的结果写入一个表，来将查询的结果给下游应用消费。这个表可以被 Flink SQL 读取，也可以通过直接与外部系统来保存数据（例如 ElasticSearch）。\n\n本例从 `server_logs` 表中过滤出客户端错误，然后将过滤出来的日志写入另一个叫 `client_errors` 的表。结果表可以持久化到任意数量的任意外部系统中，包括 Apache Kafka， Apache Hive， ElasticSearch，JDBC， \n为了保持本例的独立，`client_errors` 表是 `blackhole` 类型，这个表将任何写入的数据丢弃掉而不是写入外部系统中。",
+      "text": "%md\n\nThis recipe shows how to insert rows into a table so that downstream applications can read them.\n\nAs outlined in the first recipe Flink SQL operates on tables, that are stored in external systems. To publish results of a query for consumption by downstream applications, you write the results of a query into a table. This table can be read by Flink SQL, or directly by connecting to the external system that is storing the data (e.g. an ElasticSearch index.)\n\nThis example takes the `server_logs` tables, filters for client errors, and writes these logs into another table called `client_errors`. Any number of external systems could back the result table, including Apache Kafka, Apache Hive, ElasticSearch, JDBC, among many others. To keep this example self-contained, `client_errors` is of type `blackhole`: instead of actually writing the data to an external system, the table discards any rows written to it.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-04 12:16:29.861",
+      "dateUpdated": "2021-03-07 08:54:05.550",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -33,6 +33,36 @@
       "dateStarted": "2021-02-26 11:21:01.752",
       "dateFinished": "2021-02-26 11:21:01.766",
       "status": "FINISHED"
+    },
+    {
+      "text": "%md\n这个事例展示了怎么向表中插入数据以便下游应用使用这些数据。\n\n如果第一个方法所示，Flink SQL 操作储存在外部的表。通过将查询的结果写入一个表，来将查询的结果给下游应用消费。这个表可以被 Flink SQL 读取，也可以通过直接与外部系统来保存数据（例如 ElasticSearch）。\n\n本例从 `server_logs` 表中过滤出客户端错误，然后将过滤出来的日志写入另一个叫 `client_errors` 的表。结果表可以持久化到任意数量的任意外部系统中，包括 Apache Kafka， Apache Hive， ElasticSearch，JDBC， \n为了保持本例的独立，`client_errors` 表是 `blackhole` 类型，这个表将任何写入的数据丢弃掉而不是写入外部系统中。",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-07 08:49:17.849",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615106952557_787103027",
+      "id": "paragraph_1615106952557_787103027",
+      "dateCreated": "2021-03-07 08:49:12.557",
+      "status": "READY"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n\nDROP TABLE IF EXISTS client_errors;\n\nCREATE TABLE client_errors (\n  log_time TIMESTAMP(3),\n  request_line STRING,\n  status_code STRING,\n  size INT\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n\n",

@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n\n本例将暂时怎样使用标准的 `GROUP BY` 语句来实时聚合服务器日志。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n为了计算每种状态码中每种连览器发送的日志的数量，我们可以结合使用 `COUNT` 聚合行数与  `GROUP BY` 条件语句。由于 `user_agent` 字段包含很多信息，你可以使用内置[字符串函数](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\n对流表进行 `GROUP BY` 将产生不断更新的结果，所以你将看到随着数据的流入每种浏览器的聚合结果不断的改变。",
+      "text": "%md\n\nThis example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-06 12:57:24.741",
+      "dateUpdated": "2021-03-07 08:54:39.505",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -35,6 +35,36 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n本例将暂时怎样使用标准的 `GROUP BY` 语句来实时聚合服务器日志。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n为了计算每种状态码中每种连览器发送的日志的数量，我们可以结合使用 `COUNT` 聚合行数与  `GROUP BY` 条件语句。由于 `user_agent` 字段包含很多信息，你可以使用内置[字符串函数](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\n对流表进行 `GROUP BY` 将产生不断更新的结果，所以你将看到随着数据的流入每种浏览器的聚合结果不断的改变。\n\n\u003e 作为练习，你可以试试其他的标准 SQL 聚合函数（例如： `SUM`,`AVG`,`MIN`,`MAX`）。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-07 08:54:37.729",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615107092001_168094460",
+      "id": "paragraph_1615107092001_168094460",
+      "dateCreated": "2021-03-07 08:51:32.002",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n",
       "user": "anonymous",
       "dateUpdated": "2021-03-04 14:41:44.699",
@@ -55,15 +85,6 @@
       "settings": {
         "params": {},
         "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "Table has been dropped.\nTable has been created.\n"
-          }
-        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -154,19 +175,6 @@
       "settings": {
         "params": {},
         "forms": {}
-      },
-      "results": {
-        "code": "ERROR",
-        "msg": [
-          {
-            "type": "TABLE",
-            "data": "browser\tstatus_code\tcnt_status\nMozilla\t204\t2472\nMozilla\t400\t1243\nMozilla\t301\t4860\nMozilla\t401\t1248\nMozilla\t403\t2466\nMozilla\t201\t1279\nMozilla\t200\t1195\nOpera\t200\t51\nOpera\t400\t60\nOpera\t401\t54\nOpera\t204\t116\nOpera\t403\t100\nOpera\t201\t64\nOpera\t301\t209\n"
-          },
-          {
-            "type": "TEXT",
-            "data": "Fail to run sql command: SELECT \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027) AS browser,\n  status_code, \n  COUNT(*) AS cnt_status\nFROM server_logs\nGROUP BY \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027),\n  status_code\njava.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:172)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:105)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:89)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.callSelect(FlinkSqlInterrpeter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.callCommand(FlinkSqlInterrpeter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.runSqlList(FlinkSqlInterrpeter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.internalInterpret(FlinkSqlInterrpeter.java:111)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:47)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:852)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:744)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 06d810314a9d811f0d57e195707d11d0)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:125)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$22(RestClusterClient.java:665)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:394)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:575)\n\tat java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:943)\n\tat java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:456)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:123)\n\t... 19 more\n\n"
-          }
-        ]
       },
       "apps": [],
       "runtimeInfos": {

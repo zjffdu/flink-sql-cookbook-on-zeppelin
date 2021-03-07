@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nIn this recipe, you will learn how to use `runAsOne` to run multiple INSERT INTO statements in a single, optimized Flink Job.\n\nMany product requirements involve outputting the results of a streaming application to two or more sinks, such as Apache Kafka for real-time use cases, or a Filesystem for offline ones. Other times, two queries are not the same but share some extensive intermediate operations.\n\nWhen working with server logs, the support team would like to see the number of status codes per browser every 5 minutes to have real-time insights into a web pages\u0027 status. Additionally, they would like the same information on an hourly basis made available as partitioned Apache Parquet files so they can perform historical analysis.\n\nWe could quickly write two Flink SQL queries to solve both these requirements, but that would not be efficient. These queries have a lot of duplicated work, like reading the source logs Kafka topic and cleansing the data.\n\nZeppelin includes a feature called `runAsOne`, that allows for multiplexing INSERT INTO statements into a single query holistically optimized by Apache Flink and deployed as a single application.\n\n在本例中，你将学会怎么使用 `runAsOne` 来在单个优化的Flink任务中运行多个 INSERT INTO 语句。\n\n很多产品的需求包含将流程序的结果输出到多个接收器，例如实时场景的 Apache Kafka 或者 离线场景的文件系统。有时，2个查询并不一样但是共享很多中间操作。\n\n在使用服务器日志时，支持团队希望每5分钟查看每种浏览器的每种状态代码数量，以便实时了解web页面的状态。此外，他们还希望每小时都能以分的区Apache Parquet文件的形式提供相同的信息，以便执行历史分析。\n\n我们可以马上写 2 个 Flink SQL 查询来解决这两个需求，但是这种方式效率不高。因为这些查询有很多重复的工作，像例如从Kafka tipic 种读取原始日志和清理数据。\n\nZeppelin 包括一个称为  `runAsOne` 的特性，它允许在单个查询种多路复用多个 INSERT INTO 语句，这个查询被 Apache Flink 整体优化，并作为单个应用程序部署。\n",
+      "text": "%md\n\nIn this recipe, you will learn how to use `runAsOne` to run multiple INSERT INTO statements in a single, optimized Flink Job.\n\nMany product requirements involve outputting the results of a streaming application to two or more sinks, such as Apache Kafka for real-time use cases, or a Filesystem for offline ones. Other times, two queries are not the same but share some extensive intermediate operations.\n\nWhen working with server logs, the support team would like to see the number of status codes per browser every 5 minutes to have real-time insights into a web pages\u0027 status. Additionally, they would like the same information on an hourly basis made available as partitioned Apache Parquet files so they can perform historical analysis.\n\nWe could quickly write two Flink SQL queries to solve both these requirements, but that would not be efficient. These queries have a lot of duplicated work, like reading the source logs Kafka topic and cleansing the data.\n\nZeppelin includes a feature called `runAsOne`, that allows for multiplexing INSERT INTO statements into a single query holistically optimized by Apache Flink and deployed as a single application.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-06 12:36:22.396",
+      "dateUpdated": "2021-03-07 08:55:12.346",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -35,11 +35,23 @@
       "status": "FINISHED"
     },
     {
-      "text": "%md\n",
+      "text": "%md\n在本例中，你将学会怎么使用 `runAsOne` 来在单个优化的Flink任务中运行多个 INSERT INTO 语句。\n\n很多产品的需求包含将流程序的结果输出到多个接收器，例如实时场景的 Apache Kafka 或者 离线场景的文件系统。有时，2个查询并不一样但是共享很多中间操作。\n\n在使用服务器日志时，支持团队希望每5分钟查看每种浏览器的每种状态代码数量，以便实时了解web页面的状态。此外，他们还希望每小时都能以分的区Apache Parquet文件的形式提供相同的信息，以便执行历史分析。\n\n我们可以马上写 2 个 Flink SQL 查询来解决这两个需求，但是这种方式效率不高。因为这些查询有很多重复的工作，像例如从Kafka tipic 种读取原始日志和清理数据。\n\nZeppelin 包括一个称为  `runAsOne` 的特性，它允许在单个查询种多路复用多个 INSERT INTO 语句，这个查询被 Apache Flink 整体优化，并作为单个应用程序部署。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-06 12:51:05.856",
+      "dateUpdated": "2021-03-07 08:52:42.483",
       "progress": 0,
-      "config": {},
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -47,9 +59,9 @@
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1615035065856_1162601540",
-      "id": "paragraph_1615035065856_1162601540",
-      "dateCreated": "2021-03-06 12:51:05.856",
+      "jobName": "paragraph_1615107156917_227458529",
+      "id": "paragraph_1615107156917_227458529",
+      "dateCreated": "2021-03-07 08:52:36.917",
       "status": "READY"
     },
     {
@@ -73,15 +85,6 @@
       "settings": {
         "params": {},
         "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "Table has been dropped.\nTable has been created.\n"
-          }
-        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -115,15 +118,6 @@
         "params": {},
         "forms": {}
       },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "Table has been dropped.\nTable has been created.\n"
-          }
-        ]
-      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
@@ -155,15 +149,6 @@
       "settings": {
         "params": {},
         "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "Table has been dropped.\nTable has been created.\n"
-          }
-        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -197,15 +182,6 @@
         "params": {},
         "forms": {}
       },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "View has been dropped.\nView has been created.\n"
-          }
-        ]
-      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
@@ -237,19 +213,6 @@
       "settings": {
         "params": {},
         "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "ANGULAR",
-            "data": "\u003ch1\u003eDuration: {{duration}} \u003c/h1\u003e\n"
-          },
-          {
-            "type": "TEXT",
-            "data": "Job is cancelled.\n"
-          }
-        ]
       },
       "apps": [],
       "runtimeInfos": {
@@ -299,16 +262,7 @@
   "version": "0.10.0-SNAPSHOT",
   "noteParams": {},
   "noteForms": {},
-  "angularObjects": {
-    "flink-shared_process": [
-      {
-        "name": "duration",
-        "object": "0 seconds",
-        "noteId": "2G1MEGYE2",
-        "paragraphId": "paragraph_1614267128467_2138149264"
-      }
-    ]
-  },
+  "angularObjects": {},
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
