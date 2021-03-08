@@ -35,9 +35,9 @@
       "status": "FINISHED"
     },
     {
-      "text": "%md\n这个事例展示了怎么向表中插入数据以便下游应用使用这些数据。\n\n如果第一个方法所示，Flink SQL 操作储存在外部的表。通过将查询的结果写入一个表，来将查询的结果给下游应用消费。这个表可以被 Flink SQL 读取，也可以通过直接与外部系统来保存数据（例如 ElasticSearch）。\n\n本例从 `server_logs` 表中过滤出客户端错误，然后将过滤出来的日志写入另一个叫 `client_errors` 的表。结果表可以持久化到任意数量的任意外部系统中，包括 Apache Kafka， Apache Hive， ElasticSearch，JDBC， \n为了保持本例的独立，`client_errors` 表是 `blackhole` 类型，这个表将任何写入的数据丢弃掉而不是写入外部系统中。",
+      "text": "%md\n这个事例展示了怎么向表中插入数据以便下游应用使用这些数据。\n\n如第一个例子所示，Flink SQL 操作的表数据都是存储在外部系统上。通过将查询的结果写入表中来将结果提供给后续应用消费。这个表可以被 Flink SQL 读取，也可以通过直接与外部系统来保存数据（例如 ElasticSearch）。\n\n本例从 `server_logs` 表中过滤出客户端错误，然后将过滤出来的日志写入另一个叫 `client_errors` 的表，结果表可以持久化到任意外部系统中，包括 Apache Kafka， Apache Hive， ElasticSearch，JDBC， \n为了让这个例子能够在没有任何依赖的情况下跑起来，`client_errors` 表是 `blackhole` 类型，这个表将任何写入的数据丢弃掉而不是写入外部系统中。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:49:17.849",
+      "dateUpdated": "2021-03-08 01:51:19.259",
       "progress": 0,
       "config": {
         "editorSetting": {

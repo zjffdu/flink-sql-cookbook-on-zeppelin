@@ -35,11 +35,23 @@
       "status": "FINISHED"
     },
     {
-      "text": "%md\n这个例子将展示如何使用 `TUMBLE` 窗口来实时聚合时间序列数据。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n很多流式应用设计时间序列数据。为了计算每分钟 IP 地址的  `DISTINCT` 数量，数据需要以 [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) 分组。根据时间分组很特殊，因为时间通常只向前移动，这意味着 Flink 可以在每分钟结束的时候生成最后的结果。\n\n`TUMBLE` 是一个用来将时间按称为窗口的时间段进行分组的内置函数。不像其他的聚合函数，但某个时间段结束的时候对每个 key 它将生成一个唯一的最终结果.\n\n如果日志没有包含时间戳字段，可以使用 [computed column](https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column) 来创建一个这样的时间字段。`log_time AS PROCTIME()` 将使用当前的系统时间作为一个字段添加到表中。",
+      "text": "%md\n这个例子将展示如何使用 `TUMBLE` 窗口来实时聚合时间序列数据。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n很多流式应用用来处理时间序列数据。为了计算每分钟 IP 地址的  `DISTINCT` 数量，数据需要以 [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) 分组。根据时间分组很特殊，因为时间通常只向前移动，这意味着 Flink 可以在每分钟结束的时候生成最后的结果。\n\n`TUMBLE` 是一个用来将时间按称为窗口的时间段进行分组的内置函数。不像其他的聚合函数，它只会在某个时间段结束的时候对每个 key 生成一个唯一的最终结果.\n\n如果日志没有包含时间戳字段，可以使用 [computed column](https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column) 来创建一个这样的时间字段。`log_time AS PROCTIME()` 将使用当前的系统时间作为一个字段添加到表中。",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:55:27.814",
+      "dateUpdated": "2021-03-08 01:54:14.395",
       "progress": 0,
-      "config": {},
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown"
+      },
       "settings": {
         "params": {},
         "forms": {}
