@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\n\u003cbr/\u003e\n\nIn this recipe, you will see how to correctly enrich records from one Kafka topic with the corresponding records of another Kafka topic when the order of events matters.  \n\nTemporal table joins take an arbitrary table (left input/probe site) and correlate each row to the corresponding row’s relevant version in a versioned table (right input/build side). \nFlink uses the SQL syntax of ``FOR SYSTEM_TIME AS OF`` to perform this operation. \n\nIn this recipe, we want join each transaction (`transactions`) to its correct currency rate (`currency_rates`, a versioned table) **as of the time when the transaction happened**.\nA similar example would be to join each order with the customer details as of the time when the order happened.\nThis is exactly what an event-time temporal table join does.\nA temporal table join in Flink SQL provides correct, deterministic results in the presence of out-of-orderness and arbitrary time skew between the two tables. \n\nBoth the `transactions` and `currency_rates` tables are backed by Kafka topics, but in the case of rates this topic is compacted (i.e. only the most recent messages for a given key are kept as updated rates flow in).\nRecords in `transactions` are interpreted as inserts only, and so the table is backed by the [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`); while the records in `currency_rates` need to be interpreted as upserts based on a primary key, which requires the [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`).\n",
+      "text": "%md\n\n\u003cbr/\u003e\n\nIn this recipe, you will see how to correctly enrich records from one Kafka topic with the corresponding records of another Kafka topic when the order of events matters.  \n\nTemporal table joins take an arbitrary table (left input/probe site) and correlate each row to the corresponding row’s relevant version in a versioned table (right input/build side). \nFlink uses the SQL syntax of `FOR SYSTEM_TIME AS OF` to perform this operation. \n\nIn this recipe, we want join each transaction (`transactions`) to its correct currency rate (`currency_rates`, a versioned table) **as of the time when the transaction happened**.\nA similar example would be to join each order with the customer details as of the time when the order happened.\nThis is exactly what an event-time temporal table join does.\nA temporal table join in Flink SQL provides correct, deterministic results in the presence of out-of-orderness and arbitrary time skew between the two tables. \n\nBoth the `transactions` and `currency_rates` tables are backed by Kafka topics, but in the case of rates this topic is compacted (i.e. only the most recent messages for a given key are kept as updated rates flow in).\nRecords in `transactions` are interpreted as inserts only, and so the table is backed by the [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`); while the records in `currency_rates` need to be interpreted as upserts based on a primary key, which requires the [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`).\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:18:33.138",
+      "dateUpdated": "2021-03-08 09:31:35.418",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -35,9 +35,39 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n\n在这个例子中，你将看到当时间的顺序很重要的时如何正确的使用另一个kafaka topic 中对应的记录来丰富 kafka topic 中的记录。\n\nTemporal table joins 采用任意一张表(左边 输入/探针 地址)，将每一行记录与版本表（右边 输入/构建 侧）中对应行记录的相关版本关联。\nFlink 使用 `FOR SYSTEM_TIME AS OF` SQL 语法来执行这个操作。\n\n在本例中，我们希望将每一笔交易 (`transactions`) 与**交易发生时** 正确的货币汇率 (`currency_rates`, a versioned table)）相关联。\n一个简单的例子可能是将每笔定于与订单发生时的顾客信息关联。\n这就是 event-time temporal table join 要做的事。\nFlink SQL 中的 temporal table join 可以在含有无序的和任意时间偏移的 2 张表之间提供正确、确定的结果。\n\n`transactions` and `currency_rates` 表都使用 Kafka topics 提供数据， 但是在rates 表中 topic 是压缩的(即 只有给定的 key 的最近的消息被作为更新的rates 被保留)。\n \n`transactions` 表中的记录被翻译为只能插入，所以这个表是由 [标准 Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`)提供数据;而 `currency_rates` 表中的记录需要被翻译基于主键的upserts，这需要使用 [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`)。\n ",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-08 09:47:36.856",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615193779157_760701183",
+      "id": "paragraph_1615193779157_760701183",
+      "dateCreated": "2021-03-08 08:56:19.157",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS currency_rates;\n\nCREATE TABLE currency_rates (\n  `currency_code` STRING,\n  `eur_rate` DECIMAL(6,4),\n  `rate_time` TIMESTAMP(3),\n  WATERMARK FOR `rate_time` AS rate_time - INTERVAL \u002715\u0027 SECONDS,\n  PRIMARY KEY (currency_code) NOT ENFORCED\n) WITH (\n  \u0027connector\u0027 \u003d \u0027upsert-kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027currency_rates\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027\n);\n\nDROP TABLE IF EXISTS transactions;\n\nCREATE TABLE transactions (\n  `id` STRING,\n  `currency_code` STRING,\n  `total` DECIMAL(10,2),\n  `transaction_time` TIMESTAMP(3),\n  WATERMARK FOR `transaction_time` AS transaction_time - INTERVAL \u002730\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027transactions\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027key.fields\u0027 \u003d \u0027id\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027,\n  \u0027value.fields-include\u0027 \u003d \u0027ALL\u0027\n);\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:17:42.134",
+      "dateUpdated": "2021-03-08 09:48:31.749",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -55,6 +85,15 @@
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\nTable has been dropped.\nTable has been created.\n"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,14 +101,14 @@
       "jobName": "paragraph_1614410222972_538749509",
       "id": "paragraph_1614410222972_538749509",
       "dateCreated": "2021-02-27 15:17:02.972",
-      "dateStarted": "2021-02-27 15:17:42.139",
-      "dateFinished": "2021-02-27 15:18:05.491",
+      "dateStarted": "2021-03-08 09:48:31.833",
+      "dateFinished": "2021-03-08 09:48:34.395",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  t.id,\n  t.total * c.eur_rate AS total_eur,\n  t.total, \n  c.currency_code,\n  t.transaction_time\nFROM transactions t\nJOIN currency_rates FOR SYSTEM_TIME AS OF t.transaction_time AS c\nON t.currency_code \u003d c.currency_code;\nORDER BY t.transaction_time DESC\nLIMIT 10\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:18:15.627",
+      "dateUpdated": "2021-03-08 09:48:42.897",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -88,14 +127,23 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT \n  t.id,\n  t.total * c.eur_rate AS total_eur,\n  t.total, \n  c.currency_code,\n  t.transaction_time\nFROM transactions t\nJOIN currency_rates FOR SYSTEM_TIME AS OF t.transaction_time AS c\nON t.currency_code \u003d c.currency_code\norg.apache.flink.table.api.ValidationException: Unable to create a source for reading table \u0027default_catalog.default_database.transactions\u0027.\n\nTable options are:\n\n\u0027connector\u0027\u003d\u0027kafka\u0027\n\u0027key.fields\u0027\u003d\u0027id\u0027\n\u0027key.format\u0027\u003d\u0027raw\u0027\n\u0027properties.bootstrap.servers\u0027\u003d\u0027localhost:9092\u0027\n\u0027topic\u0027\u003d\u0027transactions\u0027\n\u0027value.fields-include\u0027\u003d\u0027ALL\u0027\n\u0027value.format\u0027\u003d\u0027json\u0027\n\tat org.apache.flink.table.factories.FactoryUtil.createTableSource(FactoryUtil.java:122)\n\tat org.apache.flink.table.planner.plan.schema.CatalogSourceTable.createDynamicTableSource(CatalogSourceTable.java:254)\n\tat org.apache.flink.table.planner.plan.schema.CatalogSourceTable.toRel(CatalogSourceTable.java:100)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.toRel(SqlToRelConverter.java:3585)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertIdentifier(SqlToRelConverter.java:2507)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2144)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2093)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2050)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertJoin(SqlToRelConverter.java:2864)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2162)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertFrom(SqlToRelConverter.java:2050)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertSelectImpl(SqlToRelConverter.java:663)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertSelect(SqlToRelConverter.java:644)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertQueryRecursive(SqlToRelConverter.java:3438)\n\tat org.apache.calcite.sql2rel.SqlToRelConverter.convertQuery(SqlToRelConverter.java:570)\n\tat org.apache.flink.table.planner.calcite.FlinkPlannerImpl.org$apache$flink$table$planner$calcite$FlinkPlannerImpl$$rel(FlinkPlannerImpl.scala:165)\n\tat org.apache.flink.table.planner.calcite.FlinkPlannerImpl.rel(FlinkPlannerImpl.scala:157)\n\tat org.apache.flink.table.planner.operations.SqlToOperationConverter.toQueryOperation(SqlToOperationConverter.java:902)\n\tat org.apache.flink.table.planner.operations.SqlToOperationConverter.convertSqlQuery(SqlToOperationConverter.java:871)\n\tat org.apache.flink.table.planner.operations.SqlToOperationConverter.convert(SqlToOperationConverter.java:250)\n\tat org.apache.flink.table.planner.delegation.ParserImpl.parse(ParserImpl.java:77)\n\tat org.apache.flink.table.api.internal.TableEnvironmentImpl.sqlQuery(TableEnvironmentImpl.java:640)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:102)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:89)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.callSelect(FlinkSqlInterrpeter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.callCommand(FlinkSqlInterrpeter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.runSqlList(FlinkSqlInterrpeter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterrpeter.internalInterpret(FlinkSqlInterrpeter.java:111)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:47)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:852)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:744)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.table.api.ValidationException: Cannot discover a connector using option: \u0027connector\u0027\u003d\u0027kafka\u0027\n\tat org.apache.flink.table.factories.FactoryUtil.enrichNoMatchingConnectorError(FactoryUtil.java:367)\n\tat org.apache.flink.table.factories.FactoryUtil.getDynamicTableFactory(FactoryUtil.java:354)\n\tat org.apache.flink.table.factories.FactoryUtil.createTableSource(FactoryUtil.java:118)\n\t... 37 more\nCaused by: org.apache.flink.table.api.ValidationException: Could not find any factory for identifier \u0027kafka\u0027 that implements \u0027org.apache.flink.table.factories.DynamicTableFactory\u0027 in the classpath.\n\nAvailable factory identifiers are:\n\nblackhole\ndatagen\nfaker\nfilesystem\nprint\n\tat org.apache.flink.table.factories.FactoryUtil.discoverFactory(FactoryUtil.java:235)\n\tat org.apache.flink.table.factories.FactoryUtil.enrichNoMatchingConnectorError(FactoryUtil.java:363)\n\t... 39 more\n\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614410262138_1486992945",
       "id": "paragraph_1614410262138_1486992945",
       "dateCreated": "2021-02-27 15:17:42.139",
-      "dateStarted": "2021-02-27 15:18:15.630",
-      "dateFinished": "2021-02-27 15:18:16.702",
+      "dateStarted": "2021-03-08 09:48:42.970",
+      "dateFinished": "2021-03-08 09:48:44.074",
       "status": "ERROR"
     },
     {
