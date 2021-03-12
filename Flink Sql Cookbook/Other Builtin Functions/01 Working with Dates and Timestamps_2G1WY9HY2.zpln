@@ -34,6 +34,36 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n\n本例将展示如何使用 [built-in date and time functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/systemFunctions.html#temporal-functions) 来操作临时字段。\n\n数据源 `subscriptions` 表使用 [`faker` connector](https://github.com/knaufk/flink-faker) 提供数据，它可以基于 Java Faker 表达式持续的在内存中生成数据。\n\n#### 日期和时间函数\n\n在 SQL 中处理日期和时间是很常见的，但是你的输入可能来自不同的类型、格式甚至时区。Flink SQL 内置了很多函数用来处理这个问题并使得操作临时字段很简单。\n\n假设你有一个服务订阅的表，然后你希望不断的从中筛选出哪些关联的支付方式将在30天内过期的订阅。 `start_date` 和 `end_date` 是 [Unix timestamps](https://en.wikipedia.org/wiki/Unix_time) (例如 epochs) —这种格式对人类不友好，需要转换一下. 另外，你希望将`payment_expiration` 时间戳解析为对应的年、月、日。有哪些函数可以使用呢？\n\n* `TO_TIMESTAMP(string[, format])`: 使用指定格式(默认: \u0027yyyy-MM-dd HH:mm:ss\u0027)将 `STRING` 值转化为  `TIMESTAMP` \n\n* `FROM_UNIXTIME(numeric[, string])`: 将 epoch 格式化为 `STRING` (默认: \u0027yyyy-MM-dd HH:mm:ss\u0027)\n\n* `DATE_FORMAT(timestamp, string)`:  使用指定格式将 `TIMESTAMP` 值转化为  `STRING` \n\n* `EXTRACT(timeintervalunit FROM temporal)`: 从某个临时字段的指定日期部分抽取返回  `LONG`\n\n* `TIMESTAMPDIFF(unit, timepoint1, timepoint2)`: 返回 `timepoint1` 与 `timepoint2` 之间的 时间单元数量\n\n* `CURRENT_TIMESTAMP`: returns the current SQL timestamp (UTC) 返回当前的 SQL 时间戳 (UTC)",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-12 08:48:46.684",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615537868232_1897098036",
+      "id": "paragraph_1615537868232_1897098036",
+      "dateCreated": "2021-03-12 08:31:08.232",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql(type\u003dupdate)\n\nDROP TABLE IF EXISTS subscriptions;\n\nCREATE TABLE subscriptions ( \n    id STRING,\n    start_date INT,\n    end_date INT,\n    payment_expiration TIMESTAMP(3)\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.id.expression\u0027 \u003d \u0027#{Internet.uuid}\u0027, \n  \u0027fields.start_date.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271576141834\u0027\u0027,\u0027\u00271607764234\u0027\u0027}\u0027,\n  \u0027fields.end_date.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271609060234\u0027\u0027,\u0027\u00271639300234\u0027\u0027}\u0027,\n  \u0027fields.payment_expiration.expression\u0027 \u003d \u0027#{date.future \u0027\u0027365\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027\n);\n",
       "user": "anonymous",
       "dateUpdated": "2021-02-26 10:17:36.350",
