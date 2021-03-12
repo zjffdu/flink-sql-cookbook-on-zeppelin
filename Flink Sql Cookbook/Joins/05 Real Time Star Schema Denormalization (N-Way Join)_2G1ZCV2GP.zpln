@@ -35,6 +35,36 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n \n在本例中，我们将使用 n-way temporal 表连接来 de-normalize 一个简单的星座模型。\n\n[Star schemas](https://en.wikipedia.org/wiki/Star_schema) 是一个流行的在数据仓库中 normalizing 数据的方式。星座模型的中心是含有指标、度量和其他关于世界的事实的  **fact table**(事实表)。\n\n围绕事实表的是一张或者多张 **dimension tables**(维度表)，维度表的元数据在查询计算时提对事实表的扩展。\n\n你在一个小型的铁路公司运行了小型数据仓库，它包含一张事实表 (`train_activity`) 和3张 维度表 (`stations`, `booking_channels`, and `passengers`)。所有对事实表的插入和对维度表的跟新都镜像到 Apache Kafka 中。时间表中的记录表示为只插入，所以它使用 [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`) 提供数据。相反，维度表的记录基于主键跟新或者插入，它需要 [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`)。\n\n通过 Flink SQL 使用 5-way temporal 表连接， 你可以轻易的将所有的维度表连接到事实表上。Temporal table joins 采用任意一张表(左边 输入/探针 地址)，将每一行记录与版本表（右边 输入/构建 侧）中对应行记录的相关版本关联。使用 `FOR SYSTEM_TIME AS OF` SQL 语法来执行这个操作。当将事实表与多个缓慢变化的维度表连接是使用一个 temporal table join 将产出一致的、可复现的结果。 每个事件(事实表中的一行)与每个维度表基于事件在真实世界发送的事件来连接对应的值。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-12 07:44:17.051",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615523318129_1784896943",
+      "id": "paragraph_1615523318129_1784896943",
+      "dateCreated": "2021-03-12 04:28:38.129",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS passengers;\n\nCREATE TABLE passengers (\n  passenger_key STRING, \n  first_name STRING, \n  last_name STRING,\n  update_time TIMESTAMP(3),\n  WATERMARK FOR update_time AS update_time - INTERVAL \u002710\u0027 SECONDS,\n  PRIMARY KEY (passenger_key) NOT ENFORCED\n) WITH (\n  \u0027connector\u0027 \u003d \u0027upsert-kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027passengers\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027\n);\n\nDROP TABLE IF EXISTS stations;\n\nCREATE TABLE stations (\n  station_key STRING, \n  update_time TIMESTAMP(3),\n  city STRING,\n  WATERMARK FOR update_time AS update_time - INTERVAL \u002710\u0027 SECONDS,\n  PRIMARY KEY (station_key) NOT ENFORCED\n) WITH (\n  \u0027connector\u0027 \u003d \u0027upsert-kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027stations\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027\n);\n\nDROP TABLE IF EXISTS booking_channels;\n\nCREATE TABLE booking_channels (\n  booking_channel_key STRING, \n  update_time TIMESTAMP(3),\n  channel STRING,\n  WATERMARK FOR update_time AS update_time - INTERVAL \u002710\u0027 SECONDS,\n  PRIMARY KEY (booking_channel_key) NOT ENFORCED\n) WITH (\n  \u0027connector\u0027 \u003d \u0027upsert-kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027booking_channels\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027\n);\n\nDROP TABLE IF EXISTS train_activities;\n\nCREATE TABLE train_activities (\n  scheduled_departure_time TIMESTAMP(3),\n  actual_departure_date TIMESTAMP(3),\n  passenger_key STRING, \n  origin_station_key STRING, \n  destination_station_key STRING,\n  booking_channel_key STRING,\n  WATERMARK FOR actual_departure_date AS actual_departure_date - INTERVAL \u002710\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027train_activities\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027,\n  \u0027value.fields-include\u0027 \u003d \u0027ALL\u0027\n);\n\n",
       "user": "anonymous",
       "dateUpdated": "2021-02-27 15:20:14.742",
