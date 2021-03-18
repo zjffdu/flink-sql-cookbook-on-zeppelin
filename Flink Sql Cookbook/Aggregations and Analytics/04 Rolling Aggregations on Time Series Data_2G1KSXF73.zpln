@@ -35,9 +35,39 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n本例将展示如何使用 `OVER` 窗口基于一组数据来计算聚合值或累积值。一个典型的场景是滑动聚合。\n\n例子中使用的 source 表`temperature_measurements` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\nOVER 窗口聚合对一段有序的数据的每条输入行都计算一个聚合值。与  GROUP BY 聚合不同， OVER 聚合不会将每组的结果记录合并成一条记录。而是为每条输入记录生成一个聚合结果。\n\n顺序需要通过 [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) 定义。记录的范围可以是记录的数量或者是一个时间段。\n\n在本例中，我们试图找出表 `temperature_measurements` 中的异常值。因此，我们使用  `OVER` 窗口对每个城市的每次测量计算前一分钟所有测量的最大 (`MAX`), 最值 (`MIN`) 和 平值 (`AVG`)温度 ，以及他么你的标准差 (`STDDEV`)。\n\n\u003e 作为练习，你可以尝试写一个查询来过滤出所有高于或低于平均值4个标准查的的温度测量。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-07 11:00:28.225",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615110707452_60443575",
+      "id": "paragraph_1615110707452_60443575",
+      "dateCreated": "2021-03-07 09:51:47.452",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS temperature_measurements;\n\nCREATE TABLE temperature_measurements (\n  measurement_time TIMESTAMP(3),\n  city STRING,\n  temperature FLOAT, \n  WATERMARK FOR measurement_time AS measurement_time - INTERVAL \u002715\u0027 SECONDS\n)\nCOMMENT \u0027\u0027\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.measurement_time.expression\u0027 \u003d \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.temperature.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00270\u0027\u0027,\u0027\u002750\u0027\u0027}\u0027,\n  \u0027fields.city.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(Chicago|Munich|Berlin|Portland|Hangzhou|Seatle|Beijing|New York){1}\u0027\u0027}\u0027\n);\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:20:25.937",
+      "dateUpdated": "2021-03-07 10:52:17.972",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -62,14 +92,14 @@
       "jobName": "paragraph_1614295390559_156273420",
       "id": "paragraph_1614295390559_156273420",
       "dateCreated": "2021-02-26 07:23:10.559",
-      "dateStarted": "2021-02-26 12:20:25.947",
-      "dateFinished": "2021-02-26 12:20:26.868",
+      "dateStarted": "2021-03-07 10:52:18.063",
+      "dateFinished": "2021-03-07 10:52:19.632",
       "status": "FINISHED"
     },
     {
-      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  measurement_time,\n  city, \n  temperature,\n  AVG(CAST(temperature AS FLOAT)) OVER last_minute AS avg_temperature_minute,\n  MAX(temperature) OVER last_minute AS min_temperature_minute,\n  MIN(temperature) OVER last_minute AS max_temperature_minute,\n  STDDEV(CAST(temperature AS FLOAT)) OVER last_minute AS stdev_temperature_minute\nFROM temperature_measurements \nWINDOW last_minute AS (\n  PARTITION BY city\n  ORDER BY measurement_time\n  RANGE BETWEEN INTERVAL \u00271\u0027 MINUTE PRECEDING AND CURRENT ROW \n)\nORDER BY measurement_time DESC\nLIMIT 10;\n\n",
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  measurement_time,\n  city, \n  temperature,\n  AVG(CAST(temperature AS FLOAT)) OVER last_minute AS avg_temperature_minute,\n  MAX(temperature) OVER last_minute AS max_temperature_minute,\n  MIN(temperature) OVER last_minute AS min_temperature_minute,\n  STDDEV(CAST(temperature AS FLOAT)) OVER last_minute AS stdev_temperature_minute\nFROM temperature_measurements \nWINDOW last_minute AS (\n  PARTITION BY city\n  ORDER BY measurement_time\n  RANGE BETWEEN INTERVAL \u00271\u0027 MINUTE PRECEDING AND CURRENT ROW \n)\nORDER BY measurement_time DESC\nLIMIT 10;\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 12:21:25.972",
+      "dateUpdated": "2021-03-07 10:55:25.256",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -131,7 +161,7 @@
           "group": "flink",
           "values": [
             {
-              "jobUrl": "http://localhost:8081#/job/56e3fd3f6dec1a0782c9b2e6c2fed5b9"
+              "jobUrl": "http://localhost:8081#/job/4566714e23aabfb7bfda2ca6bf5351d1"
             }
           ],
           "interpreterSettingId": "flink"
@@ -141,14 +171,14 @@
       "jobName": "paragraph_1614295417642_50466260",
       "id": "paragraph_1614295417642_50466260",
       "dateCreated": "2021-02-26 07:23:37.642",
-      "dateStarted": "2021-02-26 12:21:25.979",
-      "dateFinished": "2021-02-26 12:21:57.947",
+      "dateStarted": "2021-03-07 10:52:32.911",
+      "dateFinished": "2021-03-07 10:54:09.592",
       "status": "ABORT"
     },
     {
       "text": "%flink.ssql\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 07:23:53.605",
+      "dateUpdated": "2021-03-07 11:02:13.353",
       "progress": 0,
       "config": {},
       "settings": {
@@ -158,9 +188,9 @@
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1614295433605_1989308539",
-      "id": "paragraph_1614295433605_1989308539",
-      "dateCreated": "2021-02-26 07:23:53.605",
+      "jobName": "paragraph_1615114933343_2063551719",
+      "id": "paragraph_1615114933343_2063551719",
+      "dateCreated": "2021-03-07 11:02:13.353",
       "status": "READY"
     }
   ],

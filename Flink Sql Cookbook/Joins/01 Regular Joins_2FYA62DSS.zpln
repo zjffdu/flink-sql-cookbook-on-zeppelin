@@ -35,6 +35,36 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n\n本例将展示如何使用 joins 来将多个表中的行关联起来。\n\nFlink SQL 支持对连续表的灵活且复杂的join操作。有几种不同类型的连接用来应对广泛的查询语义的要求。\n\nRegular joins（普通连接）是最通用且最灵活的连接类型，它包括大多数现代数据库提供的标准的 `INNER` 和  `[FULL|LEFT|RIGHT] OUTER` 连接。\n\n假设我们有一个全世界范围内的密码代理的[NOC 列表](https://en.wikipedia.org/wiki/Non-official_cover)。如果你选择接受，你的任务是将这个表与另一个包含代理真实名称的表关联。\n\n这个任务使用 Flink SQL 的 `INNER JOIN` 可以轻松实现。 Flink 将在 `agent_id` 上使用 equi-join 谓词来连接表，然后在每当有匹配时输出一个新的行记录。\n\n但是，这里有一些地方需要注意。Flink 为了能够在将来能让表中的行与另一张表中潜在的行进行关联，它必须保留输入的每一行。这意味着查询资源的需求将无限增长并最终失败。但是这种类型的连接在一些场景下很有用，其他的连接在流处理环境下很有用并且拥有显著的空间效率。\n\n本例中，2 个表都是有界的以节省空间。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-08 09:58:26.852",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615185616790_975194353",
+      "id": "paragraph_1615185616790_975194353",
+      "dateCreated": "2021-03-08 06:40:16.790",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS NOC;\n\nCREATE TABLE NOC (\n  agent_id STRING,\n  codename STRING\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.agent_id.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(1|2|3|4|5){1}\u0027\u0027}\u0027,\n  \u0027fields.codename.expression\u0027 \u003d \u0027#{superhero.name}\u0027,\n  \u0027number-of-rows\u0027 \u003d \u002710\u0027\n);\n\nDROP TABLE IF EXISTS RealNames;\n\nCREATE TABLE RealNames (\n  agent_id STRING,\n  name     STRING\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.agent_id.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(1|2|3|4|5){1}\u0027\u0027}\u0027,\n  \u0027fields.name.expression\u0027 \u003d \u0027#{Name.full_name}\u0027,\n  \u0027number-of-rows\u0027 \u003d \u002710\u0027\n);\n",
       "user": "anonymous",
       "dateUpdated": "2021-02-26 10:06:52.684",

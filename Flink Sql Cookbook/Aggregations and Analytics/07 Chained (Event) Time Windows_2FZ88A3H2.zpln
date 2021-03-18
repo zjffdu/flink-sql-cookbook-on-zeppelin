@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to efficiently aggregate time series data on two different levels of granularity.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nBased on our `server_logs` table we would like to compute the average request size over one minute **as well as five minute (event) windows.** For this, you could run two queries, similar to the one in Aggregating Time Series Data. At the end of the page is the script and resulting JobGraph from this approach. \n\nIn the main part, we will follow a slightly more efficient approach that chains the two aggregations: the one-minute aggregation output serves as the five-minute aggregation input.\n\nWe then use `runAsOne` to write out the two result tables. To keep this example self-contained, we use two tables of type `blackhole` instead of `kafka`, `filesystem`, or any other [connectors](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/). ",
+      "text": "%md\n\nThis example will show how to efficiently aggregate time series data on two different levels of granularity.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nBased on our `server_logs` table we would like to compute the average request size over one minute **as well as five minute (event) windows.** For this, you could run two queries, similar to the one in Aggregating Time Series Data. At the end of the page is the script and resulting JobGraph from this approach. \n\nIn the main part, we will follow a slightly more efficient approach that chains the two aggregations: the one-minute aggregation output serves as the five-minute aggregation input.\n\nWe then use `runAsOne` to write out the two result tables. To keep this example self-contained, we use two tables of type `blackhole` instead of `kafka`, `filesystem`, or any other [connectors](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/). \n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:12:09.422",
+      "dateUpdated": "2021-03-08 05:39:45.343",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -33,6 +33,36 @@
       "dateStarted": "2021-02-26 12:31:03.129",
       "dateFinished": "2021-02-26 12:31:03.164",
       "status": "FINISHED"
+    },
+    {
+      "text": "%md\n\n本例将展示如何在2个不同的粒度等级上高校的聚合时间序列数据。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据\n\n基于我们的 `server_logs 表我们可能希望计算每分钟**以及每5分钟**的平均请求大小, 为此，我们可以运行 2 条与 Aggregating Time Series Data 例子中类似查询语句。这种方式的搅合和结果 JobGraph 在页面的末尾。\n\n对其中主要的部分，我们将使用一个稍微高效的方式即将 2 个聚合链接起来：将一分钟的聚合输出作为 5 分钟的聚合输入。\n\n接着我们使用 `runAsOne` 向 2 张结果表写入数据。为了让这个例子不依赖任何依赖，我们直接使用 2 个 `blackhole` 类型的表，而不用  `kafka`, `filesystem` 等其他[connectors](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/)。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-08 05:40:02.431",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615118584595_491576797",
+      "id": "paragraph_1615118584595_491576797",
+      "dateCreated": "2021-03-07 12:03:04.595",
+      "status": "READY"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    log_time TIMESTAMP(3),\n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    request_line STRING, \n    status_code STRING, \n    size INT, \n    WATERMARK FOR log_time AS log_time - INTERVAL \u002715\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027#{regexify \u0027\u0027(morsapaes|knauf|sjwiesman){1}\u0027\u0027}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n\n",

@@ -1,0 +1,15 @@
+version: "3.4"
+
+services:
+  zeppelin:
+    image: apache/zeppelin:0.9.0
+    volumes:
+      - ./logs:/logs
+      - .:/notebook
+      - $FLINK_HOME:/flink
+    environment:
+      EPPELIN_LOG_DIR: /logs
+      ZEPPELIN_NOTEBOOK_DIR: /notebook
+    ports:
+    - 8080:8080
+    - 8081:8081

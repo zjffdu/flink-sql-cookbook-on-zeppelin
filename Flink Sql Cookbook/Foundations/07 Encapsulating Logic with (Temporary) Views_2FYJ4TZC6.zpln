@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can use (temporary) views to reuse code and to structure long queries and scripts. \n\n`CREATE (TEMPORARY) VIEW` defines a view from a query. **A view is not physically materialized.** Instead, the query is run every time the view is referenced in a query.\n\nTemporary views are very useful to structure and decompose more complicated queries and to re-use queries within a longer script.Non-temporary views - stored in a persistent [catalog](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html) - can also be used to share common queries within your organization, e.g. common filters or pre-processing steps.  \n\nHere, we create a view on the `server_logs` that only contains successful requests. This view encapsulates the logic of filtering the logs based on certain `status_code`s. This logic can subsequently be used by any query or script that has access to the catalog.   \n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:14:42.478",
+      "dateUpdated": "2021-03-07 08:54:57.833",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -33,6 +33,36 @@
       "dateStarted": "2021-02-26 11:48:23.356",
       "dateFinished": "2021-02-26 11:48:23.364",
       "status": "FINISHED"
+    },
+    {
+      "text": "%md\n本例将展示怎么使用(临时)视图来复用代码以及构造长查询和脚本。\n\n`CREATE (TEMPORARY) VIEW` 根据查询来定义视图。** 视图不是物理上的实体 ** 相反，每当某个查询引用视图时这个查询都会执行。\n\n临时视图对构造和解构更复杂的查询以及在长脚本中复用查询很有用。非临时视图持久化在[catalog](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html) 中， 可以被用来在组织内共享公共的查询，例如公共的过滤或者预处理步骤。\n\n这里，我们在 `server_logs` 上创建一个只包含成功请求的视图。这个视图封装来基于特定 `status_code` 筛选日志的逻辑。这个逻辑可用于后续的任何拥有查询这个 catalog 权限的查询和脚本。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-07 08:52:21.836",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615107136845_1987078896",
+      "id": "paragraph_1615107136845_1987078896",
+      "dateCreated": "2021-03-07 08:52:16.847",
+      "status": "READY"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n\nCREATE VIEW successful_requests AS \nSELECT * \nFROM server_logs\nWHERE status_code SIMILAR TO \u0027[2,3][0-9][0-9]\u0027",

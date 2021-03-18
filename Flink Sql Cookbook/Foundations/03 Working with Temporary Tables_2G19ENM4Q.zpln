@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how and why to create a temporary table using SQL DDL.\n\nNon-temporary tables in Flink SQL are stored in a catalog, while temporary tables only live within the current session. You can use a temporary table instead of a regular (catalog) table, if it is only meant to be used within the current session.\n\nThis example is exactly the same as Inserting Into Tables except that both `server_logs` and `client_errors` are created as temporary tables.\n\n## Why Temporary Tables?\nFor result tables like `client_errors` that no one can ever read from (because of its type `blackhole`) it makes a lot of sense to use a temporary table instead of publishing its metadata in a catalog.\n\nFurthermore, temporary tables allow you to create fully self-contained scripts, which is why we will mostly use those in the Flink SQL Cookbook.",
+      "text": "%md\n\nThis example will show how and why to create a temporary table using SQL DDL.\n\nNon-temporary tables in Flink SQL are stored in a catalog, while temporary tables only live within the current session. You can use a temporary table instead of a regular (catalog) table, if it is only meant to be used within the current session.\n\nThis example is exactly the same as Inserting Into Tables except that both `server_logs` and `client_errors` are created as temporary tables.\n\n## Why Temporary Tables?\nFor result tables like `client_errors` that no one can ever read from (because of its type `blackhole`) it makes a lot of sense to use a temporary table instead of publishing its metadata in a catalog.\n\nFurthermore, temporary tables allow you to create fully self-contained scripts, which is why we will mostly use those in the Flink SQL Cookbook.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:14:16.412",
+      "dateUpdated": "2021-03-07 08:54:15.722",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -35,9 +35,39 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n本例将展示怎么使用 SQl DDL 来创建临时表，以及为什么需要临时表。\n\nFlink SQL 中的非临时表存放与 catalog 中，而临时表的生命周期仅限于当前会话。如果你只需要在当前会话中使用某个表，这时使用临时表比常规catalog表更合适。\n\n本例除了将 `server_logs` 和 `client_errors` 创建为临时表以外，其他的都与上一个例子:表的插入(Inserting Into Tables)完全一样\n\n## 为什么需要临时表\n对于像 `client_errors` 这样的结果表， 因为它的类型是 `blackhole` 所以我们不能从它哪里读取结果，这时不将它的元数据保存到catalog 而是使用一个临时表更合适。\n\n另外，临时表允许你创建完全独立的脚本，这也是我们在 Flink SQL Cookbook 里面大量使用临时表的原因。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-07 08:54:21.034",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615106975488_1767580088",
+      "id": "paragraph_1615106975488_1767580088",
+      "dateCreated": "2021-03-07 08:49:35.489",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TEMPORARY TABLE IF EXISTS server_logs_temp;\n\nCREATE TEMPORARY TABLE server_logs_temp ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:50:11.049",
+      "dateUpdated": "2021-03-04 14:02:40.027",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -62,8 +92,8 @@
       "jobName": "paragraph_1614264882150_819187836",
       "id": "paragraph_1614264882150_819187836",
       "dateCreated": "2021-02-25 22:54:42.150",
-      "dateStarted": "2021-02-26 11:50:11.072",
-      "dateFinished": "2021-02-26 11:50:12.011",
+      "dateStarted": "2021-03-04 14:02:40.087",
+      "dateFinished": "2021-03-04 14:03:10.337",
       "status": "FINISHED"
     },
     {
@@ -101,7 +131,7 @@
     {
       "text": "%flink.ssql\n\nINSERT INTO client_errors_temp\nSELECT \n  log_time,\n  request_line,\n  status_code,\n  size\nFROM server_logs_temp\nWHERE \n  status_code SIMILAR TO \u00274[0-9][0-9]\u0027",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:50:24.615",
+      "dateUpdated": "2021-03-04 14:02:50.315",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -121,27 +151,14 @@
         "forms": {}
       },
       "apps": [],
-      "runtimeInfos": {
-        "jobUrl": {
-          "propertyName": "jobUrl",
-          "label": "FLINK JOB",
-          "tooltip": "View in Flink web UI",
-          "group": "flink",
-          "values": [
-            {
-              "jobUrl": "http://localhost:8081#/job/eb04ef6dd99c8eccb92da19c65c8dfad"
-            }
-          ],
-          "interpreterSettingId": "flink"
-        }
-      },
+      "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614264958394_1745571437",
       "id": "paragraph_1614264958394_1745571437",
       "dateCreated": "2021-02-25 22:55:58.394",
-      "dateStarted": "2021-02-26 11:50:24.628",
-      "dateFinished": "2021-02-26 11:50:40.341",
-      "status": "ABORT"
+      "dateStarted": "2021-03-04 14:03:08.606",
+      "dateFinished": "2021-03-04 14:03:10.333",
+      "status": "ERROR"
     },
     {
       "text": "%flink.ssql\n",

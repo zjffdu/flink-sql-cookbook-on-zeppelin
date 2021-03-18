@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nIn this recipe, you will learn how to use `runAsOne` to run multiple INSERT INTO statements in a single, optimized Flink Job.\n\nMany product requirements involve outputting the results of a streaming application to two or more sinks, such as Apache Kafka for real-time use cases, or a Filesystem for offline ones. Other times, two queries are not the same but share some extensive intermediate operations.\n\nWhen working with server logs, the support team would like to see the number of status codes per browser every 5 minutes to have real-time insights into a web pages\u0027 status. Additionally, they would like the same information on an hourly basis made available as partitioned Apache Parquet files so they can perform historical analysis.\n\nWe could quickly write two Flink SQL queries to solve both these requirements, but that would not be efficient. These queries have a lot of duplicated work, like reading the source logs Kafka topic and cleansing the data.\n\nZeppelin includes a feature called `runAsOne`, that allows for multiplexing INSERT INTO statements into a single query holistically optimized by Apache Flink and deployed as a single application.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:14:49.439",
+      "dateUpdated": "2021-03-07 08:55:12.346",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -35,9 +35,39 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n在本例中，你将学会怎么使用 `runAsOne` 来在单个优化的Flink任务中运行多个 INSERT INTO 语句。\n\n很多产品的需求包含将流程序的结果输出到多个接收器，例如实时场景的 Apache Kafka 或者 离线场景的文件系统。有时，2个查询并不一样但是共享很多中间操作。\n\n在使用服务器日志时，支持团队希望每5分钟查看每种浏览器的每种状态代码数量，以便实时了解web页面的状态。此外，他们还希望每小时都能以分的区Apache Parquet文件的形式提供相同的信息，以便执行历史分析。\n\n我们可以马上写 2 个 Flink SQL 查询来解决这两个需求，但是这种方式效率不高。因为这些查询有很多重复的工作，像例如从Kafka tipic 种读取原始日志和清理数据。\n\nZeppelin 包括一个称为  `runAsOne` 的特性，它允许在单个查询种多路复用多个 INSERT INTO 语句，这个查询被 Apache Flink 整体优化，并作为单个应用程序部署。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-07 08:52:42.483",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615107156917_227458529",
+      "id": "paragraph_1615107156917_227458529",
+      "dateCreated": "2021-03-07 08:52:36.917",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TEMPORARY TABLE IF EXISTS server_logs_temp;\n\nCREATE TEMPORARY TABLE server_logs_temp ( \n    client_ip       STRING,\n    client_identity STRING, \n    userid          STRING, \n    user_agent      STRING,\n    log_time        TIMESTAMP(3),\n    request_line    STRING, \n    status_code     STRING, \n    size            INT,\n    WATERMARK FOR log_time AS log_time - INTERVAL \u002730\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:56:11.529",
+      "dateUpdated": "2021-03-06 12:37:48.310",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -62,14 +92,14 @@
       "jobName": "paragraph_1614266965392_2093520683",
       "id": "paragraph_1614266965392_2093520683",
       "dateCreated": "2021-02-25 23:29:25.392",
-      "dateStarted": "2021-02-26 11:56:11.547",
-      "dateFinished": "2021-02-26 11:56:12.763",
+      "dateStarted": "2021-03-06 12:37:48.455",
+      "dateFinished": "2021-03-06 12:37:50.413",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TEMPORARY TABLE IF EXISTS realtime_aggregations_temp;\n\nCREATE TEMPORARY TABLE realtime_aggregations_temp (\n  `browser`     STRING,\n  `status_code` STRING,\n  `end_time`    TIMESTAMP(3),\n  `requests`    BIGINT NOT NULL\n) WITH (\n  \u0027connector\u0027 \u003d \u0027filesystem\u0027,\n  \u0027path\u0027 \u003d \u0027file:///tmp/realtime_aggregations\u0027,\n  \u0027sink.partition-commit.trigger\u0027 \u003d \u0027partition-time\u0027, \n  \u0027format\u0027 \u003d \u0027csv\u0027 \n);\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:56:37.975",
+      "dateUpdated": "2021-03-06 12:51:56.712",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -94,14 +124,14 @@
       "jobName": "paragraph_1614266979082_1973127487",
       "id": "paragraph_1614266979082_1973127487",
       "dateCreated": "2021-02-25 23:29:39.083",
-      "dateStarted": "2021-02-26 11:56:37.986",
-      "dateFinished": "2021-02-26 11:56:38.922",
+      "dateStarted": "2021-03-06 12:51:56.767",
+      "dateFinished": "2021-03-06 12:51:57.217",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TEMPORARY TABLE IF EXISTS offline_datawarehouse_temp;\n\nCREATE TEMPORARY TABLE offline_datawarehouse_temp (\n    `browser`     STRING,\n    `status_code` STRING,\n    `dt`          STRING,\n    `hour`        STRING,\n    `requests`    BIGINT NOT NULL\n) PARTITIONED BY (`dt`, `hour`) WITH (\n  \u0027connector\u0027 \u003d \u0027filesystem\u0027,\n  \u0027path\u0027 \u003d \u0027file:///tmp/offline_datawarehouse\u0027,\n  \u0027sink.partition-commit.trigger\u0027 \u003d \u0027partition-time\u0027, \n  \u0027format\u0027 \u003d \u0027csv\u0027 \n);",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:56:57.530",
+      "dateUpdated": "2021-03-06 12:52:00.115",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -126,14 +156,14 @@
       "jobName": "paragraph_1614267087710_1500021598",
       "id": "paragraph_1614267087710_1500021598",
       "dateCreated": "2021-02-25 23:31:27.710",
-      "dateStarted": "2021-02-26 11:56:57.554",
-      "dateFinished": "2021-02-26 11:56:58.402",
+      "dateStarted": "2021-03-06 12:52:00.171",
+      "dateFinished": "2021-03-06 12:52:00.587",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n-- This is a shared view that will be used by both \n-- insert into statements\nDROP TEMPORARY VIEW IF EXISTS browsers_temp;\n\nCREATE TEMPORARY VIEW browsers_temp AS  \nSELECT \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027) AS browser,\n  status_code,\n  log_time\nFROM server_logs_temp;",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:57:36.804",
+      "dateUpdated": "2021-03-06 12:52:05.194",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -158,14 +188,14 @@
       "jobName": "paragraph_1614267108142_227560020",
       "id": "paragraph_1614267108142_227560020",
       "dateCreated": "2021-02-25 23:31:48.148",
-      "dateStarted": "2021-02-26 11:57:36.810",
-      "dateFinished": "2021-02-26 11:57:37.792",
+      "dateStarted": "2021-03-06 12:52:05.244",
+      "dateFinished": "2021-03-06 12:52:06.166",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql(runAsOne\u003dtrue)\n\nINSERT INTO realtime_aggregations_temp\nSELECT\n    browser,\n    status_code,\n    TUMBLE_ROWTIME(log_time, INTERVAL \u00275\u0027 MINUTE) AS end_time,\n    COUNT(*) requests\nFROM browsers_temp\nGROUP BY \n    browser,\n    status_code,\n    TUMBLE(log_time, INTERVAL \u00275\u0027 MINUTE);\n    \nINSERT INTO offline_datawarehouse_temp\nSELECT\n    browser,\n    status_code,\n    DATE_FORMAT(TUMBLE_ROWTIME(log_time, INTERVAL \u00271\u0027 HOUR), \u0027yyyy-MM-dd\u0027) AS `dt`,\n    DATE_FORMAT(TUMBLE_ROWTIME(log_time, INTERVAL \u00271\u0027 HOUR), \u0027HH\u0027) AS `hour`,\n    COUNT(*) requests\nFROM browsers_temp\nGROUP BY \n    browser,\n    status_code,\n    TUMBLE(log_time, INTERVAL \u00271\u0027 HOUR);\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 11:58:14.535",
+      "dateUpdated": "2021-03-06 12:53:27.697",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -193,7 +223,7 @@
           "group": "flink",
           "values": [
             {
-              "jobUrl": "http://localhost:8081#/job/1b5795771ef8a07f2844b116c59842af"
+              "jobUrl": "http://localhost:8081#/job/90ffa75345c515c217dce8ae51859fbd"
             }
           ],
           "interpreterSettingId": "flink"
@@ -203,8 +233,8 @@
       "jobName": "paragraph_1614267128467_2138149264",
       "id": "paragraph_1614267128467_2138149264",
       "dateCreated": "2021-02-25 23:32:08.467",
-      "dateStarted": "2021-02-26 11:58:14.544",
-      "dateFinished": "2021-02-26 11:58:41.188",
+      "dateStarted": "2021-03-06 12:53:27.733",
+      "dateFinished": "2021-03-06 12:53:34.465",
       "status": "ABORT"
     },
     {
@@ -232,16 +262,7 @@
   "version": "0.10.0-SNAPSHOT",
   "noteParams": {},
   "noteForms": {},
-  "angularObjects": {
-    "flink-shared_process": [
-      {
-        "name": "duration",
-        "object": "17 seconds",
-        "noteId": "2G1MEGYE2",
-        "paragraphId": "paragraph_1614267128467_2138149264"
-      }
-    ]
-  },
+  "angularObjects": {},
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
