@@ -35,9 +35,9 @@
       "status": "FINISHED"
     },
     {
-      "text": "%md\n \n在本例中，我们将使用 n-way temporal 表连接来 de-normalize 一个简单的星座模型。\n\n[Star schemas](https://en.wikipedia.org/wiki/Star_schema) 是一个流行的在数据仓库中 normalizing 数据的方式。星座模型的中心是含有指标、度量和其他关于世界的事实的  **fact table**(事实表)。\n\n围绕事实表的是一张或者多张 **dimension tables**(维度表)，维度表的元数据在查询计算时提对事实表的扩展。\n\n你在一个小型的铁路公司运行了小型数据仓库，它包含一张事实表 (`train_activity`) 和3张 维度表 (`stations`, `booking_channels`, and `passengers`)。所有对事实表的插入和对维度表的跟新都镜像到 Apache Kafka 中。时间表中的记录表示为只插入，所以它使用 [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`) 提供数据。相反，维度表的记录基于主键跟新或者插入，它需要 [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`)。\n\n通过 Flink SQL 使用 5-way temporal 表连接， 你可以轻易的将所有的维度表连接到事实表上。Temporal table joins 采用任意一张表(左边 输入/探针 地址)，将每一行记录与版本表（右边 输入/构建 侧）中对应行记录的相关版本关联。使用 `FOR SYSTEM_TIME AS OF` SQL 语法来执行这个操作。当将事实表与多个缓慢变化的维度表连接是使用一个 temporal table join 将产出一致的、可复现的结果。 每个事件(事实表中的一行)与每个维度表基于事件在真实世界发送的事件来连接对应的值。\n",
+      "text": "%md\n \n在本例中，我们将使用 n-way temporal table join 来 de-normalize 一个简单的星座模型。\n\n[Star schemas](https://en.wikipedia.org/wiki/Star_schema) 是一个流行的在数据仓库中 normalizing 数据的方式。星座模型的中心是含有指标、度量和其他关于世界的事实的  **fact table**(事实表)。\n\n围绕事实表的是一张或者多张 **dimension tables**(维度表)，维度表的元数据在查询计算时是对事实表的扩展。\n\n你在一个小型的铁路公司运行了小型数据仓库，它包含一张事实表 (`train_activity`) 和3张 维度表 (`stations`, `booking_channels`, and `passengers`)。所有对事实表的插入和对维度表的更新都镜像到 Apache Kafka 中。事实表中的记录表示为只插入，所以它使用 [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`) 提供数据。相反，维度表的记录基于主键更新或者插入，它需要 [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`)。\n\n通过 Flink SQL 使用 5-way temporal 表连接， 你可以轻易的将所有的维度表连接到事实表上。Temporal table joins 采用任意一张表(左边 输入/探针 地址)，将每一行记录与版本表（右边 输入/构建 侧）中对应行记录的相关版本关联。使用 `FOR SYSTEM_TIME AS OF` SQL 语法来执行这个操作。当将事实表与多个缓慢变化的维度表连接是使用一个 temporal table join 将产出一致的、可复现的结果。 每个事件(事实表中的一行)与每个维度表基于事件在真实世界发送的事件来连接对应的值。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-12 07:44:17.051",
+      "dateUpdated": "2021-03-18 05:27:20.567",
       "progress": 0,
       "config": {
         "editorSetting": {
