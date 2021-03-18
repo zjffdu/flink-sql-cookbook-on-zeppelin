@@ -35,6 +35,36 @@
       "status": "FINISHED"
     },
     {
+      "text": "%md\n\n本例将展示如何使用  `UNION ALL`  集合操作来将多个数据流合并。\n\n对于Apache Flink 提供的所有的不可思议的操作集请参考 [our documentation](https://ci.apache.org/projects/flink/flink-docs-master/docs/dev/table/sql/queries/#set-operations)。\n\n## 数据源\n\n这个例子假设你正在一个外星球:chestnut:创建一个访问跟踪应用:raccoon:。 有3 个访问源。瑞克和莫蒂的宇宙 ， NASA的真实世界，以及 不是很真实的银河系 Hitchhikers 指南.\n\n3 个不同的表都是 `unbound` 的并且使用 [`faker` connector](https://github.com/knaufk/flink-faker)提供数据。\n\n所有的被跟踪的访问都有 `location`和 `visit_time`字段。一些有 `visitors` 字段，一些有 `spacecrafts` 字段 以后两个字段都有。\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-12 09:26:25.867",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615540369387_878272773",
+      "id": "paragraph_1615540369387_878272773",
+      "dateCreated": "2021-03-12 09:12:49.387",
+      "status": "READY"
+    },
+    {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS rickandmorty_visits;\n\nCREATE TABLE rickandmorty_visits ( \n    visitor STRING,\n    location STRING, \n    visit_time TIMESTAMP(3)\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.visitor.expression\u0027 \u003d \u0027#{RickAndMorty.character}\u0027,\n  \u0027fields.location.expression\u0027 \u003d  \u0027#{RickAndMorty.location}\u0027,\n  \u0027fields.visit_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n\nDROP TABLE IF EXISTS spaceagency_visits;\n\nCREATE TABLE spaceagency_visits ( \n    spacecraft STRING,\n    location STRING, \n    visit_time TIMESTAMP(3)\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.spacecraft.expression\u0027 \u003d \u0027#{Space.nasaSpaceCraft}\u0027,\n  \u0027fields.location.expression\u0027 \u003d  \u0027#{Space.star}\u0027,\n  \u0027fields.visit_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n\nDROP TABLE IF EXISTS hitchhiker_visits;\n\nCREATE TABLE hitchhiker_visits ( \n    visitor STRING,\n    starship STRING,\n    location STRING, \n    visit_time TIMESTAMP(3)\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.visitor.expression\u0027 \u003d \u0027#{HitchhikersGuideToTheGalaxy.character}\u0027,\n  \u0027fields.starship.expression\u0027 \u003d \u0027#{HitchhikersGuideToTheGalaxy.starship}\u0027,\n  \u0027fields.location.expression\u0027 \u003d  \u0027#{HitchhikersGuideToTheGalaxy.location}\u0027,\n  \u0027fields.visit_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n",
       "user": "anonymous",
       "dateUpdated": "2021-02-26 10:20:10.106",
