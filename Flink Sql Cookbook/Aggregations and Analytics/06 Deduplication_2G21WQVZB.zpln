@@ -3,7 +3,7 @@
     {
       "text": "%md\n\n\nThis example will show how you can identify and filter out duplicates in a stream of events.\n\nThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same `order_id`, and that you\u0027re only interested in keeping the most recent event for downstream processing.\n\nAs a first step, you can use a combination of the `COUNT` function and the `HAVING` clause to check if and which orders have more than one event; and then filter out these events using `ROW_NUMBER()`. In practice, deduplication is a special case of Top-N aggregation, where N is 1 (`rownum \u003d 1`) and the ordering column is either the processing or event time of events.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:12:03.489",
+      "dateUpdated": "2021-03-18 15:54:53.907",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can identify and filter out duplicates in a stream of events.\u003c/p\u003e\n\u003cp\u003eThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same \u003ccode\u003eorder_id\u003c/code\u003e, and that you\u0026rsquo;re only interested in keeping the most recent event for downstream processing.\u003c/p\u003e\n\u003cp\u003eAs a first step, you can use a combination of the \u003ccode\u003eCOUNT\u003c/code\u003e function and the \u003ccode\u003eHAVING\u003c/code\u003e clause to check if and which orders have more than one event; and then filter out these events using \u003ccode\u003eROW_NUMBER()\u003c/code\u003e. In practice, deduplication is a special case of Top-N aggregation, where N is 1 (\u003ccode\u003erownum \u003d 1\u003c/code\u003e) and the ordering column is either the processing or event time of events.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614313688051_1570601018",
       "id": "paragraph_1614313688051_1570601018",
       "dateCreated": "2021-02-26 12:28:08.054",
-      "dateStarted": "2021-02-26 12:28:31.408",
-      "dateFinished": "2021-02-26 12:28:31.430",
+      "dateStarted": "2021-03-18 15:54:53.907",
+      "dateFinished": "2021-03-18 15:54:53.927",
       "status": "FINISHED"
     },
     {
       "text": "%md\n\n本例将展示如何在事件流中识别并筛选出重复的事件。\n\n从人为错误到应用程序错误，重复的事件最终会以不同的方式出现在数据源中。不管来源如何，不干净的数据都会对结果的质量（和正确性）产生实际影响。假设您的订单系统偶尔会生成具有相同 `order_id` 的重复事件，并且您只想保留最新的事件以供下游处理。\n\n首先，您可以组合使用 `COUNT` 函数和 `HAVING` 语句来检查有没有重复的事件以及哪些订单有重复事件；然后使用 `ROW_NUMBER()` 来过滤掉这些事件。实际上，去重复数据是Top-N聚合的一种特殊情况，其中N是1（`rownum\u003d1`），排序字段可以是事件的处理时间或事件时间。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 12:01:16.849",
+      "dateUpdated": "2021-03-18 15:54:56.306",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何在事件流中识别并筛选出重复的事件。\u003c/p\u003e\n\u003cp\u003e从人为错误到应用程序错误，重复的事件最终会以不同的方式出现在数据源中。不管来源如何，不干净的数据都会对结果的质量（和正确性）产生实际影响。假设您的订单系统偶尔会生成具有相同 \u003ccode\u003eorder_id\u003c/code\u003e 的重复事件，并且您只想保留最新的事件以供下游处理。\u003c/p\u003e\n\u003cp\u003e首先，您可以组合使用 \u003ccode\u003eCOUNT\u003c/code\u003e 函数和 \u003ccode\u003eHAVING\u003c/code\u003e 语句来检查有没有重复的事件以及哪些订单有重复事件；然后使用 \u003ccode\u003eROW_NUMBER()\u003c/code\u003e 来过滤掉这些事件。实际上，去重复数据是Top-N聚合的一种特殊情况，其中N是1（\u003ccode\u003erownum\u003d1\u003c/code\u003e），排序字段可以是事件的处理时间或事件时间。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615117539626_58897275",
       "id": "paragraph_1615117539626_58897275",
       "dateCreated": "2021-03-07 11:45:39.626",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:54:56.310",
+      "dateFinished": "2021-03-18 15:54:56.323",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS orders;\n\nCREATE TABLE orders (\n  id INT,\n  order_time AS CURRENT_TIMESTAMP,\n  WATERMARK FOR order_time AS order_time - INTERVAL \u00275\u0027 SECONDS\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027datagen\u0027,\n  \u0027rows-per-second\u0027\u003d\u002710\u0027,\n  \u0027fields.id.kind\u0027\u003d\u0027random\u0027,\n  \u0027fields.id.min\u0027\u003d\u00271\u0027,\n  \u0027fields.id.max\u0027\u003d\u0027100\u0027\n);\n",

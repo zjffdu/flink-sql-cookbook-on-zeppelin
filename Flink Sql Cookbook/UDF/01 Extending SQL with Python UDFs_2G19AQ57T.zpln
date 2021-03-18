@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nInstall apache-flink\n\n```\npip install apache-flink\u003d\u003d1.12.1\n```\n\nThis example will show how to extend Flink SQL with custom functions written in Python.\n\nFlink SQL provides a wide range of [built-in functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/systemFunctions.html) that cover most SQL day-to-day work. Sometimes, you need more flexibility to express custom business logic or transformations that aren\u0027t easily translatable to SQL: this can be achieved with [User-Defined Functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/udfs.html) (UDFs).\n\nIn this example, you\u0027ll focus on [Python UDFs](https://ci.apache.org/projects/flink/flink-docs-stable/dev/python/table-api-users-guide/udfs/python_udfs.html) and implement a custom function (`to_fahr`) to convert temperature readings that are continuously generated for different EU and US cities. The Celsius-\u003eFahrenheit conversion should only happen if the city associated with the reading is in the US.",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:22:09.699",
+      "dateUpdated": "2021-03-18 16:01:45.310",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eInstall apache-flink\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003epip install apache-flink\u003d\u003d1.12.1\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis example will show how to extend Flink SQL with custom functions written in Python.\u003c/p\u003e\n\u003cp\u003eFlink SQL provides a wide range of \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/systemFunctions.html\"\u003ebuilt-in functions\u003c/a\u003e that cover most SQL day-to-day work. Sometimes, you need more flexibility to express custom business logic or transformations that aren\u0026rsquo;t easily translatable to SQL: this can be achieved with \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/udfs.html\"\u003eUser-Defined Functions\u003c/a\u003e (UDFs).\u003c/p\u003e\n\u003cp\u003eIn this example, you\u0026rsquo;ll focus on \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/python/table-api-users-guide/udfs/python_udfs.html\"\u003ePython UDFs\u003c/a\u003e and implement a custom function (\u003ccode\u003eto_fahr\u003c/code\u003e) to convert temperature readings that are continuously generated for different EU and US cities. The Celsius-\u0026gt;Fahrenheit conversion should only happen if the city associated with the reading is in the US.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614306308381_842100307",
       "id": "paragraph_1614306308381_842100307",
       "dateCreated": "2021-02-26 10:25:08.387",
-      "dateStarted": "2021-02-26 13:26:16.984",
-      "dateFinished": "2021-02-26 13:26:16.998",
+      "dateStarted": "2021-03-18 16:01:45.311",
+      "dateFinished": "2021-03-18 16:01:45.328",
       "status": "FINISHED"
     },
     {
       "text": "%md\n\n本例将展示如何使用Python编写的自定义函数来扩展 Flink SQL\n\nFlink SQL 提供来很多的内置函数[built-in functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/systemFunctions.html) ，它们覆盖来几乎所有的日常工作所需的函数。有时，我们需要更多的灵活性来表达一些难以转换为 SQL 的自定义的业务逻辑或者转换：我们可以通过 [User-Defined Functions](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/udfs.html) (UDFs)来达到目的。\n\n在本例中我们聚焦于 [Python UDFs](https://ci.apache.org/projects/flink/flink-docs-stable/dev/python/table-api-users-guide/udfs/python_udfs.html) 并使用一个自定义的函数 (`to_fahr`) 来转换来自不同的 EU和 US 城市的温度的读数显示。只有这个读数关联的城市是 US 的时候才进行摄氏度到华氏度的转换。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-12 09:11:13.043",
+      "dateUpdated": "2021-03-18 16:01:48.650",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何使用Python编写的自定义函数来扩展 Flink SQL\u003c/p\u003e\n\u003cp\u003eFlink SQL 提供来很多的内置函数\u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/systemFunctions.html\"\u003ebuilt-in functions\u003c/a\u003e ，它们覆盖来几乎所有的日常工作所需的函数。有时，我们需要更多的灵活性来表达一些难以转换为 SQL 的自定义的业务逻辑或者转换：我们可以通过 \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/functions/udfs.html\"\u003eUser-Defined Functions\u003c/a\u003e (UDFs)来达到目的。\u003c/p\u003e\n\u003cp\u003e在本例中我们聚焦于 \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/python/table-api-users-guide/udfs/python_udfs.html\"\u003ePython UDFs\u003c/a\u003e 并使用一个自定义的函数 (\u003ccode\u003eto_fahr\u003c/code\u003e) 来转换来自不同的 EU和 US 城市的温度的读数显示。只有这个读数关联的城市是 US 的时候才进行摄氏度到华氏度的转换。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615539187631_995640762",
       "id": "paragraph_1615539187631_995640762",
       "dateCreated": "2021-03-12 08:53:07.631",
-      "status": "READY"
+      "dateStarted": "2021-03-18 16:01:48.645",
+      "dateFinished": "2021-03-18 16:01:48.659",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.pyflink\n\nfrom pyflink.table import DataTypes\nfrom pyflink.table.udf import udf\n\nus_cities \u003d {\"Chicago\",\"Portland\",\"Seattle\",\"New York\"}\n\n@udf(input_types\u003d[DataTypes.STRING(), DataTypes.FLOAT()],\n     result_type\u003dDataTypes.FLOAT())\ndef to_fahr(city, temperature):\n  if city in us_cities:\n    fahr \u003d ((temperature * 9.0 / 5.0) + 32.0)\n    return fahr\n  else:\n    return temperature\n    \nst_env.register_function(\"to_fahr\", to_fahr)\n",

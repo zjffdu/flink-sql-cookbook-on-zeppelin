@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can use Flink SQL to detect patterns in a stream of events with `MATCH_RECOGNIZE`.\n\nA common (but historically complex) task in SQL day-to-day work is to identify meaningful sequences of events in a data set — also known as Complex Event Processing (CEP). This becomes even more relevant when dealing with streaming data, as you want to react quickly to known patterns or changing trends to deliver up-to-date business insights. In Flink SQL, you can easily perform this kind of tasks using the standard SQL clause [`MATCH_RECOGNIZE`](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html).\n\n## Breaking down MATCH_RECOGNIZE\n\nIn this example, you want to find users that downgraded their service subscription from one of the premium tiers (`type IN (\u0027premium\u0027,\u0027platinum\u0027)`) to the basic tier. \n\n#### Input\n\nThe input argument of `MATCH_RECOGNIZE` will be a row pattern table based on `subscriptions`. As a first step, logical partitioning and ordering must be applied to the input row pattern table to ensure that event processing is correct and deterministic:\n\n```sql\nPARTITION BY user_id \nORDER BY proc_time\n```\n\n#### Output\n\nRow pattern columns are then defined in the `MEASURES` clause, which can be thought of as the `SELECT` of `MATCH_RECOGNIZE`. If you\u0027re interested in getting the type of premium subscription associated with the last event before the downgrade, you can fetch it using the [logical offset](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html#logical-offsets) operator `LAST`. The downgrade date can be extrapolated from the `start_date` of the first basic subscription event following any existing premium one(s).\n\n```sql\nMEASURES\n  LAST(PREMIUM.type) AS premium_type,\n  AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n  BASIC.start_date AS downgrade_date\nAFTER MATCH SKIP PAST LAST ROW\n```\n\n#### Pattern Definition\n\nPatterns are specified in the `PATTERN` clause using row-pattern variables (i.e. event types) and regular expressions. These variables must also be associated with the matching conditions that events must meet to be included in the pattern, using the `DEFINE` clause. Here, you are interested in matching one or more premium subscription events (`PREMIUM+`) followed by a basic subscription event (`BASIC`):\n\n```sql\nPATTERN (PREMIUM+ BASIC)\nDEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\nBASIC AS BASIC.type \u003d \u0027basic\u0027);\n```\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:12:15.364",
+      "dateUpdated": "2021-03-18 15:55:20.771",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can use Flink SQL to detect patterns in a stream of events with \u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eA common (but historically complex) task in SQL day-to-day work is to identify meaningful sequences of events in a data set — also known as Complex Event Processing (CEP). This becomes even more relevant when dealing with streaming data, as you want to react quickly to known patterns or changing trends to deliver up-to-date business insights. In Flink SQL, you can easily perform this kind of tasks using the standard SQL clause \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html\"\u003e\u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e\u003c/a\u003e.\u003c/p\u003e\n\u003ch2\u003eBreaking down MATCH_RECOGNIZE\u003c/h2\u003e\n\u003cp\u003eIn this example, you want to find users that downgraded their service subscription from one of the premium tiers (\u003ccode\u003etype IN (\u0027premium\u0027,\u0027platinum\u0027)\u003c/code\u003e) to the basic tier.\u003c/p\u003e\n\u003ch4\u003eInput\u003c/h4\u003e\n\u003cp\u003eThe input argument of \u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e will be a row pattern table based on \u003ccode\u003esubscriptions\u003c/code\u003e. As a first step, logical partitioning and ordering must be applied to the input row pattern table to ensure that event processing is correct and deterministic:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003ePARTITION BY user_id \nORDER BY proc_time\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003eOutput\u003c/h4\u003e\n\u003cp\u003eRow pattern columns are then defined in the \u003ccode\u003eMEASURES\u003c/code\u003e clause, which can be thought of as the \u003ccode\u003eSELECT\u003c/code\u003e of \u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e. If you\u0026rsquo;re interested in getting the type of premium subscription associated with the last event before the downgrade, you can fetch it using the \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html#logical-offsets\"\u003elogical offset\u003c/a\u003e operator \u003ccode\u003eLAST\u003c/code\u003e. The downgrade date can be extrapolated from the \u003ccode\u003estart_date\u003c/code\u003e of the first basic subscription event following any existing premium one(s).\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eMEASURES\n  LAST(PREMIUM.type) AS premium_type,\n  AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n  BASIC.start_date AS downgrade_date\nAFTER MATCH SKIP PAST LAST ROW\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003ePattern Definition\u003c/h4\u003e\n\u003cp\u003ePatterns are specified in the \u003ccode\u003ePATTERN\u003c/code\u003e clause using row-pattern variables (i.e. event types) and regular expressions. These variables must also be associated with the matching conditions that events must meet to be included in the pattern, using the \u003ccode\u003eDEFINE\u003c/code\u003e clause. Here, you are interested in matching one or more premium subscription events (\u003ccode\u003ePREMIUM+\u003c/code\u003e) followed by a basic subscription event (\u003ccode\u003eBASIC\u003c/code\u003e):\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003ePATTERN (PREMIUM+ BASIC)\nDEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\nBASIC AS BASIC.type \u003d \u0027basic\u0027);\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614313983592_107698209",
       "id": "paragraph_1614313983592_107698209",
       "dateCreated": "2021-02-26 12:33:03.592",
-      "dateStarted": "2021-02-26 12:33:19.133",
-      "dateFinished": "2021-02-26 12:33:19.172",
+      "dateStarted": "2021-03-18 15:55:20.772",
+      "dateFinished": "2021-03-18 15:55:20.796",
       "status": "FINISHED"
     },
     {
       "text": "%md\n\n本例将展示如何使用 Flink SQL 的  `MATCH_RECOGNIZE` 来检测事件流中的模式。\n\nSQL 日常开发中的一个常见的任务（但是非常复杂）是识别数据集中有意义的事件序列 - 通常称为  Complex Event Processing (CEP) 复杂事件处理。单处理流式数据时这个任务更加的普遍，因为我们想对已知的模式或者变化趋势快速做出反应以提供最新的业务洞察。 在 FLINK SQL 中，你可以使用标准 SQL 语句 [`MATCH_RECOGNIZE`](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html)来轻易的实现这个任务。\n\n## 分解 MATCH_RECOGNIZE\n\n本例中我们希望找到那些将订阅服务从某个高的等级(`type IN (\u0027premium\u0027,\u0027platinum\u0027)`) 降到基础等级的用户。\n\n#### 输入\n\n`MATCH_RECOGNIZE` 的输入参数将是一个基于`subscriptions` 的模式表。首先必须对输入模式表进行逻辑分区和排序来保证事件处理的正确性和确定性\n\n```sql\nPARTITION BY user_id \nORDER BY proc_time\n```\n\n#### 输出\n\n记录的模式字段定义在  `MEASURES` 语句中，可以理解为 `MATCH_RECOGNIZE` 的 `SELECT`。 如果你对降级事件之前的最后一次事件关联的高级订阅类型感兴趣，你可以使用 [logical offset](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html#logical-offsets) 操作子 `LAST` 来获取它。降级的日期可以从任何高级订阅服务后紧跟的基础订阅服务的 `start_date` 来推测出来。\n\n```sql\nMEASURES\n  LAST(PREMIUM.type) AS premium_type,\n  AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n  BASIC.start_date AS downgrade_date\nAFTER MATCH SKIP PAST LAST ROW\n```\n\n#### 定义模式\n\nPatterns 使用 row-pattern 变量（即 event types）和正则表达式定义在 `PATTERN` 中。这些变量必须使用 `DEFINE` 来与事件必须达成的模式条件进行关联，这里我们关心匹配一个或多个高级订阅服务事件 (`PREMIUM+`)紧跟一个基础订阅服务事件(`BASIC`):\n\n```sql\nPATTERN (PREMIUM+ BASIC)\nDEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\nBASIC AS BASIC.type \u003d \u0027basic\u0027);\n```\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 06:35:09.689",
+      "dateUpdated": "2021-03-18 15:55:24.859",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何使用 Flink SQL 的  \u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e 来检测事件流中的模式。\u003c/p\u003e\n\u003cp\u003eSQL 日常开发中的一个常见的任务（但是非常复杂）是识别数据集中有意义的事件序列 - 通常称为  Complex Event Processing (CEP) 复杂事件处理。单处理流式数据时这个任务更加的普遍，因为我们想对已知的模式或者变化趋势快速做出反应以提供最新的业务洞察。 在 FLINK SQL 中，你可以使用标准 SQL 语句 \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html\"\u003e\u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e\u003c/a\u003e来轻易的实现这个任务。\u003c/p\u003e\n\u003ch2\u003e分解 MATCH_RECOGNIZE\u003c/h2\u003e\n\u003cp\u003e本例中我们希望找到那些将订阅服务从某个高的等级(\u003ccode\u003etype IN (\u0027premium\u0027,\u0027platinum\u0027)\u003c/code\u003e) 降到基础等级的用户。\u003c/p\u003e\n\u003ch4\u003e输入\u003c/h4\u003e\n\u003cp\u003e\u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e 的输入参数将是一个基于\u003ccode\u003esubscriptions\u003c/code\u003e 的模式表。首先必须对输入模式表进行逻辑分区和排序来保证事件处理的正确性和确定性\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003ePARTITION BY user_id \nORDER BY proc_time\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003e输出\u003c/h4\u003e\n\u003cp\u003e记录的模式字段定义在  \u003ccode\u003eMEASURES\u003c/code\u003e 语句中，可以理解为 \u003ccode\u003eMATCH_RECOGNIZE\u003c/code\u003e 的 \u003ccode\u003eSELECT\u003c/code\u003e。 如果你对降级事件之前的最后一次事件关联的高级订阅类型感兴趣，你可以使用 \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/streaming/match_recognize.html#logical-offsets\"\u003elogical offset\u003c/a\u003e 操作子 \u003ccode\u003eLAST\u003c/code\u003e 来获取它。降级的日期可以从任何高级订阅服务后紧跟的基础订阅服务的 \u003ccode\u003estart_date\u003c/code\u003e 来推测出来。\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eMEASURES\n  LAST(PREMIUM.type) AS premium_type,\n  AVG(TIMESTAMPDIFF(DAY,PREMIUM.start_date,PREMIUM.end_date)) AS premium_avg_duration,\n  BASIC.start_date AS downgrade_date\nAFTER MATCH SKIP PAST LAST ROW\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003e定义模式\u003c/h4\u003e\n\u003cp\u003ePatterns 使用 row-pattern 变量（即 event types）和正则表达式定义在 \u003ccode\u003ePATTERN\u003c/code\u003e 中。这些变量必须使用 \u003ccode\u003eDEFINE\u003c/code\u003e 来与事件必须达成的模式条件进行关联，这里我们关心匹配一个或多个高级订阅服务事件 (\u003ccode\u003ePREMIUM+\u003c/code\u003e)紧跟一个基础订阅服务事件(\u003ccode\u003eBASIC\u003c/code\u003e):\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003ePATTERN (PREMIUM+ BASIC)\nDEFINE PREMIUM AS PREMIUM.type IN (\u0027premium\u0027,\u0027platinum\u0027),\nBASIC AS BASIC.type \u003d \u0027basic\u0027);\n\u003c/code\u003e\u003c/pre\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615182073519_1664177331",
       "id": "paragraph_1615182073519_1664177331",
       "dateCreated": "2021-03-08 05:41:13.519",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:55:24.860",
+      "dateFinished": "2021-03-18 15:55:24.883",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS subscriptions;\n\nCREATE TABLE subscriptions ( \n    id STRING,\n    user_id INT,\n    type STRING,\n    start_date TIMESTAMP(3),\n    end_date TIMESTAMP(3),\n    payment_expiration TIMESTAMP(3),\n    proc_time AS PROCTIME()\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.id.expression\u0027 \u003d \u0027#{Internet.uuid}\u0027, \n  \u0027fields.user_id.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271\u0027\u0027,\u0027\u002750\u0027\u0027}\u0027,\n  \u0027fields.type.expression\u0027\u003d \u0027#{regexify \u0027\u0027(basic|premium|platinum){1}\u0027\u0027}\u0027,\n  \u0027fields.start_date.expression\u0027 \u003d \u0027#{date.past \u0027\u002730\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027,\n  \u0027fields.end_date.expression\u0027 \u003d \u0027#{date.future \u0027\u002715\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027,\n  \u0027fields.payment_expiration.expression\u0027 \u003d \u0027#{date.future \u0027\u0027365\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027\n);\n",

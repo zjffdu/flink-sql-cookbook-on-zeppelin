@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can sort a table, particularly unbounded tables. \n\nFlink SQL supports `ORDER BY`. Bounded Tables can be sorted by any column, descending or ascending. \n\nTo use `ORDER BY` on unbounded tables like `server_logs` the primary sorting key needs to be a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) like `log_time`.\n\nIn first example below, we are sorting the `server_logs` by `log_time`. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the `window_time` (a time attribute) and the `cnt_browser` (descending), so that the browser with the highest number of logs is at the top of each window.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:54:50.361",
+      "dateUpdated": "2021-03-18 15:27:10.598",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can sort a table, particularly unbounded tables.\u003c/p\u003e\n\u003cp\u003eFlink SQL supports \u003ccode\u003eORDER BY\u003c/code\u003e. Bounded Tables can be sorted by any column, descending or ascending.\u003c/p\u003e\n\u003cp\u003eTo use \u003ccode\u003eORDER BY\u003c/code\u003e on unbounded tables like \u003ccode\u003eserver_logs\u003c/code\u003e the primary sorting key needs to be a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e like \u003ccode\u003elog_time\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eIn first example below, we are sorting the \u003ccode\u003eserver_logs\u003c/code\u003e by \u003ccode\u003elog_time\u003c/code\u003e. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the \u003ccode\u003ewindow_time\u003c/code\u003e (a time attribute) and the \u003ccode\u003ecnt_browser\u003c/code\u003e (descending), so that the browser with the highest number of logs is at the top of each window.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614268041202_1817551626",
       "id": "paragraph_1614268041202_1817551626",
       "dateCreated": "2021-02-25 23:47:21.202",
-      "dateStarted": "2021-02-26 11:43:41.422",
-      "dateFinished": "2021-02-26 11:43:41.435",
+      "dateStarted": "2021-03-18 15:27:10.600",
+      "dateFinished": "2021-03-18 15:27:10.620",
       "status": "FINISHED"
     },
     {
       "text": "%md\n本例将展示如何对表进行排序，特别是对与无界表进行排序。\n\nFlink SQL 支持 `ORDER BY`。对于有界表，它可以对任何字段进行升序或者降序排序。\n对于像  `server_logs` 这样的无界表，为了支持 `ORDER BY` 主要的排序字段必须是 [时间属性](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) ，例如 `log_time`.\n\n下面的第一个例子中，我们使用 `log_time` 对 `server_logs` 排序。 第二个例子稍微复杂一些：它将每分钟每种浏览器的日志数量通过 `window_time` (一个时间属性) 和 `cnt_browser` 排序 (降序)，结果是每个窗口中日志数量最多的浏览器排在窗口的最上面。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:54:48.564",
+      "dateUpdated": "2021-03-18 15:27:42.861",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何对表进行排序，特别是对与无界表进行排序。\u003c/p\u003e\n\u003cp\u003eFlink SQL 支持 \u003ccode\u003eORDER BY\u003c/code\u003e。对于有界表，它可以对任何字段进行升序或者降序排序。\u003cbr /\u003e\n对于像  \u003ccode\u003eserver_logs\u003c/code\u003e 这样的无界表，为了支持 \u003ccode\u003eORDER BY\u003c/code\u003e 主要的排序字段必须是 \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003e时间属性\u003c/a\u003e ，例如 \u003ccode\u003elog_time\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003e下面的第一个例子中，我们使用 \u003ccode\u003elog_time\u003c/code\u003e 对 \u003ccode\u003eserver_logs\u003c/code\u003e 排序。 第二个例子稍微复杂一些：它将每分钟每种浏览器的日志数量通过 \u003ccode\u003ewindow_time\u003c/code\u003e (一个时间属性) 和 \u003ccode\u003ecnt_browser\u003c/code\u003e 排序 (降序)，结果是每个窗口中日志数量最多的浏览器排在窗口的最上面。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615107109571_1255171753",
       "id": "paragraph_1615107109571_1255171753",
       "dateCreated": "2021-03-07 08:51:49.572",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:27:42.858",
+      "dateFinished": "2021-03-18 15:27:42.871",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TEMPORARY TABLE IF EXISTS server_logs_temp;\n\nCREATE TEMPORARY TABLE server_logs_temp ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT, \n    WATERMARK FOR log_time AS log_time - INTERVAL \u002715\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);",

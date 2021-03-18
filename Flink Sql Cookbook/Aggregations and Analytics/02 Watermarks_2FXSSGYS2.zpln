@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how to use `WATERMARK`s to work with timestamps in records. \n\nThe source table (`doctor_sightings`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nThe previous recipe showed how a `TUMBLE` group window makes it simple to aggregate time-series data.\t \n\n[The Doctor](https://tardis.fandom.com/wiki/The_Doctor) is a renegade time lord who travels through space and time in a [TARDIS](https://tardis.fandom.com/wiki/The_Doctor%27s_TARDIS). As different versions of the Doctor travel through time, various people log their sightings. We want to track how many times each version of the Doctor is seen each minute. Unlike the previous recipe, these records have an embedded timestamp we need to use to perform our calculation. \t \n\nMore often than not, most data will come with embedded timestamps that we want to use for our time series calculations.\tWe call this timestamp an [event-time attribute](https://ci.apache.org/projects/flink/flink-docs-stable/learn-flink/streaming_analytics.html#event-time-and-watermarks).\t \n  \nEvent time represents when something actually happened in the real world. And it is unique because it is quasi-monotonically increasing; we generally see things that happened earlier before seeing things that happen later. Of course, data will never be perfectly ordered (systems go down, networks are laggy, doctor sighting take time to postmark and mail), and there will be some out-of-orderness in our data. \t \n\nFlink can account for all these variabilities using a [WATERMARK](https://docs.ververica.com/user_guide/sql_development/table_view.html#event-time) attribute in the tables DDL. The watermark signifies a column as the table\u0027s event time attribute and tells Flink how out of order we expect our data. \t \n \nIn the Doctor\u0027s case, we expect all records to arrive within 15 seconds when the sighting occurs.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:55:47.027",
+      "dateUpdated": "2021-03-18 15:52:40.889",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how to use \u003ccode\u003eWATERMARK\u003c/code\u003es to work with timestamps in records.\u003c/p\u003e\n\u003cp\u003eThe source table (\u003ccode\u003edoctor_sightings\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eThe previous recipe showed how a \u003ccode\u003eTUMBLE\u003c/code\u003e group window makes it simple to aggregate time-series data.\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://tardis.fandom.com/wiki/The_Doctor\"\u003eThe Doctor\u003c/a\u003e is a renegade time lord who travels through space and time in a \u003ca href\u003d\"https://tardis.fandom.com/wiki/The_Doctor%27s_TARDIS\"\u003eTARDIS\u003c/a\u003e. As different versions of the Doctor travel through time, various people log their sightings. We want to track how many times each version of the Doctor is seen each minute. Unlike the previous recipe, these records have an embedded timestamp we need to use to perform our calculation.\u003c/p\u003e\n\u003cp\u003eMore often than not, most data will come with embedded timestamps that we want to use for our time series calculations.\tWe call this timestamp an \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/learn-flink/streaming_analytics.html#event-time-and-watermarks\"\u003eevent-time attribute\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eEvent time represents when something actually happened in the real world. And it is unique because it is quasi-monotonically increasing; we generally see things that happened earlier before seeing things that happen later. Of course, data will never be perfectly ordered (systems go down, networks are laggy, doctor sighting take time to postmark and mail), and there will be some out-of-orderness in our data.\u003c/p\u003e\n\u003cp\u003eFlink can account for all these variabilities using a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#event-time\"\u003eWATERMARK\u003c/a\u003e attribute in the tables DDL. The watermark signifies a column as the table\u0026rsquo;s event time attribute and tells Flink how out of order we expect our data.\u003c/p\u003e\n\u003cp\u003eIn the Doctor\u0026rsquo;s case, we expect all records to arrive within 15 seconds when the sighting occurs.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614312342228_1171087041",
       "id": "paragraph_1614312342228_1171087041",
       "dateCreated": "2021-02-26 12:05:42.228",
-      "dateStarted": "2021-02-26 12:06:51.250",
-      "dateFinished": "2021-02-26 12:06:51.301",
+      "dateStarted": "2021-03-18 15:52:40.889",
+      "dateFinished": "2021-03-18 15:52:40.905",
       "status": "FINISHED"
     },
     {
       "text": "%md\n\n本例将展示如何使用 `WATERMARK` 来处理记录中的时间戳。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n之前的例子展示了 `TUMBLE` 窗口如何使时间序列数据的聚合变得简单。\n\n[The Doctor](https://tardis.fandom.com/wiki/The_Doctor) 是一个叛逆的时间领主，他使用 [TARDIS](https://tardis.fandom.com/wiki/The_Doctor%27s_TARDIS) 在时间和空间中穿梭旅行。不同版本的博士穿越在时间中，不同的人记录着他们目击到的博士以及目击的时间。我们要追踪每种版本的博士每分钟被目击的次数。与前面的例子不同，这些记录有一个嵌入的时间戳我们需要使用它来计算。\n\n通常，很多数据本身就携带我们需要用来计算时间序列的时间戳。我们称之为  [event-time attribute](https://ci.apache.org/projects/flink/flink-docs-stable/learn-flink/streaming_analytics.html#event-time-and-watermarks).\n\nEvent time(事件事件) 代表了事件在真实世界实际发生的时间。它是唯一的因为它是单调递增的；我们通常先看到之前发生的事然后然后看到后面发生的事。当然，数据集不可能都被完美的排好序（系统宕机，网络延迟，doctor 目击话费邮寄时间），我们的数据中将包含一些无序的记录。\n\nFLink 可以在表的 DDL 中使用  [WATERMARK](https://docs.ververica.com/user_guide/sql_development/table_view.html#event-time) 来将这些变数考虑进来。watermark 作为时间属性表示为表中的一个字段，并告诉 Flink 我们期望的数据的排序程度。\n\n在下面的 Doctor 例子中，我们期望所有的数据在目击发生后15秒内到达。\n\n\u003e 背景介绍 《神秘博士》（Doctor Who）是一部由英国BBC出品的科幻电视剧。故事讲述了一位自称为“博士”（The Doctor）的时间领主用他伪装成20世纪50年代英国警亭的时间机器塔迪斯（TARDIS，即”Time And Relative Dimension(s) In Space“的缩写）与其搭档在时间、空间探索悠游、惩恶扬善、拯救文明、帮助弱小的故事。\n[神秘博士](https://baike.baidu.com/item/%E7%A5%9E%E7%A7%98%E5%8D%9A%E5%A3%AB/82613?fromtitle\u003ddoctor%20who\u0026fromid\u003d3946220\u0026fr\u003daladdin)\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 03:25:57.954",
+      "dateUpdated": "2021-03-18 15:53:31.696",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何使用 \u003ccode\u003eWATERMARK\u003c/code\u003e 来处理记录中的时间戳。\u003c/p\u003e\n\u003cp\u003e例子中使用的 source 表\u003ccode\u003eserver_logs\u003c/code\u003e 的数据是利用  \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\u003c/p\u003e\n\u003cp\u003e之前的例子展示了 \u003ccode\u003eTUMBLE\u003c/code\u003e 窗口如何使时间序列数据的聚合变得简单。\u003c/p\u003e\n\u003cp\u003e\u003ca href\u003d\"https://tardis.fandom.com/wiki/The_Doctor\"\u003eThe Doctor\u003c/a\u003e 是一个叛逆的时间领主，他使用 \u003ca href\u003d\"https://tardis.fandom.com/wiki/The_Doctor%27s_TARDIS\"\u003eTARDIS\u003c/a\u003e 在时间和空间中穿梭旅行。不同版本的博士穿越在时间中，不同的人记录着他们目击到的博士以及目击的时间。我们要追踪每种版本的博士每分钟被目击的次数。与前面的例子不同，这些记录有一个嵌入的时间戳我们需要使用它来计算。\u003c/p\u003e\n\u003cp\u003e通常，很多数据本身就携带我们需要用来计算时间序列的时间戳。我们称之为  \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/learn-flink/streaming_analytics.html#event-time-and-watermarks\"\u003eevent-time attribute\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eEvent time(事件事件) 代表了事件在真实世界实际发生的时间。它是唯一的因为它是单调递增的；我们通常先看到之前发生的事然后然后看到后面发生的事。当然，数据集不可能都被完美的排好序（系统宕机，网络延迟，doctor 目击话费邮寄时间），我们的数据中将包含一些无序的记录。\u003c/p\u003e\n\u003cp\u003eFLink 可以在表的 DDL 中使用  \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#event-time\"\u003eWATERMARK\u003c/a\u003e 来将这些变数考虑进来。watermark 作为时间属性表示为表中的一个字段，并告诉 Flink 我们期望的数据的排序程度。\u003c/p\u003e\n\u003cp\u003e在下面的 Doctor 例子中，我们期望所有的数据在目击发生后15秒内到达。\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e背景介绍 《神秘博士》（Doctor Who）是一部由英国BBC出品的科幻电视剧。故事讲述了一位自称为“博士”（The Doctor）的时间领主用他伪装成20世纪50年代英国警亭的时间机器塔迪斯（TARDIS，即”Time And Relative Dimension(s) In Space“的缩写）与其搭档在时间、空间探索悠游、惩恶扬善、拯救文明、帮助弱小的故事。\u003cbr /\u003e\n\u003ca href\u003d\"https://baike.baidu.com/item/%E7%A5%9E%E7%A7%98%E5%8D%9A%E5%A3%AB/82613?fromtitle\u003ddoctor%20who\u0026amp;fromid\u003d3946220\u0026amp;fr\u003daladdin\"\u003e神秘博士\u003c/a\u003e\u003c/p\u003e\n\u003c/blockquote\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615107347152_1462984888",
       "id": "paragraph_1615107347152_1462984888",
       "dateCreated": "2021-03-07 08:55:47.152",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:53:31.696",
+      "dateFinished": "2021-03-18 15:53:31.715",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS doctor_sightings;\n\nCREATE TABLE doctor_sightings (\n  doctor        STRING,\n  sighting_time TIMESTAMP(3),\n  WATERMARK FOR sighting_time AS sighting_time - INTERVAL \u002715\u0027 SECONDS\n)\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.doctor.expression\u0027 \u003d \u0027#{dr_who.the_doctors}\u0027,\n  \u0027fields.sighting_time.expression\u0027 \u003d \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n\n",

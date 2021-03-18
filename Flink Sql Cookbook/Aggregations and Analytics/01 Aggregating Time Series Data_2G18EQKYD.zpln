@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how to aggregate time-series data in real-time using a `TUMBLE` window.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nMany streaming applications work with time-series data. To count the number of `DISTINCT` IP addresses seen each minute, rows need to be grouped based on a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes). Grouping based on time is special, because time always moves forward, which means Flink can generate final results after the minute is completed. \n\n`TUMBLE` is a built-in function for grouping timestamps into time intervals called windows. Unlike other aggregations, it will only produce a single final result for each key when the interval is completed. \n\nIf the logs do not have a timestamp, one can be generated using a [computed column](https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column). `log_time AS PROCTIME()` will append a column to the table with the current system time. \n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:55:25.350",
+      "dateUpdated": "2021-03-18 15:45:58.171",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how to aggregate time-series data in real-time using a \u003ccode\u003eTUMBLE\u003c/code\u003e window.\u003c/p\u003e\n\u003cp\u003eThe source table (\u003ccode\u003eserver_logs\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eMany streaming applications work with time-series data. To count the number of \u003ccode\u003eDISTINCT\u003c/code\u003e IP addresses seen each minute, rows need to be grouped based on a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e. Grouping based on time is special, because time always moves forward, which means Flink can generate final results after the minute is completed.\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eTUMBLE\u003c/code\u003e is a built-in function for grouping timestamps into time intervals called windows. Unlike other aggregations, it will only produce a single final result for each key when the interval is completed.\u003c/p\u003e\n\u003cp\u003eIf the logs do not have a timestamp, one can be generated using a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column\"\u003ecomputed column\u003c/a\u003e. \u003ccode\u003elog_time AS PROCTIME()\u003c/code\u003e will append a column to the table with the current system time.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614312032383_1494157403",
       "id": "paragraph_1614312032383_1494157403",
       "dateCreated": "2021-02-26 12:00:32.390",
-      "dateStarted": "2021-02-26 12:01:11.263",
-      "dateFinished": "2021-02-26 12:01:11.278",
+      "dateStarted": "2021-03-18 15:45:58.172",
+      "dateFinished": "2021-03-18 15:45:58.197",
       "status": "FINISHED"
     },
     {
       "text": "%md\n这个例子将展示如何使用 `TUMBLE` 窗口来实时聚合时间序列数据。\n\n例子中使用的 source 表`server_logs` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n很多流式应用用来处理时间序列数据。为了计算每分钟 IP 地址的  `DISTINCT` 数量，数据需要以 [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) 分组。根据时间分组很特殊，因为时间通常只向前移动，这意味着 Flink 可以在每分钟结束的时候生成最后的结果。\n\n`TUMBLE` 是一个用来将时间按称为窗口的时间段进行分组的内置函数。不像其他的聚合函数，它只会在某个时间段结束的时候对每个 key 生成一个唯一的最终结果.\n\n如果日志没有包含时间戳字段，可以使用 [computed column](https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column) 来创建一个这样的时间字段。`log_time AS PROCTIME()` 将使用当前的系统时间作为一个字段添加到表中。",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 01:54:14.395",
+      "dateUpdated": "2021-03-18 15:46:04.438",
       "progress": 0,
       "config": {
         "colWidth": 12.0,
@@ -50,11 +59,22 @@
           "completionKey": "TAB",
           "completionSupport": false
         },
-        "editorMode": "ace/mode/markdown"
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e这个例子将展示如何使用 \u003ccode\u003eTUMBLE\u003c/code\u003e 窗口来实时聚合时间序列数据。\u003c/p\u003e\n\u003cp\u003e例子中使用的 source 表\u003ccode\u003eserver_logs\u003c/code\u003e 的数据是利用  \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\u003c/p\u003e\n\u003cp\u003e很多流式应用用来处理时间序列数据。为了计算每分钟 IP 地址的  \u003ccode\u003eDISTINCT\u003c/code\u003e 数量，数据需要以 \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e 分组。根据时间分组很特殊，因为时间通常只向前移动，这意味着 Flink 可以在每分钟结束的时候生成最后的结果。\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eTUMBLE\u003c/code\u003e 是一个用来将时间按称为窗口的时间段进行分组的内置函数。不像其他的聚合函数，它只会在某个时间段结束的时候对每个 key 生成一个唯一的最终结果.\u003c/p\u003e\n\u003cp\u003e如果日志没有包含时间戳字段，可以使用 \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column\"\u003ecomputed column\u003c/a\u003e 来创建一个这样的时间字段。\u003ccode\u003elog_time AS PROCTIME()\u003c/code\u003e 将使用当前的系统时间作为一个字段添加到表中。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615107326507_1922483004",
       "id": "paragraph_1615107326507_1922483004",
       "dateCreated": "2021-03-07 08:55:26.507",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:46:04.439",
+      "dateFinished": "2021-03-18 15:46:04.453",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    request_line STRING, \n    status_code STRING, \n    log_time AS PROCTIME()\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027\n);",

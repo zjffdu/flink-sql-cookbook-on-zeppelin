@@ -3,7 +3,7 @@
     {
       "text": "%md\n\nThis example will show how you can correlate events using a `LATERAL` join.\n\nA recent addition to the SQL standard is the `LATERAL` join, which allows you to combine the power of a correlated subquery with the expressiveness of a join. \n\nGiven a table with people\u0027s addresses, you need to find the two most populous cities for each state and continuously update those rankings as people move. The input table of `People` contains a uid for each person and their address and when they moved there.\n\nThe first step is to calculate each city\u0027s population using a continuous aggregation. While this is simple enough, the real power of Flink SQL comes when people move. By using deduplication. Flink will automatically issue a retraction for a persons old city when they move. So if John moves from New York to Los Angelos, the population for New York will automatically go down by 1. This gives us the power change-data-capture without having to invest in the actual infrastructure of setting it up!\n\nWith this dynamic population table at hand, you are ready to solve the original problem using a `LATERAL` table join. Unlike a normal join, lateral joins allow the subquery to correlate with columns from other arguments in the `FROM` clause. And unlike a regular subquery, as a join, the lateral can return multiple rows. You can now have a sub-query correlated with every individual state, and for every state it ranks by population and returns the top 2 cities.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:21:43.779",
+      "dateUpdated": "2021-03-18 15:57:21.775",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can correlate events using a \u003ccode\u003eLATERAL\u003c/code\u003e join.\u003c/p\u003e\n\u003cp\u003eA recent addition to the SQL standard is the \u003ccode\u003eLATERAL\u003c/code\u003e join, which allows you to combine the power of a correlated subquery with the expressiveness of a join.\u003c/p\u003e\n\u003cp\u003eGiven a table with people\u0026rsquo;s addresses, you need to find the two most populous cities for each state and continuously update those rankings as people move. The input table of \u003ccode\u003ePeople\u003c/code\u003e contains a uid for each person and their address and when they moved there.\u003c/p\u003e\n\u003cp\u003eThe first step is to calculate each city\u0026rsquo;s population using a continuous aggregation. While this is simple enough, the real power of Flink SQL comes when people move. By using deduplication. Flink will automatically issue a retraction for a persons old city when they move. So if John moves from New York to Los Angelos, the population for New York will automatically go down by 1. This gives us the power change-data-capture without having to invest in the actual infrastructure of setting it up!\u003c/p\u003e\n\u003cp\u003eWith this dynamic population table at hand, you are ready to solve the original problem using a \u003ccode\u003eLATERAL\u003c/code\u003e table join. Unlike a normal join, lateral joins allow the subquery to correlate with columns from other arguments in the \u003ccode\u003eFROM\u003c/code\u003e clause. And unlike a regular subquery, as a join, the lateral can return multiple rows. You can now have a sub-query correlated with every individual state, and for every state it ranks by population and returns the top 2 cities.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614316927145_278384972",
       "id": "paragraph_1614316927145_278384972",
       "dateCreated": "2021-02-26 13:22:07.145",
-      "dateStarted": "2021-02-26 13:23:11.156",
-      "dateFinished": "2021-02-26 13:23:11.180",
+      "dateStarted": "2021-03-18 15:57:21.776",
+      "dateFinished": "2021-03-18 15:57:21.799",
       "status": "FINISHED"
     },
     {
       "text": "%md\n\n本例将展示如何使用  `LATERAL` join 来关联事件。\n\n `LATERAL` join 是最近添加到标准 SQL 的，它允许我们在 jion 的时候结合关联子查询的能力。\n \n 给定一个居民地址的表，我们需要找出对于每个州人口最多的城市。尽管这个例子很简单，当居民移动的时候就能体现 Flink SQL 的价值了。 通过使用去重复。当居民移动时 Flink 会自动发送一个 retraction给 居民以前的城市。所以如果 John 从纽约迁移到了洛杉矶，纽约的人口自动减去1。 这个能力能给我们提供捕获数据改变的能力而不需要花费额外的精力来搭建实际的基础设施！\n \n 借助动态人口表，我们可以使用 `LATERAL` table join 来解决之前的问题。与 普通的 join 不能，lateral 连接允许子查询关联`FROM` 语句中的其他参数的字段。并且与传统的子查询不同，作为一个连接，lateral 可以返回多行。现在我们可以使用一个与每个州关联的子查询并对对每个州的城市的人口排序返回最多的2个城市。\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-12 08:15:31.962",
+      "dateUpdated": "2021-03-18 15:57:24.097",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何使用  \u003ccode\u003eLATERAL\u003c/code\u003e join 来关联事件。\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eLATERAL\u003c/code\u003e join 是最近添加到标准 SQL 的，它允许我们在 jion 的时候结合关联子查询的能力。\u003c/p\u003e\n\u003cp\u003e给定一个居民地址的表，我们需要找出对于每个州人口最多的城市。尽管这个例子很简单，当居民移动的时候就能体现 Flink SQL 的价值了。 通过使用去重复。当居民移动时 Flink 会自动发送一个 retraction给 居民以前的城市。所以如果 John 从纽约迁移到了洛杉矶，纽约的人口自动减去1。 这个能力能给我们提供捕获数据改变的能力而不需要花费额外的精力来搭建实际的基础设施！\u003c/p\u003e\n\u003cp\u003e借助动态人口表，我们可以使用 \u003ccode\u003eLATERAL\u003c/code\u003e table join 来解决之前的问题。与 普通的 join 不能，lateral 连接允许子查询关联\u003ccode\u003eFROM\u003c/code\u003e 语句中的其他参数的字段。并且与传统的子查询不同，作为一个连接，lateral 可以返回多行。现在我们可以使用一个与每个州关联的子查询并对对每个州的城市的人口排序返回最多的2个城市。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615535173871_1879361334",
       "id": "paragraph_1615535173871_1879361334",
       "dateCreated": "2021-03-12 07:46:13.871",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:57:24.097",
+      "dateFinished": "2021-03-18 15:57:24.107",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS People;\n\nCREATE TABLE People (\n    id           INT,\n    city         STRING,\n    state        STRING,\n    arrival_time TIMESTAMP(3),\n    WATERMARK FOR arrival_time AS arrival_time - INTERVAL \u00271\u0027 MINUTE \n) WITH (\n    \u0027connector\u0027 \u003d \u0027faker\u0027,\n    \u0027fields.id.expression\u0027    \u003d \u0027#{number.numberBetween \u0027\u00271\u0027\u0027,\u0027\u0027100\u0027\u0027}\u0027,\n    \u0027fields.city.expression\u0027  \u003d \u0027#{regexify \u0027\u0027(Newmouth|Newburgh|Portport|Southfort|Springfield){1}\u0027\u0027}\u0027,\n    \u0027fields.state.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(New York|Illinois|California|Washington){1}\u0027\u0027}\u0027,\n    \u0027fields.arrival_time.expression\u0027 \u003d \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n    \u0027rows-per-second\u0027          \u003d \u002710\u0027\n); \n\n\nDROP VIEW IF EXISTS CurrentPopulation;\n\nCREATE VIEW CurrentPopulation AS\nSELECT \n    city,\n    state,\n    COUNT(*) as population\nFROM (\n    SELECT\n        city,\n        state,\n        ROW_NUMBER() OVER (PARTITION BY id ORDER BY arrival_time DESC) AS rownum\n    FROM People\n)\nWHERE rownum \u003d 1\nGROUP BY city, state;",

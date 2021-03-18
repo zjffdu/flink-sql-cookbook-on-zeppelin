@@ -3,7 +3,7 @@
     {
       "text": "%md\n\n\u003cbr/\u003e\n\nThis example will show how to calculate an aggregate or cumulative value based on a group of rows using an `OVER` window. A typical use case are rolling aggregations.\n\nThe source table (`temperature_measurements`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nOVER window aggregates compute an aggregated value for every input row over a range of ordered rows. In contrast to GROUP BY aggregates, OVER aggregates do not reduce the number of result rows to a single row for every group. Instead, OVER aggregates produce an aggregated value for every input row.\n\nThe order needs to be defined by a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes). The range of rows can be defined by a number of rows or a time interval. \n\nIn this example, we are trying to identify outliers in the `temperature_measurements` table. For this, we use an `OVER` window to calculate, for each measurement, the maximum (`MAX`), minimum (`MIN`) and average (`AVG`) temperature across all measurements, as well as the standard deviation (`STDDEV`), for the same city over the previous minute. \n\u003e As an exercise, you can try to write another query to filter out any temperature measurement that are higher or lower than the average by more than four standard deviations.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-27 15:11:51.487",
+      "dateUpdated": "2021-03-18 15:54:28.741",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cbr/\u003e\n\u003cp\u003eThis example will show how to calculate an aggregate or cumulative value based on a group of rows using an \u003ccode\u003eOVER\u003c/code\u003e window. A typical use case are rolling aggregations.\u003c/p\u003e\n\u003cp\u003eThe source table (\u003ccode\u003etemperature_measurements\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eOVER window aggregates compute an aggregated value for every input row over a range of ordered rows. In contrast to GROUP BY aggregates, OVER aggregates do not reduce the number of result rows to a single row for every group. Instead, OVER aggregates produce an aggregated value for every input row.\u003c/p\u003e\n\u003cp\u003eThe order needs to be defined by a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e. The range of rows can be defined by a number of rows or a time interval.\u003c/p\u003e\n\u003cp\u003eIn this example, we are trying to identify outliers in the \u003ccode\u003etemperature_measurements\u003c/code\u003e table. For this, we use an \u003ccode\u003eOVER\u003c/code\u003e window to calculate, for each measurement, the maximum (\u003ccode\u003eMAX\u003c/code\u003e), minimum (\u003ccode\u003eMIN\u003c/code\u003e) and average (\u003ccode\u003eAVG\u003c/code\u003e) temperature across all measurements, as well as the standard deviation (\u003ccode\u003eSTDDEV\u003c/code\u003e), for the same city over the previous minute.\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eAs an exercise, you can try to write another query to filter out any temperature measurement that are higher or lower than the average by more than four standard deviations.\u003c/p\u003e\n\u003c/blockquote\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614313116607_1862525193",
       "id": "paragraph_1614313116607_1862525193",
       "dateCreated": "2021-02-26 12:18:36.607",
-      "dateStarted": "2021-02-26 12:19:26.368",
-      "dateFinished": "2021-02-26 12:19:26.402",
+      "dateStarted": "2021-03-18 15:54:28.742",
+      "dateFinished": "2021-03-18 15:54:28.760",
       "status": "FINISHED"
     },
     {
       "text": "%md\n本例将展示如何使用 `OVER` 窗口基于一组数据来计算聚合值或累积值。一个典型的场景是滑动聚合。\n\n例子中使用的 source 表`temperature_measurements` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\nOVER 窗口聚合对一段有序的数据的每条输入行都计算一个聚合值。与  GROUP BY 聚合不同， OVER 聚合不会将每组的结果记录合并成一条记录。而是为每条输入记录生成一个聚合结果。\n\n顺序需要通过 [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) 定义。记录的范围可以是记录的数量或者是一个时间段。\n\n在本例中，我们试图找出表 `temperature_measurements` 中的异常值。因此，我们使用  `OVER` 窗口对每个城市的每次测量计算前一分钟所有测量的最大 (`MAX`), 最值 (`MIN`) 和 平值 (`AVG`)温度 ，以及他么你的标准差 (`STDDEV`)。\n\n\u003e 作为练习，你可以尝试写一个查询来过滤出所有高于或低于平均值4个标准查的的温度测量。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 11:00:28.225",
+      "dateUpdated": "2021-03-18 15:54:32.765",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例将展示如何使用 \u003ccode\u003eOVER\u003c/code\u003e 窗口基于一组数据来计算聚合值或累积值。一个典型的场景是滑动聚合。\u003c/p\u003e\n\u003cp\u003e例子中使用的 source 表\u003ccode\u003etemperature_measurements\u003c/code\u003e 的数据是利用  \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\u003c/p\u003e\n\u003cp\u003eOVER 窗口聚合对一段有序的数据的每条输入行都计算一个聚合值。与  GROUP BY 聚合不同， OVER 聚合不会将每组的结果记录合并成一条记录。而是为每条输入记录生成一个聚合结果。\u003c/p\u003e\n\u003cp\u003e顺序需要通过 \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e 定义。记录的范围可以是记录的数量或者是一个时间段。\u003c/p\u003e\n\u003cp\u003e在本例中，我们试图找出表 \u003ccode\u003etemperature_measurements\u003c/code\u003e 中的异常值。因此，我们使用  \u003ccode\u003eOVER\u003c/code\u003e 窗口对每个城市的每次测量计算前一分钟所有测量的最大 (\u003ccode\u003eMAX\u003c/code\u003e), 最值 (\u003ccode\u003eMIN\u003c/code\u003e) 和 平值 (\u003ccode\u003eAVG\u003c/code\u003e)温度 ，以及他么你的标准差 (\u003ccode\u003eSTDDEV\u003c/code\u003e)。\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e作为练习，你可以尝试写一个查询来过滤出所有高于或低于平均值4个标准查的的温度测量。\u003c/p\u003e\n\u003c/blockquote\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615110707452_60443575",
       "id": "paragraph_1615110707452_60443575",
       "dateCreated": "2021-03-07 09:51:47.452",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:54:32.766",
+      "dateFinished": "2021-03-18 15:54:32.788",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS temperature_measurements;\n\nCREATE TABLE temperature_measurements (\n  measurement_time TIMESTAMP(3),\n  city STRING,\n  temperature FLOAT, \n  WATERMARK FOR measurement_time AS measurement_time - INTERVAL \u002715\u0027 SECONDS\n)\nCOMMENT \u0027\u0027\nWITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.measurement_time.expression\u0027 \u003d \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.temperature.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00270\u0027\u0027,\u0027\u002750\u0027\u0027}\u0027,\n  \u0027fields.city.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(Chicago|Munich|Berlin|Portland|Hangzhou|Seatle|Beijing|New York){1}\u0027\u0027}\u0027\n);\n",

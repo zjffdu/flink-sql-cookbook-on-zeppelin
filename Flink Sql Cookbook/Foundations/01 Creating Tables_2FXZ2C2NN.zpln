@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the WITH clause and defines the physical system that backs this table. This example uses the datagen connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple SELECT statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\n",
+      "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the `WITH` clause and defines the physical system that backs this table. This example uses the `datagen` connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple `SELECT` statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:53:50.634",
+      "dateUpdated": "2021-03-18 15:05:48.624",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,13 +16,23 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "title": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how to create a table using SQL DDL.\u003c/p\u003e\n\u003cp\u003eFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\u003c/p\u003e\n\u003cp\u003eTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the \u003ccode\u003eWITH\u003c/code\u003e clause and defines the physical system that backs this table. This example uses the \u003ccode\u003edatagen\u003c/code\u003e connector which generates rows in memory and is convenient for testing queries.\u003c/p\u003e\n\u003cp\u003eYou can test the table is properly created by running a simple \u003ccode\u003eSELECT\u003c/code\u003e statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -30,14 +40,14 @@
       "jobName": "paragraph_1614267718812_631245959",
       "id": "paragraph_1614267718812_631245959",
       "dateCreated": "2021-02-25 23:41:58.812",
-      "dateStarted": "2021-02-27 15:00:24.277",
-      "dateFinished": "2021-02-27 15:00:26.924",
+      "dateStarted": "2021-03-18 15:05:48.625",
+      "dateFinished": "2021-03-18 15:05:48.655",
       "status": "FINISHED"
     },
     {
-      "text": "%md\n本例子将展示怎么使用 DDL SQL 来创建表\n\nFlink SQL 能像操作传统数据库一样操作逻辑表。 但是他并不维护表本身，而是通过操作外部系统来变更表的数据。\n\n定义表分为2部分；分别是设计逻辑 schema 和 connector 的配置。逻辑 schema 定义了表中的字段及其类型它也是查询操作的对象。连接器配置在 WITH 语句中，它定义了逻辑表依赖的物理储存。本例使用 datagen 连接器的在内存中生成数据，便于测试查询。\n\n你可以通过运行一条简单的 SELETE 语句来测试这个表。在 Zeppelin 中你可以在UI上看到查询的结果。在下面的例子中你将看到最近的10条记录。",
+      "text": "%md\n本例子将展示怎么使用 DDL SQL 来创建表\n\nFlink SQL 能像操作传统数据库一样操作逻辑表。 但是他并不维护表本身，而是通过操作外部系统来变更表的数据。\n\n定义表分为2部分；分别是设计逻辑 schema 和 connector 的配置。逻辑 schema 定义了表中的字段及其类型它也是查询操作的对象。连接器配置在 `WITH` 语句中，它定义了逻辑表依赖的物理储存。本例使用 `datagen` 连接器的在内存中生成数据，便于测试查询。\n\n你可以通过运行一条简单的 `SELETE` 语句来测试这个表。在 `Zeppelin` 中你可以在UI上看到查询的结果。在下面的例子中你将看到最近的10条记录。",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 01:43:57.363",
+      "dateUpdated": "2021-03-18 15:07:01.050",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +60,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e本例子将展示怎么使用 DDL SQL 来创建表\u003c/p\u003e\n\u003cp\u003eFlink SQL 能像操作传统数据库一样操作逻辑表。 但是他并不维护表本身，而是通过操作外部系统来变更表的数据。\u003c/p\u003e\n\u003cp\u003e定义表分为2部分；分别是设计逻辑 schema 和 connector 的配置。逻辑 schema 定义了表中的字段及其类型它也是查询操作的对象。连接器配置在 \u003ccode\u003eWITH\u003c/code\u003e 语句中，它定义了逻辑表依赖的物理储存。本例使用 \u003ccode\u003edatagen\u003c/code\u003e 连接器的在内存中生成数据，便于测试查询。\u003c/p\u003e\n\u003cp\u003e你可以通过运行一条简单的 \u003ccode\u003eSELETE\u003c/code\u003e 语句来测试这个表。在 \u003ccode\u003eZeppelin\u003c/code\u003e 中你可以在UI上看到查询的结果。在下面的例子中你将看到最近的10条记录。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +83,9 @@
       "jobName": "paragraph_1615106915535_2015311282",
       "id": "paragraph_1615106915535_2015311282",
       "dateCreated": "2021-03-07 08:48:35.535",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:07:01.049",
+      "dateFinished": "2021-03-18 15:07:01.074",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS orders;\n\nCREATE TABLE orders (\n    order_uid  BIGINT,\n    product_id BIGINT,\n    price      DOUBLE,\n    order_time TIMESTAMP(3)\n) WITH (\n    \u0027connector\u0027 \u003d \u0027datagen\u0027\n);\n\n",

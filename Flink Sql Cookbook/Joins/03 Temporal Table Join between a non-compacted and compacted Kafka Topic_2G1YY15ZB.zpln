@@ -3,7 +3,7 @@
     {
       "text": "%md\n\n\u003cbr/\u003e\n\nIn this recipe, you will see how to correctly enrich records from one Kafka topic with the corresponding records of another Kafka topic when the order of events matters.  \n\nTemporal table joins take an arbitrary table (left input/probe site) and correlate each row to the corresponding row’s relevant version in a versioned table (right input/build side). \nFlink uses the SQL syntax of `FOR SYSTEM_TIME AS OF` to perform this operation. \n\nIn this recipe, we want join each transaction (`transactions`) to its correct currency rate (`currency_rates`, a versioned table) **as of the time when the transaction happened**.\nA similar example would be to join each order with the customer details as of the time when the order happened.\nThis is exactly what an event-time temporal table join does.\nA temporal table join in Flink SQL provides correct, deterministic results in the presence of out-of-orderness and arbitrary time skew between the two tables. \n\nBoth the `transactions` and `currency_rates` tables are backed by Kafka topics, but in the case of rates this topic is compacted (i.e. only the most recent messages for a given key are kept as updated rates flow in).\nRecords in `transactions` are interpreted as inserts only, and so the table is backed by the [standard Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`); while the records in `currency_rates` need to be interpreted as upserts based on a primary key, which requires the [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`).\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 09:31:35.418",
+      "dateUpdated": "2021-03-18 15:56:25.613",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -17,12 +17,21 @@
         "fontSize": 9.0,
         "results": {},
         "enabled": true,
-        "editorHide": false,
+        "editorHide": true,
         "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cbr/\u003e\n\u003cp\u003eIn this recipe, you will see how to correctly enrich records from one Kafka topic with the corresponding records of another Kafka topic when the order of events matters.\u003c/p\u003e\n\u003cp\u003eTemporal table joins take an arbitrary table (left input/probe site) and correlate each row to the corresponding row’s relevant version in a versioned table (right input/build side).\u003cbr /\u003e\nFlink uses the SQL syntax of \u003ccode\u003eFOR SYSTEM_TIME AS OF\u003c/code\u003e to perform this operation.\u003c/p\u003e\n\u003cp\u003eIn this recipe, we want join each transaction (\u003ccode\u003etransactions\u003c/code\u003e) to its correct currency rate (\u003ccode\u003ecurrency_rates\u003c/code\u003e, a versioned table) \u003cstrong\u003eas of the time when the transaction happened\u003c/strong\u003e.\u003cbr /\u003e\nA similar example would be to join each order with the customer details as of the time when the order happened.\u003cbr /\u003e\nThis is exactly what an event-time temporal table join does.\u003cbr /\u003e\nA temporal table join in Flink SQL provides correct, deterministic results in the presence of out-of-orderness and arbitrary time skew between the two tables.\u003c/p\u003e\n\u003cp\u003eBoth the \u003ccode\u003etransactions\u003c/code\u003e and \u003ccode\u003ecurrency_rates\u003c/code\u003e tables are backed by Kafka topics, but in the case of rates this topic is compacted (i.e. only the most recent messages for a given key are kept as updated rates flow in).\u003cbr /\u003e\nRecords in \u003ccode\u003etransactions\u003c/code\u003e are interpreted as inserts only, and so the table is backed by the \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html\"\u003estandard Kafka connector\u003c/a\u003e (\u003ccode\u003econnector\u003c/code\u003e \u003d \u003ccode\u003ekafka\u003c/code\u003e); while the records in \u003ccode\u003ecurrency_rates\u003c/code\u003e need to be interpreted as upserts based on a primary key, which requires the \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html\"\u003eUpsert Kafka connector\u003c/a\u003e (\u003ccode\u003econnector\u003c/code\u003e \u003d \u003ccode\u003eupsert-kafka\u003c/code\u003e).\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -30,14 +39,14 @@
       "jobName": "paragraph_1614305485358_1290675305",
       "id": "paragraph_1614305485358_1290675305",
       "dateCreated": "2021-02-26 10:11:25.358",
-      "dateStarted": "2021-02-27 15:18:31.473",
-      "dateFinished": "2021-02-27 15:18:31.492",
+      "dateStarted": "2021-03-18 15:56:25.613",
+      "dateFinished": "2021-03-18 15:56:25.625",
       "status": "FINISHED"
     },
     {
       "text": "%md\n\n在这个例子中，你将看到当时间的顺序很重要的时如何正确的使用另一个kafaka topic 中对应的记录来丰富 kafka topic 中的记录。\n\nTemporal table joins 采用任意一张表(左边 输入/探针 地址)，将每一行记录与版本表（右边 输入/构建 侧）中对应行记录的相关版本关联。\nFlink 使用 `FOR SYSTEM_TIME AS OF` SQL 语法来执行这个操作。\n\n在本例中，我们希望将每一笔交易 (`transactions`) 与**交易发生时** 正确的货币汇率 (`currency_rates`, a versioned table)）相关联。\n一个简单的例子可能是将每笔定于与订单发生时的顾客信息关联。\n这就是 event-time temporal table join 要做的事。\nFlink SQL 中的 temporal table join 可以在含有无序的和任意时间偏移的 2 张表之间提供正确、确定的结果。\n\n`transactions` and `currency_rates` 表都使用 Kafka topics 提供数据， 但是在rates 表中 topic 是压缩的(即 只有给定的 key 的最近的消息被作为更新的rates 被保留)。\n \n`transactions` 表中的记录被翻译为只能插入，所以这个表是由 [标准 Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html) (`connector` \u003d `kafka`)提供数据;而 `currency_rates` 表中的记录需要被翻译基于主键的upserts，这需要使用 [Upsert Kafka connector](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html) (`connector` \u003d `upsert-kafka`)。\n ",
       "user": "anonymous",
-      "dateUpdated": "2021-03-08 09:47:36.856",
+      "dateUpdated": "2021-03-18 15:56:27.877",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e在这个例子中，你将看到当时间的顺序很重要的时如何正确的使用另一个kafaka topic 中对应的记录来丰富 kafka topic 中的记录。\u003c/p\u003e\n\u003cp\u003eTemporal table joins 采用任意一张表(左边 输入/探针 地址)，将每一行记录与版本表（右边 输入/构建 侧）中对应行记录的相关版本关联。\u003cbr /\u003e\nFlink 使用 \u003ccode\u003eFOR SYSTEM_TIME AS OF\u003c/code\u003e SQL 语法来执行这个操作。\u003c/p\u003e\n\u003cp\u003e在本例中，我们希望将每一笔交易 (\u003ccode\u003etransactions\u003c/code\u003e) 与\u003cstrong\u003e交易发生时\u003c/strong\u003e 正确的货币汇率 (\u003ccode\u003ecurrency_rates\u003c/code\u003e, a versioned table)）相关联。\u003cbr /\u003e\n一个简单的例子可能是将每笔定于与订单发生时的顾客信息关联。\u003cbr /\u003e\n这就是 event-time temporal table join 要做的事。\u003cbr /\u003e\nFlink SQL 中的 temporal table join 可以在含有无序的和任意时间偏移的 2 张表之间提供正确、确定的结果。\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003etransactions\u003c/code\u003e and \u003ccode\u003ecurrency_rates\u003c/code\u003e 表都使用 Kafka topics 提供数据， 但是在rates 表中 topic 是压缩的(即 只有给定的 key 的最近的消息被作为更新的rates 被保留)。\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003etransactions\u003c/code\u003e 表中的记录被翻译为只能插入，所以这个表是由 \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/kafka.html\"\u003e标准 Kafka connector\u003c/a\u003e (\u003ccode\u003econnector\u003c/code\u003e \u003d \u003ccode\u003ekafka\u003c/code\u003e)提供数据;而 \u003ccode\u003ecurrency_rates\u003c/code\u003e 表中的记录需要被翻译基于主键的upserts，这需要使用 \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/connectors/upsert-kafka.html\"\u003eUpsert Kafka connector\u003c/a\u003e (\u003ccode\u003econnector\u003c/code\u003e \u003d \u003ccode\u003eupsert-kafka\u003c/code\u003e)。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615193779157_760701183",
       "id": "paragraph_1615193779157_760701183",
       "dateCreated": "2021-03-08 08:56:19.157",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:56:27.878",
+      "dateFinished": "2021-03-18 15:56:27.894",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS currency_rates;\n\nCREATE TABLE currency_rates (\n  `currency_code` STRING,\n  `eur_rate` DECIMAL(6,4),\n  `rate_time` TIMESTAMP(3),\n  WATERMARK FOR `rate_time` AS rate_time - INTERVAL \u002715\u0027 SECONDS,\n  PRIMARY KEY (currency_code) NOT ENFORCED\n) WITH (\n  \u0027connector\u0027 \u003d \u0027upsert-kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027currency_rates\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027\n);\n\nDROP TABLE IF EXISTS transactions;\n\nCREATE TABLE transactions (\n  `id` STRING,\n  `currency_code` STRING,\n  `total` DECIMAL(10,2),\n  `transaction_time` TIMESTAMP(3),\n  WATERMARK FOR `transaction_time` AS transaction_time - INTERVAL \u002730\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027kafka\u0027,\n  \u0027topic\u0027 \u003d \u0027transactions\u0027,\n  \u0027properties.bootstrap.servers\u0027 \u003d \u0027localhost:9092\u0027,\n  \u0027key.format\u0027 \u003d \u0027raw\u0027,\n  \u0027key.fields\u0027 \u003d \u0027id\u0027,\n  \u0027value.format\u0027 \u003d \u0027json\u0027,\n  \u0027value.fields-include\u0027 \u003d \u0027ALL\u0027\n);\n",

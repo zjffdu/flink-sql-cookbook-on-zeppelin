@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nIn this recipe, you will learn how to use `runAsOne` to run multiple INSERT INTO statements in a single, optimized Flink Job.\n\nMany product requirements involve outputting the results of a streaming application to two or more sinks, such as Apache Kafka for real-time use cases, or a Filesystem for offline ones. Other times, two queries are not the same but share some extensive intermediate operations.\n\nWhen working with server logs, the support team would like to see the number of status codes per browser every 5 minutes to have real-time insights into a web pages\u0027 status. Additionally, they would like the same information on an hourly basis made available as partitioned Apache Parquet files so they can perform historical analysis.\n\nWe could quickly write two Flink SQL queries to solve both these requirements, but that would not be efficient. These queries have a lot of duplicated work, like reading the source logs Kafka topic and cleansing the data.\n\nZeppelin includes a feature called `runAsOne`, that allows for multiplexing INSERT INTO statements into a single query holistically optimized by Apache Flink and deployed as a single application.\n",
+      "text": "%md\n\nIn this recipe, you will learn how to use `runAsOne` which is only supported by Zeppelin to run multiple `INSERT INTO` statements in a single, optimized Flink Job.\n\nMany product requirements involve outputting the results of a streaming application to two or more sinks, such as Apache Kafka for real-time use cases, or a Filesystem for offline ones. Other times, two queries are not the same but share some extensive intermediate operations.\n\nWhen working with server logs, the support team would like to see the number of status codes per browser every 5 minutes to have real-time insights into a web pages\u0027 status. Additionally, they would like the same information on an hourly basis made available as partitioned Apache Parquet files so they can perform historical analysis.\n\nWe could quickly write two Flink SQL queries to solve both these requirements, but that would not be efficient. These queries have a lot of duplicated work, like reading the source logs Kafka topic and cleansing the data.\n\nZeppelin includes a feature called `runAsOne`, that allows for multiplexing `INSERT INTO` statements into a single query holistically optimized by Apache Flink and deployed as a single application.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:55:12.346",
+      "dateUpdated": "2021-03-18 15:45:10.264",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eIn this recipe, you will learn how to use \u003ccode\u003erunAsOne\u003c/code\u003e which is only supported by Zeppelin to run multiple \u003ccode\u003eINSERT INTO\u003c/code\u003e statements in a single, optimized Flink Job.\u003c/p\u003e\n\u003cp\u003eMany product requirements involve outputting the results of a streaming application to two or more sinks, such as Apache Kafka for real-time use cases, or a Filesystem for offline ones. Other times, two queries are not the same but share some extensive intermediate operations.\u003c/p\u003e\n\u003cp\u003eWhen working with server logs, the support team would like to see the number of status codes per browser every 5 minutes to have real-time insights into a web pages\u0026rsquo; status. Additionally, they would like the same information on an hourly basis made available as partitioned Apache Parquet files so they can perform historical analysis.\u003c/p\u003e\n\u003cp\u003eWe could quickly write two Flink SQL queries to solve both these requirements, but that would not be efficient. These queries have a lot of duplicated work, like reading the source logs Kafka topic and cleansing the data.\u003c/p\u003e\n\u003cp\u003eZeppelin includes a feature called \u003ccode\u003erunAsOne\u003c/code\u003e, that allows for multiplexing \u003ccode\u003eINSERT INTO\u003c/code\u003e statements into a single query holistically optimized by Apache Flink and deployed as a single application.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614268141191_633824219",
       "id": "paragraph_1614268141191_633824219",
       "dateCreated": "2021-02-25 23:49:01.191",
-      "dateStarted": "2021-02-26 11:55:46.255",
-      "dateFinished": "2021-02-26 11:55:46.689",
+      "dateStarted": "2021-03-18 15:45:10.264",
+      "dateFinished": "2021-03-18 15:45:10.284",
       "status": "FINISHED"
     },
     {
       "text": "%md\n在本例中，你将学会怎么使用 `runAsOne` 来在单个优化的Flink任务中运行多个 INSERT INTO 语句。\n\n很多产品的需求包含将流程序的结果输出到多个接收器，例如实时场景的 Apache Kafka 或者 离线场景的文件系统。有时，2个查询并不一样但是共享很多中间操作。\n\n在使用服务器日志时，支持团队希望每5分钟查看每种浏览器的每种状态代码数量，以便实时了解web页面的状态。此外，他们还希望每小时都能以分的区Apache Parquet文件的形式提供相同的信息，以便执行历史分析。\n\n我们可以马上写 2 个 Flink SQL 查询来解决这两个需求，但是这种方式效率不高。因为这些查询有很多重复的工作，像例如从Kafka tipic 种读取原始日志和清理数据。\n\nZeppelin 包括一个称为  `runAsOne` 的特性，它允许在单个查询种多路复用多个 INSERT INTO 语句，这个查询被 Apache Flink 整体优化，并作为单个应用程序部署。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 08:52:42.483",
+      "dateUpdated": "2021-03-18 15:42:36.890",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e在本例中，你将学会怎么使用 \u003ccode\u003erunAsOne\u003c/code\u003e 来在单个优化的Flink任务中运行多个 INSERT INTO 语句。\u003c/p\u003e\n\u003cp\u003e很多产品的需求包含将流程序的结果输出到多个接收器，例如实时场景的 Apache Kafka 或者 离线场景的文件系统。有时，2个查询并不一样但是共享很多中间操作。\u003c/p\u003e\n\u003cp\u003e在使用服务器日志时，支持团队希望每5分钟查看每种浏览器的每种状态代码数量，以便实时了解web页面的状态。此外，他们还希望每小时都能以分的区Apache Parquet文件的形式提供相同的信息，以便执行历史分析。\u003c/p\u003e\n\u003cp\u003e我们可以马上写 2 个 Flink SQL 查询来解决这两个需求，但是这种方式效率不高。因为这些查询有很多重复的工作，像例如从Kafka tipic 种读取原始日志和清理数据。\u003c/p\u003e\n\u003cp\u003eZeppelin 包括一个称为  \u003ccode\u003erunAsOne\u003c/code\u003e 的特性，它允许在单个查询种多路复用多个 INSERT INTO 语句，这个查询被 Apache Flink 整体优化，并作为单个应用程序部署。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615107156917_227458529",
       "id": "paragraph_1615107156917_227458529",
       "dateCreated": "2021-03-07 08:52:36.917",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:42:36.890",
+      "dateFinished": "2021-03-18 15:42:36.904",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\nDROP TEMPORARY TABLE IF EXISTS server_logs_temp;\n\nCREATE TEMPORARY TABLE server_logs_temp ( \n    client_ip       STRING,\n    client_identity STRING, \n    userid          STRING, \n    user_agent      STRING,\n    log_time        TIMESTAMP(3),\n    request_line    STRING, \n    status_code     STRING, \n    size            INT,\n    WATERMARK FOR log_time AS log_time - INTERVAL \u002730\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);",

@@ -3,7 +3,7 @@
     {
       "text": "%md\n\n\u003cbr/\u003e\n\nThis example will show how to continuously calculate the \"Top-N\" rows based on a given attribute, using an `OVER` window and the `ROW_NUMBER()` function.\n\nThe source table (`spells_cast`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nThe Ministry of Magic tracks every spell a wizard casts throughout Great Britain and wants to know every wizard\u0027s Top 2 all-time favorite spells. \n\nFlink SQL can be used to calculate continuous aggregations, so if we know each spell a wizard has cast, we can maintain a continuous total of how many times they have cast that spell. \n\n```sql\nSELECT wizard, spell, COUNT(*) AS times_cast\nFROM spells_cast\nGROUP BY wizard;\n```\n\nThis result can be used in an `OVER` window to calculate a [Top-N](https://docs.ververica.com/user_guide/sql_development/queries.html#top-n). The rows are partitioned using the `wizard` column, and are then ordered based on the count of spell casts (`times_cast DESC`).  The built-in function `ROW_NUMBER()` assigns a unique, sequential number to each row, starting from one, according to the rows\u0027 ordering within the partition. Finally, the results are filtered for only those rows with a `row_num \u003c\u003d 2` to find each wizard\u0027s top 2 favorite spells. \n\nWhere Flink is most potent in this query is its ability to issue retractions. As wizards cast more spells, their top 2 will change. When this occurs, Flink will issue a retraction, modifying its output, so the result is always correct and up to date. \n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 11:04:24.822",
+      "dateUpdated": "2021-03-18 15:54:40.443",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -16,7 +16,7 @@
         "colWidth": 12.0,
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
-        "editorHide": false,
+        "editorHide": true,
         "results": {},
         "enabled": true
       },
@@ -24,20 +24,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cbr/\u003e\n\u003cp\u003eThis example will show how to continuously calculate the \u0026ldquo;Top-N\u0026rdquo; rows based on a given attribute, using an \u003ccode\u003eOVER\u003c/code\u003e window and the \u003ccode\u003eROW_NUMBER()\u003c/code\u003e function.\u003c/p\u003e\n\u003cp\u003eThe source table (\u003ccode\u003espells_cast\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eThe Ministry of Magic tracks every spell a wizard casts throughout Great Britain and wants to know every wizard\u0026rsquo;s Top 2 all-time favorite spells.\u003c/p\u003e\n\u003cp\u003eFlink SQL can be used to calculate continuous aggregations, so if we know each spell a wizard has cast, we can maintain a continuous total of how many times they have cast that spell.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eSELECT wizard, spell, COUNT(*) AS times_cast\nFROM spells_cast\nGROUP BY wizard;\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis result can be used in an \u003ccode\u003eOVER\u003c/code\u003e window to calculate a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/queries.html#top-n\"\u003eTop-N\u003c/a\u003e. The rows are partitioned using the \u003ccode\u003ewizard\u003c/code\u003e column, and are then ordered based on the count of spell casts (\u003ccode\u003etimes_cast DESC\u003c/code\u003e).  The built-in function \u003ccode\u003eROW_NUMBER()\u003c/code\u003e assigns a unique, sequential number to each row, starting from one, according to the rows\u0026rsquo; ordering within the partition. Finally, the results are filtered for only those rows with a \u003ccode\u003erow_num \u0026lt;\u003d 2\u003c/code\u003e to find each wizard\u0026rsquo;s top 2 favorite spells.\u003c/p\u003e\n\u003cp\u003eWhere Flink is most potent in this query is its ability to issue retractions. As wizards cast more spells, their top 2 will change. When this occurs, Flink will issue a retraction, modifying its output, so the result is always correct and up to date.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614313517301_112591276",
       "id": "paragraph_1614313517301_112591276",
       "dateCreated": "2021-02-26 12:25:17.301",
-      "dateStarted": "2021-02-26 12:26:01.745",
-      "dateFinished": "2021-02-26 12:26:01.767",
+      "dateStarted": "2021-03-18 15:54:40.445",
+      "dateFinished": "2021-03-18 15:54:40.463",
       "status": "FINISHED"
     },
     {
       "text": "%md\n这个例子将展示如何使用 `OVER` 窗口和 `ROW_NUMBER()` 函数来基于给定的属性持续计算 \"Top-N\" 条记录。\n\n例子中使用的 source 表`spells_cast` 的数据是利用  [`faker` connector](https://github.com/knaufk/flink-faker) 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\n\n魔法部在追踪每个巫师在英国施法的每一个咒语，并想知道每个巫师最喜欢的两个咒语。\n\nFlink SQL 可以被用来持续聚合计算，所以如果我们知道每个巫师施法的咒语，我门就可以持续维护他们每个施法的咒语的总数。\n\n```sql\nSELECT wizard, spell, COUNT(*) AS times_cast\nFROM spells_cast\nGROUP BY wizard, spell;\n```\n\n结果可以被用在 `OVER` 窗口中，来计算[Top-N](https://docs.ververica.com/user_guide/sql_development/queries.html#top-n)。 数据被 `wizard` 字段分区，然后基于咒语施法的次数排序 (`times_cast DESC`)，内置函数 `ROW_NUMBER()` 对每个分区内的数据，从第一行开始配置一个顺序的唯一的行号。最后这些结果使用 `row_num \u003c\u003d 2` 来过滤出每个巫师最喜欢的2条咒语。\n\nFLink 在这个查询中最厉害 的地方在于可以发出retraction。随着巫师不断的施法咒语，他们的 top 2 将会改变。一旦发生改变，Flink将发送 retraction，然后修改它的输出，所以结果总是正确的且最新的。\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-07 11:45:00.109",
+      "dateUpdated": "2021-03-18 15:54:45.403",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -50,11 +59,22 @@
         "editorMode": "ace/mode/markdown",
         "fontSize": 9.0,
         "results": {},
-        "enabled": true
+        "enabled": true,
+        "editorHide": true,
+        "tableHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e这个例子将展示如何使用 \u003ccode\u003eOVER\u003c/code\u003e 窗口和 \u003ccode\u003eROW_NUMBER()\u003c/code\u003e 函数来基于给定的属性持续计算 \u0026ldquo;Top-N\u0026rdquo; 条记录。\u003c/p\u003e\n\u003cp\u003e例子中使用的 source 表\u003ccode\u003espells_cast\u003c/code\u003e 的数据是利用  \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e 产生的，它基于 Java Faker 表达式不断的在内存中生成数据。\u003c/p\u003e\n\u003cp\u003e魔法部在追踪每个巫师在英国施法的每一个咒语，并想知道每个巫师最喜欢的两个咒语。\u003c/p\u003e\n\u003cp\u003eFlink SQL 可以被用来持续聚合计算，所以如果我们知道每个巫师施法的咒语，我门就可以持续维护他们每个施法的咒语的总数。\u003c/p\u003e\n\u003cpre\u003e\u003ccode class\u003d\"language-sql\"\u003eSELECT wizard, spell, COUNT(*) AS times_cast\nFROM spells_cast\nGROUP BY wizard, spell;\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e结果可以被用在 \u003ccode\u003eOVER\u003c/code\u003e 窗口中，来计算\u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/queries.html#top-n\"\u003eTop-N\u003c/a\u003e。 数据被 \u003ccode\u003ewizard\u003c/code\u003e 字段分区，然后基于咒语施法的次数排序 (\u003ccode\u003etimes_cast DESC\u003c/code\u003e)，内置函数 \u003ccode\u003eROW_NUMBER()\u003c/code\u003e 对每个分区内的数据，从第一行开始配置一个顺序的唯一的行号。最后这些结果使用 \u003ccode\u003erow_num \u0026lt;\u003d 2\u003c/code\u003e 来过滤出每个巫师最喜欢的2条咒语。\u003c/p\u003e\n\u003cp\u003eFLink 在这个查询中最厉害 的地方在于可以发出retraction。随着巫师不断的施法咒语，他们的 top 2 将会改变。一旦发生改变，Flink将发送 retraction，然后修改它的输出，所以结果总是正确的且最新的。\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
       },
       "apps": [],
       "runtimeInfos": {},
@@ -62,7 +82,9 @@
       "jobName": "paragraph_1615115064951_644342547",
       "id": "paragraph_1615115064951_644342547",
       "dateCreated": "2021-03-07 11:04:24.954",
-      "status": "READY"
+      "dateStarted": "2021-03-18 15:54:45.408",
+      "dateFinished": "2021-03-18 15:54:45.427",
+      "status": "FINISHED"
     },
     {
       "text": "%flink.ssql\n\n\nDROP TABLE IF EXISTS spells_cast;\n\nCREATE TABLE spells_cast (\n    wizard STRING,\n    spell  STRING\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.wizard.expression\u0027 \u003d \u0027#{harry_potter.characters}\u0027,\n  \u0027fields.spell.expression\u0027 \u003d \u0027#{harry_potter.spells}\u0027\n);\n\n",
