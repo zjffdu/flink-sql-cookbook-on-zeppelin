@@ -1,0 +1,170 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.14%2B-lightgrey)\n\n\u003e :bulb: This example will show how to filter out late data using the `CURRENT_WATERMARK` function.\nThe source table (`mobile_usage`) is backed by the [`faker` connector](https://flink-packages.org/packages/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nAs explained before in the [watermarks recipe](../../aggregations-and-analytics/02_watermarks/02_watermarks.md), Flink uses watermarks to measure progress in event time. By using a `WATERMARK` attribute in a table\u0027s DDL, we signify a column as the table\u0027s event time attribute and tell Flink how out of order we expect our data to arrive.  \n\nThere are many cases when rows are arriving even more out of order than anticipated, i.e. after the watermark. This data is called *late*.  An example could be when someone is using a mobile app while being offline because of lack of mobile coverage or flight mode being enabled. When Internet access is restored, previously tracked activities would then be sent.\n\nIn this recipe, we\u0027ll filter out this late data using the [`CURRENT_WATERMARK`](https://ci.apache.org/projects/flink/flink-docs-release-1.14/docs/dev/table/functions/systemfunctions/) function. In the first statement, we\u0027ll use the non-late data combined with the [`TUMBLE`](../../aggregations-and-analytics/01_group_by_window/01_group_by_window_tvf.md) function to send the unique IP addresses per minute to a downstream consumer (like a BI tool). Next to this use case, we\u0027re sending the late data to a different sink. For example, you might want to use these rows to change the results of your product recommender for offline mobile app users. \n\nThis table DDL contains both an event time and a processing time definition. `ingest_time` is defined as processing time, while `log_time` is defined as event time and will contain timestamps between 45 and 10 seconds ago.   \n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 11:53:33.372",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.14%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to filter out late data using the \u003ccode\u003eCURRENT_WATERMARK\u003c/code\u003e function.\u003cbr /\u003e\nThe source table (\u003ccode\u003emobile_usage\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://flink-packages.org/packages/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eAs explained before in the \u003ca href\u003d\"../../aggregations-and-analytics/02_watermarks/02_watermarks.md\"\u003ewatermarks recipe\u003c/a\u003e, Flink uses watermarks to measure progress in event time. By using a \u003ccode\u003eWATERMARK\u003c/code\u003e attribute in a table\u0026rsquo;s DDL, we signify a column as the table\u0026rsquo;s event time attribute and tell Flink how out of order we expect our data to arrive.\u003c/p\u003e\n\u003cp\u003eThere are many cases when rows are arriving even more out of order than anticipated, i.e. after the watermark. This data is called \u003cem\u003elate\u003c/em\u003e.  An example could be when someone is using a mobile app while being offline because of lack of mobile coverage or flight mode being enabled. When Internet access is restored, previously tracked activities would then be sent.\u003c/p\u003e\n\u003cp\u003eIn this recipe, we\u0026rsquo;ll filter out this late data using the \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-release-1.14/docs/dev/table/functions/systemfunctions/\"\u003e\u003ccode\u003eCURRENT_WATERMARK\u003c/code\u003e\u003c/a\u003e function. In the first statement, we\u0026rsquo;ll use the non-late data combined with the \u003ca href\u003d\"../../aggregations-and-analytics/01_group_by_window/01_group_by_window_tvf.md\"\u003e\u003ccode\u003eTUMBLE\u003c/code\u003e\u003c/a\u003e function to send the unique IP addresses per minute to a downstream consumer (like a BI tool). Next to this use case, we\u0026rsquo;re sending the late data to a different sink. For example, you might want to use these rows to change the results of your product recommender for offline mobile app users.\u003c/p\u003e\n\u003cp\u003eThis table DDL contains both an event time and a processing time definition. \u003ccode\u003eingest_time\u003c/code\u003e is defined as processing time, while \u003ccode\u003elog_time\u003c/code\u003e is defined as event time and will contain timestamps between 45 and 10 seconds ago.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633665177413_1398758132",
+      "id": "paragraph_1633665177413_1398758132",
+      "dateCreated": "2021-10-08 11:52:57.413",
+      "dateStarted": "2021-10-08 11:53:33.376",
+      "dateFinished": "2021-10-08 11:53:35.864",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\n-- Create source table\nCREATE TABLE `mobile_usage` ( \n    `activity` STRING, \n    `client_ip` STRING,\n    `ingest_time` AS PROCTIME(),\n    `log_time` TIMESTAMP_LTZ(3), \n    WATERMARK FOR log_time AS log_time - INTERVAL \u002715\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027rows-per-second\u0027 \u003d \u002750\u0027,\n  \u0027fields.activity.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(open_push_message|discard_push_message|open_app|display_overview|change_settings)\u0027\u0027}\u0027,\n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002745\u0027\u0027,\u0027\u002710\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n\n-- Create sink table for rows that are non-late\nCREATE TABLE `unique_users_per_window` ( \n    `window_start` TIMESTAMP(3), \n    `window_end` TIMESTAMP(3),\n    `ip_addresses` BIGINT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n-- Create sink table for rows that are late\nCREATE TABLE `late_usage_events` ( \n    `activity` STRING, \n    `client_ip` STRING,\n    `ingest_time` TIMESTAMP_LTZ(3),\n    `log_time` TIMESTAMP_LTZ(3), \n    `current_watermark` TIMESTAMP_LTZ(3)    \n) WITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n-- Create a view with non-late data\nCREATE TEMPORARY VIEW `mobile_data` AS\n    SELECT * FROM mobile_usage\n    WHERE CURRENT_WATERMARK(log_time) IS NOT NULL\n          OR log_time \u003c CURRENT_WATERMARK(log_time);\n\n-- Create a view with late data\nCREATE TEMPORARY VIEW `late_mobile_data` AS \n    SELECT * FROM mobile_usage\n        WHERE CURRENT_WATERMARK(log_time) IS NULL\n              OR log_time \u003e CURRENT_WATERMARK(log_time);\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 11:57:05.534",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been created.\nTable has been created.\nTable has been created.\nView has been created.\nView has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633665213368_836109418",
+      "id": "paragraph_1633665213368_836109418",
+      "dateCreated": "2021-10-08 11:53:33.368",
+      "dateStarted": "2021-10-08 11:57:05.537",
+      "dateFinished": "2021-10-08 11:57:36.112",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(runAsOne\u003dtrue)\n\nINSERT INTO `unique_users_per_window`\n    SELECT `window_start`, `window_end`, COUNT(DISTINCT client_ip) AS `ip_addresses`\n      FROM TABLE(\n        TUMBLE(TABLE mobile_data, DESCRIPTOR(log_time), INTERVAL \u00271\u0027 MINUTE))\n      GROUP BY window_start, window_end;\n\n-- Send all rows that are late to the sink for late data\nINSERT INTO `late_usage_events`\n    SELECT *, CURRENT_WATERMARK(log_time) as `current_watermark` from `late_mobile_data`;\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 11:58:02.010",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1628498781174_4089/#/job/f46da64231057666732d9059ac150900"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633665300488_421025159",
+      "id": "paragraph_1633665300488_421025159",
+      "dateCreated": "2021-10-08 11:55:00.488",
+      "dateStarted": "2021-10-08 11:58:02.012",
+      "status": "RUNNING"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 11:58:02.012",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633665482012_1897319436",
+      "id": "paragraph_1633665482012_1897319436",
+      "dateCreated": "2021-10-08 11:58:02.012",
+      "status": "READY"
+    }
+  ],
+  "name": "03 Filtering out Late Data",
+  "id": "2GJ18VM3X",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {
+    "flink-2GJ18VM3X": [
+      {
+        "name": "duration",
+        "object": "6 minutes 43 seconds",
+        "noteId": "2GJ18VM3X",
+        "paragraphId": "paragraph_1633665300488_421025159"
+      }
+    ]
+  },
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
