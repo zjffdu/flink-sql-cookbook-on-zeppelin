@@ -1,0 +1,205 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.13%2B-lightgrey)\n\n\u003e :bulb: This example will show how to aggregate time series data in real-time using a `TUMBLE` window.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://flink-packages.org/packages/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nMany streaming applications work with time series data.\nTo count the number of `DISTINCT` IP addresses seen each minute, rows need to be grouped based on a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes).\nGrouping based on time is special, because time always moves forward, which means Flink can generate final results after the minute is completed.\n\n`TUMBLE` is a [built-in function](https://ci.apache.org/projects/flink/flink-docs-stable/docs/dev/table/sql/queries/window-agg/) for grouping timestamps into time intervals called windows. Windows split the stream into “buckets” of finite size, over which we can apply computations.\nUnlike other aggregations such as `HOP` or `CUMULATE`, it will only produce a single final result for each key when the interval is completed.\n\nIf the logs do not have a timestamp, one can be generated using a [computed column](https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column).\n`log_time AS PROCTIME()` will append a column to the table with the current system time.\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 16:06:24.514",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.13%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to aggregate time series data in real-time using a \u003ccode\u003eTUMBLE\u003c/code\u003e window.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThe source table (\u003ccode\u003eserver_logs\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://flink-packages.org/packages/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eMany streaming applications work with time series data.\u003cbr /\u003e\nTo count the number of \u003ccode\u003eDISTINCT\u003c/code\u003e IP addresses seen each minute, rows need to be grouped based on a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e.\u003cbr /\u003e\nGrouping based on time is special, because time always moves forward, which means Flink can generate final results after the minute is completed.\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eTUMBLE\u003c/code\u003e is a \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/docs/dev/table/sql/queries/window-agg/\"\u003ebuilt-in function\u003c/a\u003e for grouping timestamps into time intervals called windows. Windows split the stream into “buckets” of finite size, over which we can apply computations.\u003cbr /\u003e\nUnlike other aggregations such as \u003ccode\u003eHOP\u003c/code\u003e or \u003ccode\u003eCUMULATE\u003c/code\u003e, it will only produce a single final result for each key when the interval is completed.\u003c/p\u003e\n\u003cp\u003eIf the logs do not have a timestamp, one can be generated using a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#computed-column\"\u003ecomputed column\u003c/a\u003e.\u003cbr /\u003e\n\u003ccode\u003elog_time AS PROCTIME()\u003c/code\u003e will append a column to the table with the current system time.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633680366906_806346437",
+      "id": "paragraph_1633680366906_806346437",
+      "dateCreated": "2021-10-08 16:06:06.906",
+      "dateStarted": "2021-10-08 16:06:24.513",
+      "dateFinished": "2021-10-08 16:06:24.526",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    request_line STRING, \n    status_code STRING, \n    log_time AS PROCTIME()\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027\n);",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 16:06:52.594",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633680384513_748559044",
+      "id": "paragraph_1633680384513_748559044",
+      "dateCreated": "2021-10-08 16:06:24.513",
+      "dateStarted": "2021-10-08 16:06:52.600",
+      "dateFinished": "2021-10-08 16:07:24.595",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT window_start, window_end, COUNT(DISTINCT client_ip) AS ip_addresses\n  FROM TABLE(\n    TUMBLE(TABLE server_logs, DESCRIPTOR(log_time), INTERVAL \u00271\u0027 MINUTE))\n  GROUP BY window_start, window_end;\n  \n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 16:07:56.657",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "window_start": "string",
+                      "window_end": "string",
+                      "ip_addresses": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "window_start\twindow_end\tip_addresses\n2021-10-08 16:07:00.000\t2021-10-08 16:08:00.000\t301\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT window_start, window_end, COUNT(DISTINCT client_ip) AS ip_addresses\n  FROM TABLE(\n    TUMBLE(TABLE server_logs, DESCRIPTOR(log_time), INTERVAL \u00271\u0027 MINUTE))\n  GROUP BY window_start, window_end\njava.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:177)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:86)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callSelect(FlinkSqlInterpreter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callCommand(FlinkSqlInterpreter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.runSqlList(FlinkSqlInterpreter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:109)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:849)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:741)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.client.deployment.application.UnsuccessfulExecutionException: Application Status: CANCELED\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:71)\n\tat org.apache.flink.client.deployment.application.EmbeddedJobClient.lambda$getJobExecutionResult$2(EmbeddedJobClient.java:136)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.deployment.application.JobStatusPollingUtils.lambda$null$2(JobStatusPollingUtils.java:101)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.rpc.akka.AkkaInvocationHandler.lambda$invokeRpc$0(AkkaInvocationHandler.java:250)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1389)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$1.onComplete(AkkaFutureUtils.java:47)\n\tat akka.dispatch.OnComplete.internal(Future.scala:300)\n\tat akka.dispatch.OnComplete.internal(Future.scala:297)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:224)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:221)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$DirectExecutionContext.execute(AkkaFutureUtils.java:65)\n\tat scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:68)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:284)\n\tat akka.pattern.PromiseActorRef.$bang(AskSupport.scala:621)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:24)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:23)\n\tat scala.concurrent.Future.$anonfun$andThen$1(Future.scala:532)\n\tat scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:29)\n\tat scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:29)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat akka.dispatch.BatchingExecutor$AbstractBatch.processBatch(BatchingExecutor.scala:63)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.$anonfun$run$1(BatchingExecutor.scala:100)\n\tat scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)\n\tat scala.concurrent.BlockContext$.withBlockContext(BlockContext.scala:81)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.run(BatchingExecutor.scala:100)\n\tat akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:49)\n\tat akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(ForkJoinExecutorConfigurator.scala:48)\n\tat java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)\n\tat java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)\n\tat java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)\n\tat java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:60)\n\t... 52 more\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1628498781174_4094/#/job/ecadbad833c35cb128680ba8a11ca356"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633680412595_1019969805",
+      "id": "paragraph_1633680412595_1019969805",
+      "dateCreated": "2021-10-08 16:06:52.596",
+      "dateStarted": "2021-10-08 16:07:54.798",
+      "dateFinished": "2021-10-08 16:08:24.627",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 16:07:54.798",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633680474798_1347039507",
+      "id": "paragraph_1633680474798_1347039507",
+      "dateCreated": "2021-10-08 16:07:54.798",
+      "status": "READY"
+    }
+  ],
+  "name": "01 Aggregating Time Series Data (TVF)",
+  "id": "2GH45WG7A",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

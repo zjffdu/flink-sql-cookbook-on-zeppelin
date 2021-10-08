@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to filter server logs in real-time using a standard `WHERE` clause.\n\nThe table it uses `server_logs` is backed by the [`faker` connector](https://github.com/knaufk/flink-faker) which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in `datagen` connector used for example in the first recipe.\n\nYou can continuously filter these logs for those requests that experience authx issues with a simple `SELECT` statement with a `WHERE` clause filtering on the auth related HTTP status codes. \n",
+      "text": "%md\n\n\u003e :bulb: This example will show how to filter server logs in real-time using a standard `WHERE` clause.\n\nThe table it uses `server_logs` is backed by the [`faker` connector](https://github.com/knaufk/flink-faker) which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in `datagen` connector used for example in the first recipe.\n\nYou can continuously filter these logs for those requests that experience authx issues with a simple `SELECT` statement with a `WHERE` clause filtering on the auth related HTTP status codes. \n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-18 15:25:15.077",
+      "dateUpdated": "2021-10-08 16:35:39.946",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -29,7 +29,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how to filter server logs in real-time using a standard \u003ccode\u003eWHERE\u003c/code\u003e clause.\u003c/p\u003e\n\u003cp\u003eThe table it uses \u003ccode\u003eserver_logs\u003c/code\u003e is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in \u003ccode\u003edatagen\u003c/code\u003e connector used for example in the first recipe.\u003c/p\u003e\n\u003cp\u003eYou can continuously filter these logs for those requests that experience authx issues with a simple \u003ccode\u003eSELECT\u003c/code\u003e statement with a \u003ccode\u003eWHERE\u003c/code\u003e clause filtering on the auth related HTTP status codes.\u003c/p\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to filter server logs in real-time using a standard \u003ccode\u003eWHERE\u003c/code\u003e clause.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThe table it uses \u003ccode\u003eserver_logs\u003c/code\u003e is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e which continuously generates rows in memory based on Java Faker expressions and is convenient for testing queries. As such, it is an alternative to the built-in \u003ccode\u003edatagen\u003c/code\u003e connector used for example in the first recipe.\u003c/p\u003e\n\u003cp\u003eYou can continuously filter these logs for those requests that experience authx issues with a simple \u003ccode\u003eSELECT\u003c/code\u003e statement with a \u003ccode\u003eWHERE\u003c/code\u003e clause filtering on the auth related HTTP status codes.\u003c/p\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -39,8 +39,8 @@
       "jobName": "paragraph_1614267953363_1697493143",
       "id": "paragraph_1614267953363_1697493143",
       "dateCreated": "2021-02-25 23:45:53.363",
-      "dateStarted": "2021-03-18 15:25:15.078",
-      "dateFinished": "2021-03-18 15:25:15.118",
+      "dateStarted": "2021-10-08 16:35:12.770",
+      "dateFinished": "2021-10-08 16:35:12.775",
       "status": "FINISHED"
     },
     {

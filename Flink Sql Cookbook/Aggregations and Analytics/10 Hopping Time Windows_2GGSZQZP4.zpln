@@ -1,0 +1,206 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.13%2B-lightgrey)\n\n\u003e :bulb: This example will show how to calculate a moving average in real-time using a `HOP` window.\n\nThe source table (`bids`) is backed by the [`faker` connector](https://flink-packages.org/packages/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nIn one of our previous recipes we\u0027ve shown how you can [aggregate time series data](../01_group_by_window/01_group_by_window_tvf.md) using `TUMBLE`. \nTo display every 30 seconds the moving average of bidding prices per currency per 1 minute, we will use the built-in `HOP` [function](https://ci.apache.org/projects/flink/flink-docs-stable/docs/dev/table/sql/queries/window-agg/).\n\nThe difference between a `HOP` and a `TUMBLE` function is that with a `HOP` you can \"jump\" forward in time. That\u0027s why you have to specify both the length of the window and the interval you want to jump forward. \nWhen using a `HOP` function, records can be assigned to multiple windows if the interval is smaller than the window length, like in this example. A tumbling window never overlaps and records will only belong to one window.  ",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:20:07.455",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.13%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to calculate a moving average in real-time using a \u003ccode\u003eHOP\u003c/code\u003e window.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThe source table (\u003ccode\u003ebids\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://flink-packages.org/packages/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eIn one of our previous recipes we\u0026rsquo;ve shown how you can \u003ca href\u003d\"../01_group_by_window/01_group_by_window_tvf.md\"\u003eaggregate time series data\u003c/a\u003e using \u003ccode\u003eTUMBLE\u003c/code\u003e.\u003cbr /\u003e\nTo display every 30 seconds the moving average of bidding prices per currency per 1 minute, we will use the built-in \u003ccode\u003eHOP\u003c/code\u003e \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/docs/dev/table/sql/queries/window-agg/\"\u003efunction\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eThe difference between a \u003ccode\u003eHOP\u003c/code\u003e and a \u003ccode\u003eTUMBLE\u003c/code\u003e function is that with a \u003ccode\u003eHOP\u003c/code\u003e you can \u0026ldquo;jump\u0026rdquo; forward in time. That\u0026rsquo;s why you have to specify both the length of the window and the interval you want to jump forward.\u003cbr /\u003e\nWhen using a \u003ccode\u003eHOP\u003c/code\u003e function, records can be assigned to multiple windows if the interval is smaller than the window length, like in this example. A tumbling window never overlaps and records will only belong to one window.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666792925_745244199",
+      "id": "paragraph_1633666792925_745244199",
+      "dateCreated": "2021-10-08 12:19:52.925",
+      "dateStarted": "2021-10-08 12:20:07.456",
+      "dateFinished": "2021-10-08 12:20:07.471",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nCREATE TABLE bids ( \n    bid_id STRING,\n    currency_code STRING,\n    bid_price DOUBLE, \n    transaction_time TIMESTAMP(3),\n    WATERMARK FOR transaction_time AS transaction_time - INTERVAL \u00275\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.bid_id.expression\u0027 \u003d \u0027#{Internet.UUID}\u0027,\n  \u0027fields.currency_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(EUR|USD|CNY)\u0027\u0027}\u0027,\n  \u0027fields.bid_price.expression\u0027 \u003d \u0027#{Number.randomDouble \u0027\u00272\u0027\u0027,\u0027\u00271\u0027\u0027,\u0027\u0027150\u0027\u0027}\u0027,\n  \u0027fields.transaction_time.expression\u0027 \u003d \u0027#{date.past \u0027\u002730\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027rows-per-second\u0027 \u003d \u0027100\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:20:19.915",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666807454_1821022617",
+      "id": "paragraph_1633666807454_1821022617",
+      "dateCreated": "2021-10-08 12:20:07.454",
+      "dateStarted": "2021-10-08 12:20:19.917",
+      "dateFinished": "2021-10-08 12:20:50.444",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nSELECT window_start, window_end, currency_code, ROUND(AVG(bid_price),2) AS MovingAverageBidPrice\n  FROM TABLE(\n    HOP(TABLE bids, DESCRIPTOR(transaction_time), INTERVAL \u002730\u0027 SECONDS, INTERVAL \u00271\u0027 MINUTE))\n  GROUP BY window_start, window_end, currency_code;\n  ",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:21:11.739",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "window_start": "string",
+                      "window_end": "string",
+                      "currency_code": "string",
+                      "MovingAverageBidPrice": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "window_start\twindow_end\tcurrency_code\tMovingAverageBidPrice\n2021-10-08 17:20:00.000\t2021-10-08 17:21:00.000\tEUR\t52.19\n2021-10-08 17:20:00.000\t2021-10-08 17:21:00.000\tUSD\t120.35\n2021-10-08 17:20:00.000\t2021-10-08 17:21:00.000\tCNY\t99.69\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT window_start, window_end, currency_code, ROUND(AVG(bid_price),2) AS MovingAverageBidPrice\n  FROM TABLE(\n    HOP(TABLE bids, DESCRIPTOR(transaction_time), INTERVAL \u002730\u0027 SECONDS, INTERVAL \u00271\u0027 MINUTE))\n  GROUP BY window_start, window_end, currency_code\njava.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:177)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:86)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callSelect(FlinkSqlInterpreter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callCommand(FlinkSqlInterpreter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.runSqlList(FlinkSqlInterpreter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:109)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:849)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:741)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.client.deployment.application.UnsuccessfulExecutionException: Application Status: CANCELED\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:71)\n\tat org.apache.flink.client.deployment.application.EmbeddedJobClient.lambda$getJobExecutionResult$2(EmbeddedJobClient.java:136)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.deployment.application.JobStatusPollingUtils.lambda$null$2(JobStatusPollingUtils.java:101)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.rpc.akka.AkkaInvocationHandler.lambda$invokeRpc$0(AkkaInvocationHandler.java:250)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1389)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$1.onComplete(AkkaFutureUtils.java:47)\n\tat akka.dispatch.OnComplete.internal(Future.scala:300)\n\tat akka.dispatch.OnComplete.internal(Future.scala:297)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:224)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:221)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$DirectExecutionContext.execute(AkkaFutureUtils.java:65)\n\tat scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:68)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:284)\n\tat akka.pattern.PromiseActorRef.$bang(AskSupport.scala:621)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:24)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:23)\n\tat scala.concurrent.Future.$anonfun$andThen$1(Future.scala:532)\n\tat scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:29)\n\tat scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:29)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat akka.dispatch.BatchingExecutor$AbstractBatch.processBatch(BatchingExecutor.scala:63)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.$anonfun$run$1(BatchingExecutor.scala:100)\n\tat scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)\n\tat scala.concurrent.BlockContext$.withBlockContext(BlockContext.scala:81)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.run(BatchingExecutor.scala:100)\n\tat akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:49)\n\tat akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(ForkJoinExecutorConfigurator.scala:48)\n\tat java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)\n\tat java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)\n\tat java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)\n\tat java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:60)\n\t... 52 more\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1628498781174_4091/#/job/804ffeed3cb76d17392e01955c12d3ea"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666819916_759068534",
+      "id": "paragraph_1633666819916_759068534",
+      "dateCreated": "2021-10-08 12:20:19.916",
+      "dateStarted": "2021-10-08 12:21:09.883",
+      "dateFinished": "2021-10-08 12:21:23.266",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:21:09.883",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666869882_827956824",
+      "id": "paragraph_1633666869882_827956824",
+      "dateCreated": "2021-10-08 12:21:09.883",
+      "status": "READY"
+    }
+  ],
+  "name": "10 Hopping Time Windows",
+  "id": "2GGSZQZP4",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

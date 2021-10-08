@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how you can sort a table, particularly unbounded tables. \n\nFlink SQL supports `ORDER BY`. Bounded Tables can be sorted by any column, descending or ascending. \n\nTo use `ORDER BY` on unbounded tables like `server_logs` the primary sorting key needs to be a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) like `log_time`.\n\nIn first example below, we are sorting the `server_logs` by `log_time`. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the `window_time` (a time attribute) and the `cnt_browser` (descending), so that the browser with the highest number of logs is at the top of each window.\n",
+      "text": "%md\n\n\u003e :bulb: This example will show how you can sort a table, particularly unbounded tables. \n\nFlink SQL supports `ORDER BY`. Bounded Tables can be sorted by any column, descending or ascending. \n\nTo use `ORDER BY` on unbounded tables like `server_logs` the primary sorting key needs to be a [time attribute](https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes) like `log_time`.\n\nIn first example below, we are sorting the `server_logs` by `log_time`. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the `window_time` (a time attribute) and the `cnt_browser` (descending), so that the browser with the highest number of logs is at the top of each window.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-18 15:27:10.598",
+      "dateUpdated": "2021-10-08 16:36:16.610",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -29,7 +29,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can sort a table, particularly unbounded tables.\u003c/p\u003e\n\u003cp\u003eFlink SQL supports \u003ccode\u003eORDER BY\u003c/code\u003e. Bounded Tables can be sorted by any column, descending or ascending.\u003c/p\u003e\n\u003cp\u003eTo use \u003ccode\u003eORDER BY\u003c/code\u003e on unbounded tables like \u003ccode\u003eserver_logs\u003c/code\u003e the primary sorting key needs to be a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e like \u003ccode\u003elog_time\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eIn first example below, we are sorting the \u003ccode\u003eserver_logs\u003c/code\u003e by \u003ccode\u003elog_time\u003c/code\u003e. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the \u003ccode\u003ewindow_time\u003c/code\u003e (a time attribute) and the \u003ccode\u003ecnt_browser\u003c/code\u003e (descending), so that the browser with the highest number of logs is at the top of each window.\u003c/p\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how you can sort a table, particularly unbounded tables.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eFlink SQL supports \u003ccode\u003eORDER BY\u003c/code\u003e. Bounded Tables can be sorted by any column, descending or ascending.\u003c/p\u003e\n\u003cp\u003eTo use \u003ccode\u003eORDER BY\u003c/code\u003e on unbounded tables like \u003ccode\u003eserver_logs\u003c/code\u003e the primary sorting key needs to be a \u003ca href\u003d\"https://docs.ververica.com/user_guide/sql_development/table_view.html#time-attributes\"\u003etime attribute\u003c/a\u003e like \u003ccode\u003elog_time\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eIn first example below, we are sorting the \u003ccode\u003eserver_logs\u003c/code\u003e by \u003ccode\u003elog_time\u003c/code\u003e. The second example is a bit more advanced: It sorts the number of logs per minute and browser by the \u003ccode\u003ewindow_time\u003c/code\u003e (a time attribute) and the \u003ccode\u003ecnt_browser\u003c/code\u003e (descending), so that the browser with the highest number of logs is at the top of each window.\u003c/p\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -39,8 +39,8 @@
       "jobName": "paragraph_1614268041202_1817551626",
       "id": "paragraph_1614268041202_1817551626",
       "dateCreated": "2021-02-25 23:47:21.202",
-      "dateStarted": "2021-03-18 15:27:10.600",
-      "dateFinished": "2021-03-18 15:27:10.620",
+      "dateStarted": "2021-10-08 16:36:16.611",
+      "dateFinished": "2021-10-08 16:36:16.615",
       "status": "FINISHED"
     },
     {

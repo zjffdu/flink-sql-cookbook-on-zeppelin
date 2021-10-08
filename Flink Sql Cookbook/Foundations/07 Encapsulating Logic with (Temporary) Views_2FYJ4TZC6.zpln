@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how you can use (temporary) views to reuse code and to structure long queries and scripts. \n\n`CREATE (TEMPORARY) VIEW` defines a view from a query. **A view is not physically materialized.** Instead, the query is run every time the view is referenced in a query.\n\nTemporary views are very useful to structure and decompose more complicated queries and to re-use queries within a longer script.Non-temporary views - stored in a persistent [catalog](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html) - can also be used to share common queries within your organization, e.g. common filters or pre-processing steps.  \n\nHere, we create a view on the `server_logs` that only contains successful requests. This view encapsulates the logic of filtering the logs based on certain `status_code`s. This logic can subsequently be used by any query or script that has access to the catalog.   \n",
+      "text": "%md\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.11%2B-lightgrey)\n\n\u003e :bulb: This example will show how you can use (temporary) views to reuse code and to structure long queries and scripts. \n\n`CREATE (TEMPORARY) VIEW` defines a view from a query. **A view is not physically materialized.** Instead, the query is run every time the view is referenced in a query.\n\nTemporary views are very useful to structure and decompose more complicated queries and to re-use queries within a longer script.Non-temporary views - stored in a persistent [catalog](https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html) - can also be used to share common queries within your organization, e.g. common filters or pre-processing steps.  \n\nHere, we create a view on the `server_logs` that only contains successful requests. This view encapsulates the logic of filtering the logs based on certain `status_code`s. This logic can subsequently be used by any query or script that has access to the catalog.   \n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-18 15:27:56.845",
+      "dateUpdated": "2021-10-08 16:36:53.390",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -29,7 +29,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can use (temporary) views to reuse code and to structure long queries and scripts.\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eCREATE (TEMPORARY) VIEW\u003c/code\u003e defines a view from a query. \u003cstrong\u003eA view is not physically materialized.\u003c/strong\u003e Instead, the query is run every time the view is referenced in a query.\u003c/p\u003e\n\u003cp\u003eTemporary views are very useful to structure and decompose more complicated queries and to re-use queries within a longer script.Non-temporary views - stored in a persistent \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html\"\u003ecatalog\u003c/a\u003e - can also be used to share common queries within your organization, e.g. common filters or pre-processing steps.\u003c/p\u003e\n\u003cp\u003eHere, we create a view on the \u003ccode\u003eserver_logs\u003c/code\u003e that only contains successful requests. This view encapsulates the logic of filtering the logs based on certain \u003ccode\u003estatus_code\u003c/code\u003es. This logic can subsequently be used by any query or script that has access to the catalog.\u003c/p\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.11%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how you can use (temporary) views to reuse code and to structure long queries and scripts.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e\u003ccode\u003eCREATE (TEMPORARY) VIEW\u003c/code\u003e defines a view from a query. \u003cstrong\u003eA view is not physically materialized.\u003c/strong\u003e Instead, the query is run every time the view is referenced in a query.\u003c/p\u003e\n\u003cp\u003eTemporary views are very useful to structure and decompose more complicated queries and to re-use queries within a longer script.Non-temporary views - stored in a persistent \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/dev/table/catalogs.html\"\u003ecatalog\u003c/a\u003e - can also be used to share common queries within your organization, e.g. common filters or pre-processing steps.\u003c/p\u003e\n\u003cp\u003eHere, we create a view on the \u003ccode\u003eserver_logs\u003c/code\u003e that only contains successful requests. This view encapsulates the logic of filtering the logs based on certain \u003ccode\u003estatus_code\u003c/code\u003es. This logic can subsequently be used by any query or script that has access to the catalog.\u003c/p\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -39,8 +39,8 @@
       "jobName": "paragraph_1614268082780_1390435132",
       "id": "paragraph_1614268082780_1390435132",
       "dateCreated": "2021-02-25 23:48:02.780",
-      "dateStarted": "2021-03-18 15:27:56.850",
-      "dateFinished": "2021-03-18 15:27:56.891",
+      "dateStarted": "2021-10-08 16:36:53.390",
+      "dateFinished": "2021-10-08 16:36:53.396",
       "status": "FINISHED"
     },
     {

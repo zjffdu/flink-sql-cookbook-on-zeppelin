@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\n\nThis example will show how you can identify and filter out duplicates in a stream of events.\n\nThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same `order_id`, and that you\u0027re only interested in keeping the most recent event for downstream processing.\n\nAs a first step, you can use a combination of the `COUNT` function and the `HAVING` clause to check if and which orders have more than one event; and then filter out these events using `ROW_NUMBER()`. In practice, deduplication is a special case of Top-N aggregation, where N is 1 (`rownum \u003d 1`) and the ordering column is either the processing or event time of events.\n",
+      "text": "%md\n\n\n\u003e :bulb: This example will show how you can identify and filter out duplicates in a stream of events.\n\nThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same `order_id`, and that you\u0027re only interested in keeping the most recent event for downstream processing.\n\nAs a first step, you can use a combination of the `COUNT` function and the `HAVING` clause to check if and which orders have more than one event; and then filter out these events using `ROW_NUMBER()`. In practice, deduplication is a special case of [Top-N aggregation](../05_top_n/05_top_n.md), where N is 1 (`rownum \u003d 1`) and the ordering column is either the processing or event time of events.",
       "user": "anonymous",
-      "dateUpdated": "2021-03-18 15:54:53.907",
+      "dateUpdated": "2021-10-08 16:27:51.215",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -29,7 +29,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how you can identify and filter out duplicates in a stream of events.\u003c/p\u003e\n\u003cp\u003eThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same \u003ccode\u003eorder_id\u003c/code\u003e, and that you\u0026rsquo;re only interested in keeping the most recent event for downstream processing.\u003c/p\u003e\n\u003cp\u003eAs a first step, you can use a combination of the \u003ccode\u003eCOUNT\u003c/code\u003e function and the \u003ccode\u003eHAVING\u003c/code\u003e clause to check if and which orders have more than one event; and then filter out these events using \u003ccode\u003eROW_NUMBER()\u003c/code\u003e. In practice, deduplication is a special case of Top-N aggregation, where N is 1 (\u003ccode\u003erownum \u003d 1\u003c/code\u003e) and the ordering column is either the processing or event time of events.\u003c/p\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how you can identify and filter out duplicates in a stream of events.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThere are different ways that duplicate events can end up in your data sources, from human error to application bugs. Regardless of the origin, unclean data can have a real impact in the quality (and correctness) of your results. Suppose that your order system occasionally generates duplicate events with the same \u003ccode\u003eorder_id\u003c/code\u003e, and that you\u0026rsquo;re only interested in keeping the most recent event for downstream processing.\u003c/p\u003e\n\u003cp\u003eAs a first step, you can use a combination of the \u003ccode\u003eCOUNT\u003c/code\u003e function and the \u003ccode\u003eHAVING\u003c/code\u003e clause to check if and which orders have more than one event; and then filter out these events using \u003ccode\u003eROW_NUMBER()\u003c/code\u003e. In practice, deduplication is a special case of \u003ca href\u003d\"../05_top_n/05_top_n.md\"\u003eTop-N aggregation\u003c/a\u003e, where N is 1 (\u003ccode\u003erownum \u003d 1\u003c/code\u003e) and the ordering column is either the processing or event time of events.\u003c/p\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -39,8 +39,8 @@
       "jobName": "paragraph_1614313688051_1570601018",
       "id": "paragraph_1614313688051_1570601018",
       "dateCreated": "2021-02-26 12:28:08.054",
-      "dateStarted": "2021-03-18 15:54:53.907",
-      "dateFinished": "2021-03-18 15:54:53.927",
+      "dateStarted": "2021-10-08 16:27:51.216",
+      "dateFinished": "2021-10-08 16:27:51.221",
       "status": "FINISHED"
     },
     {

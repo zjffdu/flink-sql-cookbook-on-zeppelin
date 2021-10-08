@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n",
+      "text": "%md\n\n\u003e :bulb: This example will show how to aggregate server logs in real-time using the standard `GROUP BY` clause.\n\nThe source table (`server_logs`) is backed by the [`faker` connector](https://github.com/knaufk/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nTo count the number of logs received per browser for each status code _over time_, you can combine the `COUNT` aggregate function with a `GROUP BY` clause. Because the `user_agent` field contains a lot of information, you can extract the browser using the built-in [string function](https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions) `REGEXP_EXTRACT`.\n\nA `GROUP BY` on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\n\n\u003e As an exercise, you can play around with other standard SQL aggregate functions (e.g. `SUM`,`AVG`,`MIN`,`MAX`).\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-18 15:26:16.063",
+      "dateUpdated": "2021-10-08 16:35:48.826",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -29,7 +29,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how to aggregate server logs in real-time using the standard \u003ccode\u003eGROUP BY\u003c/code\u003e clause.\u003c/p\u003e\n\u003cp\u003eThe source table (\u003ccode\u003eserver_logs\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eTo count the number of logs received per browser for each status code \u003cem\u003eover time\u003c/em\u003e, you can combine the \u003ccode\u003eCOUNT\u003c/code\u003e aggregate function with a \u003ccode\u003eGROUP BY\u003c/code\u003e clause. Because the \u003ccode\u003euser_agent\u003c/code\u003e field contains a lot of information, you can extract the browser using the built-in \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions\"\u003estring function\u003c/a\u003e \u003ccode\u003eREGEXP_EXTRACT\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eA \u003ccode\u003eGROUP BY\u003c/code\u003e on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eAs an exercise, you can play around with other standard SQL aggregate functions (e.g. \u003ccode\u003eSUM\u003c/code\u003e,\u003ccode\u003eAVG\u003c/code\u003e,\u003ccode\u003eMIN\u003c/code\u003e,\u003ccode\u003eMAX\u003c/code\u003e).\u003c/p\u003e\n\u003c/blockquote\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to aggregate server logs in real-time using the standard \u003ccode\u003eGROUP BY\u003c/code\u003e clause.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThe source table (\u003ccode\u003eserver_logs\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://github.com/knaufk/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eTo count the number of logs received per browser for each status code \u003cem\u003eover time\u003c/em\u003e, you can combine the \u003ccode\u003eCOUNT\u003c/code\u003e aggregate function with a \u003ccode\u003eGROUP BY\u003c/code\u003e clause. Because the \u003ccode\u003euser_agent\u003c/code\u003e field contains a lot of information, you can extract the browser using the built-in \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-release-1.11/dev/table/functions/systemFunctions.html#string-functions\"\u003estring function\u003c/a\u003e \u003ccode\u003eREGEXP_EXTRACT\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eA \u003ccode\u003eGROUP BY\u003c/code\u003e on a streaming table produces an updating result, so you will see the aggregated count for each browser continuously changing as new rows flow in.\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eAs an exercise, you can play around with other standard SQL aggregate functions (e.g. \u003ccode\u003eSUM\u003c/code\u003e,\u003ccode\u003eAVG\u003c/code\u003e,\u003ccode\u003eMIN\u003c/code\u003e,\u003ccode\u003eMAX\u003c/code\u003e).\u003c/p\u003e\n\u003c/blockquote\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -39,8 +39,8 @@
       "jobName": "paragraph_1614268004818_923961985",
       "id": "paragraph_1614268004818_923961985",
       "dateCreated": "2021-02-25 23:46:44.818",
-      "dateStarted": "2021-03-18 15:26:16.060",
-      "dateFinished": "2021-03-18 15:26:16.081",
+      "dateStarted": "2021-10-08 16:35:48.826",
+      "dateFinished": "2021-10-08 16:35:48.834",
       "status": "FINISHED"
     },
     {
@@ -89,7 +89,7 @@
     {
       "text": "%flink.ssql\n\nDROP TABLE IF EXISTS server_logs;\n\nCREATE TABLE server_logs ( \n    client_ip STRING,\n    client_identity STRING, \n    userid STRING, \n    user_agent STRING,\n    log_time TIMESTAMP(3),\n    request_line STRING, \n    status_code STRING, \n    size INT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.client_identity.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.userid.expression\u0027 \u003d  \u0027-\u0027,\n  \u0027fields.user_agent.expression\u0027 \u003d \u0027#{Internet.userAgentAny}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.request_line.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(GET|POST|PUT|PATCH){1}\u0027\u0027} #{regexify \u0027\u0027(/search\\.html|/login\\.html|/prod\\.html|cart\\.html|/order\\.html){1}\u0027\u0027} #{regexify \u0027\u0027(HTTP/1\\.1|HTTP/2|/HTTP/1\\.0){1}\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(200|201|204|400|401|403|301){1}\u0027\u0027}\u0027,\n  \u0027fields.size.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u0027100\u0027\u0027,\u0027\u002710000000\u0027\u0027}\u0027\n);\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-04 14:41:44.699",
+      "dateUpdated": "2021-08-25 05:30:00.641",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -108,20 +108,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614265474939_121202527",
       "id": "paragraph_1614265474939_121202527",
       "dateCreated": "2021-02-25 23:04:34.939",
-      "dateStarted": "2021-03-04 14:41:44.738",
-      "dateFinished": "2021-03-04 14:41:45.441",
+      "dateStarted": "2021-08-25 05:30:00.645",
+      "dateFinished": "2021-08-25 05:30:00.859",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql(type\u003dupdate)\n\n-- Sample user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A\n-- Regex pattern: \u0027[^\\/]+\u0027 (Match everything before \u0027/\u0027)\nSELECT \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027) AS browser,\n  status_code, \n  COUNT(*) AS cnt_status\nFROM server_logs\nGROUP BY \n  REGEXP_EXTRACT(user_agent,\u0027[^\\/]+\u0027),\n  status_code;\n  \n  ",
       "user": "anonymous",
-      "dateUpdated": "2021-03-05 05:39:13.724",
+      "dateUpdated": "2021-08-25 05:30:02.963",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -207,7 +216,7 @@
           "group": "flink",
           "values": [
             {
-              "jobUrl": "http://localhost:8081#/job/06d810314a9d811f0d57e195707d11d0"
+              "jobUrl": "http://localhost:8081#/job/7e103a837f0d410dbf676304a901a7e6"
             }
           ],
           "interpreterSettingId": "flink"
@@ -217,7 +226,7 @@
       "jobName": "paragraph_1614265500959_774321427",
       "id": "paragraph_1614265500959_774321427",
       "dateCreated": "2021-02-25 23:05:00.959",
-      "dateStarted": "2021-03-04 14:42:35.913",
+      "dateStarted": "2021-08-25 05:30:02.966",
       "dateFinished": "2021-03-04 14:43:27.553",
       "status": "ABORT"
     },

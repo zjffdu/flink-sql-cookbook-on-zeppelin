@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%md\n\nThis example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the `WITH` clause and defines the physical system that backs this table. This example uses the `datagen` connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple `SELECT` statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\n",
+      "text": "%md\n\n\u003e :bulb: This example will show how to create a table using SQL DDL.\n\nFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\n\nTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the `WITH` clause and defines the physical system that backs this table. This example uses the `datagen` connector which generates rows in memory and is convenient for testing queries.\n\nYou can test the table is properly created by running a simple `SELECT` statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\n",
       "user": "anonymous",
-      "dateUpdated": "2021-03-18 15:05:48.624",
+      "dateUpdated": "2021-10-08 16:32:34.920",
       "progress": 0,
       "config": {
         "tableHide": false,
@@ -30,7 +30,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003eThis example will show how to create a table using SQL DDL.\u003c/p\u003e\n\u003cp\u003eFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\u003c/p\u003e\n\u003cp\u003eTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the \u003ccode\u003eWITH\u003c/code\u003e clause and defines the physical system that backs this table. This example uses the \u003ccode\u003edatagen\u003c/code\u003e connector which generates rows in memory and is convenient for testing queries.\u003c/p\u003e\n\u003cp\u003eYou can test the table is properly created by running a simple \u003ccode\u003eSELECT\u003c/code\u003e statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\u003c/p\u003e\n\n\u003c/div\u003e"
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to create a table using SQL DDL.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eFlink SQL operates against logical tables, just like a traditional database. However, it does not maintain tables internally but always operates against external systems.\u003c/p\u003e\n\u003cp\u003eTable definitions are in two parts; the logical schema and connector configuration. The logical schema defines the columns and types in the table and is what queries operate against. The connector configuration is contained in the \u003ccode\u003eWITH\u003c/code\u003e clause and defines the physical system that backs this table. This example uses the \u003ccode\u003edatagen\u003c/code\u003e connector which generates rows in memory and is convenient for testing queries.\u003c/p\u003e\n\u003cp\u003eYou can test the table is properly created by running a simple \u003ccode\u003eSELECT\u003c/code\u003e statement. In Zeppelin you will see the results printed to the UI. In this example below you would see the latest 10 records.\u003c/p\u003e\n\n\u003c/div\u003e"
           }
         ]
       },
@@ -40,8 +40,8 @@
       "jobName": "paragraph_1614267718812_631245959",
       "id": "paragraph_1614267718812_631245959",
       "dateCreated": "2021-02-25 23:41:58.812",
-      "dateStarted": "2021-03-18 15:05:48.625",
-      "dateFinished": "2021-03-18 15:05:48.655",
+      "dateStarted": "2021-10-08 16:32:34.920",
+      "dateFinished": "2021-10-08 16:32:34.928",
       "status": "FINISHED"
     },
     {

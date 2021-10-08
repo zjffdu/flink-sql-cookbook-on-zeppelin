@@ -44,9 +44,9 @@
       "status": "FINISHED"
     },
     {
-      "text": "%flink.ssql\n\n-- Create source table\nCREATE TABLE `mobile_usage` ( \n    `activity` STRING, \n    `client_ip` STRING,\n    `ingest_time` AS PROCTIME(),\n    `log_time` TIMESTAMP_LTZ(3), \n    WATERMARK FOR log_time AS log_time - INTERVAL \u002715\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027rows-per-second\u0027 \u003d \u002750\u0027,\n  \u0027fields.activity.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(open_push_message|discard_push_message|open_app|display_overview|change_settings)\u0027\u0027}\u0027,\n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002745\u0027\u0027,\u0027\u002710\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n\n-- Create sink table for rows that are non-late\nCREATE TABLE `unique_users_per_window` ( \n    `window_start` TIMESTAMP(3), \n    `window_end` TIMESTAMP(3),\n    `ip_addresses` BIGINT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n-- Create sink table for rows that are late\nCREATE TABLE `late_usage_events` ( \n    `activity` STRING, \n    `client_ip` STRING,\n    `ingest_time` TIMESTAMP_LTZ(3),\n    `log_time` TIMESTAMP_LTZ(3), \n    `current_watermark` TIMESTAMP_LTZ(3)    \n) WITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n-- Create a view with non-late data\nCREATE TEMPORARY VIEW `mobile_data` AS\n    SELECT * FROM mobile_usage\n    WHERE CURRENT_WATERMARK(log_time) IS NOT NULL\n          OR log_time \u003c CURRENT_WATERMARK(log_time);\n\n-- Create a view with late data\nCREATE TEMPORARY VIEW `late_mobile_data` AS \n    SELECT * FROM mobile_usage\n        WHERE CURRENT_WATERMARK(log_time) IS NULL\n              OR log_time \u003e CURRENT_WATERMARK(log_time);\n\n",
+      "text": "%flink.ssql\n\n-- Create source table\nCREATE TABLE IF NOT EXISTS `mobile_usage` ( \n    `activity` STRING, \n    `client_ip` STRING,\n    `ingest_time` AS PROCTIME(),\n    `log_time` TIMESTAMP_LTZ(3), \n    WATERMARK FOR log_time AS log_time - INTERVAL \u002715\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027rows-per-second\u0027 \u003d \u002750\u0027,\n  \u0027fields.activity.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(open_push_message|discard_push_message|open_app|display_overview|change_settings)\u0027\u0027}\u0027,\n  \u0027fields.client_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002745\u0027\u0027,\u0027\u002710\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027\n);\n\n-- Create sink table for rows that are non-late\nCREATE TABLE IF NOT EXISTS `unique_users_per_window` ( \n    `window_start` TIMESTAMP(3), \n    `window_end` TIMESTAMP(3),\n    `ip_addresses` BIGINT\n) WITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n-- Create sink table for rows that are late\nCREATE TABLE IF NOT EXISTS `late_usage_events` ( \n    `activity` STRING, \n    `client_ip` STRING,\n    `ingest_time` TIMESTAMP_LTZ(3),\n    `log_time` TIMESTAMP_LTZ(3), \n    `current_watermark` TIMESTAMP_LTZ(3)    \n) WITH (\n  \u0027connector\u0027 \u003d \u0027blackhole\u0027\n);\n\n-- Create a view with non-late data\nCREATE TEMPORARY VIEW IF NOT EXISTS `mobile_data` AS\n    SELECT * FROM mobile_usage\n    WHERE CURRENT_WATERMARK(log_time) IS NOT NULL\n          OR log_time \u003c CURRENT_WATERMARK(log_time);\n\n-- Create a view with late data\nCREATE TEMPORARY VIEW IF NOT EXISTS `late_mobile_data` AS \n    SELECT * FROM mobile_usage\n        WHERE CURRENT_WATERMARK(log_time) IS NULL\n              OR log_time \u003e CURRENT_WATERMARK(log_time);\n\n",
       "user": "anonymous",
-      "dateUpdated": "2021-10-08 11:57:05.534",
+      "dateUpdated": "2021-10-08 12:09:44.850",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -80,14 +80,14 @@
       "jobName": "paragraph_1633665213368_836109418",
       "id": "paragraph_1633665213368_836109418",
       "dateCreated": "2021-10-08 11:53:33.368",
-      "dateStarted": "2021-10-08 11:57:05.537",
-      "dateFinished": "2021-10-08 11:57:36.112",
+      "dateStarted": "2021-10-08 12:09:44.851",
+      "dateFinished": "2021-10-08 12:09:45.152",
       "status": "FINISHED"
     },
     {
       "text": "%flink.ssql(runAsOne\u003dtrue)\n\nINSERT INTO `unique_users_per_window`\n    SELECT `window_start`, `window_end`, COUNT(DISTINCT client_ip) AS `ip_addresses`\n      FROM TABLE(\n        TUMBLE(TABLE mobile_data, DESCRIPTOR(log_time), INTERVAL \u00271\u0027 MINUTE))\n      GROUP BY window_start, window_end;\n\n-- Send all rows that are late to the sink for late data\nINSERT INTO `late_usage_events`\n    SELECT *, CURRENT_WATERMARK(log_time) as `current_watermark` from `late_mobile_data`;\n",
       "user": "anonymous",
-      "dateUpdated": "2021-10-08 11:58:02.010",
+      "dateUpdated": "2021-10-08 12:09:54.241",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -106,6 +106,19 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "ANGULAR",
+            "data": "\u003ch1\u003eDuration: {{duration}} \u003c/h1\u003e\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Job is cancelled.\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {
         "jobUrl": {
@@ -115,7 +128,7 @@
           "group": "flink",
           "values": [
             {
-              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1628498781174_4089/#/job/f46da64231057666732d9059ac150900"
+              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1628498781174_4089/#/job/61aacdf53b079f872641211d0d6542ed"
             }
           ],
           "interpreterSettingId": "flink"
@@ -125,8 +138,9 @@
       "jobName": "paragraph_1633665300488_421025159",
       "id": "paragraph_1633665300488_421025159",
       "dateCreated": "2021-10-08 11:55:00.488",
-      "dateStarted": "2021-10-08 11:58:02.012",
-      "status": "RUNNING"
+      "dateStarted": "2021-10-08 12:09:54.242",
+      "dateFinished": "2021-10-08 12:11:19.868",
+      "status": "ABORT"
     },
     {
       "text": "%flink.ssql\n",
@@ -157,7 +171,7 @@
     "flink-2GJ18VM3X": [
       {
         "name": "duration",
-        "object": "6 minutes 43 seconds",
+        "object": "1 minutes 24 seconds",
         "noteId": "2GJ18VM3X",
         "paragraphId": "paragraph_1633665300488_421025159"
       }

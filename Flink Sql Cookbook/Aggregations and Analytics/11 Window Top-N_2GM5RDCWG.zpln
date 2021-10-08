@@ -1,0 +1,208 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.13%2B-lightgrey)\n\n\u003e :bulb: This example will show how to calculate the Top 3 suppliers who have the highest sales for every tumbling 5 minutes window.\n\nThe source table (`orders`) is backed by the [`faker` connector](https://flink-packages.org/packages/flink-faker), which continuously generates rows in memory based on Java Faker expressions.\n\nIn our previous recipes we\u0027ve shown how you can [aggregate time series data](../01_group_by_window/01_group_by_window_tvf.md) using the `TUMBLE` function and also how you can get continuous [Top-N results](../05_top_n/05_top_n.md).\nIn this recipe, you will use the `Window Top-N` [feature](https://ci.apache.org/projects/flink/flink-docs-stable/docs/dev/table/sql/queries/window-topn/) to display the top 3 suppliers with the highest sales every 5 minutes. \n\nThe difference between the regular Top-N and this Window Top-N, is that Window Top-N only emits final results, which is the total top N records at the end of the window. \n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:22:06.037",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.13%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to calculate the Top 3 suppliers who have the highest sales for every tumbling 5 minutes window.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThe source table (\u003ccode\u003eorders\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://flink-packages.org/packages/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates rows in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eIn our previous recipes we\u0026rsquo;ve shown how you can \u003ca href\u003d\"../01_group_by_window/01_group_by_window_tvf.md\"\u003eaggregate time series data\u003c/a\u003e using the \u003ccode\u003eTUMBLE\u003c/code\u003e function and also how you can get continuous \u003ca href\u003d\"../05_top_n/05_top_n.md\"\u003eTop-N results\u003c/a\u003e.\u003cbr /\u003e\nIn this recipe, you will use the \u003ccode\u003eWindow Top-N\u003c/code\u003e \u003ca href\u003d\"https://ci.apache.org/projects/flink/flink-docs-stable/docs/dev/table/sql/queries/window-topn/\"\u003efeature\u003c/a\u003e to display the top 3 suppliers with the highest sales every 5 minutes.\u003c/p\u003e\n\u003cp\u003eThe difference between the regular Top-N and this Window Top-N, is that Window Top-N only emits final results, which is the total top N records at the end of the window.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666909227_97964253",
+      "id": "paragraph_1633666909227_97964253",
+      "dateCreated": "2021-10-08 12:21:49.227",
+      "dateStarted": "2021-10-08 12:22:06.038",
+      "dateFinished": "2021-10-08 12:22:06.053",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nCREATE TABLE orders ( \n    bidtime TIMESTAMP(3),\n    price DOUBLE, \n    item STRING,\n    supplier STRING,\n    WATERMARK FOR bidtime AS bidtime - INTERVAL \u00275\u0027 SECONDS\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.bidtime.expression\u0027 \u003d \u0027#{date.past \u0027\u002730\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.price.expression\u0027 \u003d \u0027#{Number.randomDouble \u0027\u00272\u0027\u0027,\u0027\u00271\u0027\u0027,\u0027\u0027150\u0027\u0027}\u0027,\n  \u0027fields.item.expression\u0027 \u003d \u0027#{Commerce.productName}\u0027,\n  \u0027fields.supplier.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(Alice|Bob|Carol|Alex|Joe|James|Jane|Jack)\u0027\u0027}\u0027,\n  \u0027rows-per-second\u0027 \u003d \u0027100\u0027\n);",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:22:17.555",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666926036_503129932",
+      "id": "paragraph_1633666926036_503129932",
+      "dateCreated": "2021-10-08 12:22:06.036",
+      "dateStarted": "2021-10-08 12:22:17.557",
+      "dateFinished": "2021-10-08 12:22:48.094",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nSELECT *\n    FROM (\n        SELECT *, ROW_NUMBER() OVER (PARTITION BY window_start, window_end ORDER BY price DESC) as rownum\n        FROM (\n            SELECT window_start, window_end, supplier, SUM(price) as price, COUNT(*) as cnt\n            FROM TABLE(\n                TUMBLE(TABLE orders, DESCRIPTOR(bidtime), INTERVAL \u002710\u0027 MINUTES))\n            GROUP BY window_start, window_end, supplier\n        )\n    ) WHERE rownum \u003c\u003d 3;",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:23:11.190",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "window_start": "string",
+                      "window_end": "string",
+                      "supplier": "string",
+                      "price": "string",
+                      "cnt": "string",
+                      "rownum": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "window_start\twindow_end\tsupplier\tprice\tcnt\trownum\n2021-10-08 17:20:00.000\t2021-10-08 17:30:00.000\tCarol\t779703.6500000028\t10452\t1\n2021-10-08 17:20:00.000\t2021-10-08 17:30:00.000\tBob\t773465.1500000014\t10445\t2\n2021-10-08 17:20:00.000\t2021-10-08 17:30:00.000\tJoe\t386342.37000000005\t5181\t3\n2021-10-08 17:30:00.000\t2021-10-08 17:40:00.000\tBob\t1092773.5499999945\t14702\t1\n2021-10-08 17:30:00.000\t2021-10-08 17:40:00.000\tCarol\t1089192.739999998\t14588\t2\n2021-10-08 17:30:00.000\t2021-10-08 17:40:00.000\tAlex\t560596.5299999992\t7553\t3\n2021-10-08 17:40:00.000\t2021-10-08 17:50:00.000\tBob\t1107159.0100000037\t14781\t1\n2021-10-08 17:40:00.000\t2021-10-08 17:50:00.000\tCarol\t1094919.7700000012\t14769\t2\n2021-10-08 17:40:00.000\t2021-10-08 17:50:00.000\tAlex\t559063.1499999999\t7531\t3\n2021-10-08 17:50:00.000\t2021-10-08 18:00:00.000\tBob\t1088060.969999999\t14759\t1\n2021-10-08 17:50:00.000\t2021-10-08 18:00:00.000\tCarol\t1086988.7699999965\t14682\t2\n2021-10-08 17:50:00.000\t2021-10-08 18:00:00.000\tAlice\t546305.7799999993\t7381\t3\n2021-10-08 18:00:00.000\t2021-10-08 18:10:00.000\tCarol\t1098407.359999994\t14779\t1\n2021-10-08 18:00:00.000\t2021-10-08 18:10:00.000\tBob\t1090695.8499999975\t14716\t2\n2021-10-08 18:00:00.000\t2021-10-08 18:10:00.000\tAlex\t551103.9400000027\t7447\t3\n2021-10-08 18:10:00.000\t2021-10-08 18:20:00.000\tCarol\t1097517.9699999974\t14843\t1\n2021-10-08 18:10:00.000\t2021-10-08 18:20:00.000\tBob\t1092154.3499999978\t14726\t2\n2021-10-08 18:10:00.000\t2021-10-08 18:20:00.000\tAlice\t552073.3800000016\t7455\t3\n2021-10-08 18:20:00.000\t2021-10-08 18:30:00.000\tCarol\t1102962.3299999963\t14792\t1\n2021-10-08 18:20:00.000\t2021-10-08 18:30:00.000\tBob\t1097098.6400000034\t14750\t2\n2021-10-08 18:20:00.000\t2021-10-08 18:30:00.000\tJoe\t553891.1400000001\t7390\t3\n2021-10-08 18:30:00.000\t2021-10-08 18:40:00.000\tCarol\t1097817.3200000108\t14741\t1\n2021-10-08 18:30:00.000\t2021-10-08 18:40:00.000\tBob\t1095697.6099999987\t14709\t2\n2021-10-08 18:30:00.000\t2021-10-08 18:40:00.000\tAlex\t554872.5599999989\t7500\t3\n2021-10-08 18:40:00.000\t2021-10-08 18:50:00.000\tCarol\t1102960.969999996\t14814\t1\n2021-10-08 18:40:00.000\t2021-10-08 18:50:00.000\tBob\t1089486.0999999999\t14761\t2\n2021-10-08 18:40:00.000\t2021-10-08 18:50:00.000\tAlice\t562083.4400000012\t7459\t3\n2021-10-08 18:50:00.000\t2021-10-08 19:00:00.000\tBob\t1096532.370000003\t14644\t1\n2021-10-08 18:50:00.000\t2021-10-08 19:00:00.000\tCarol\t1092242.7100000067\t14742\t2\n2021-10-08 18:50:00.000\t2021-10-08 19:00:00.000\tAlice\t567342.6099999992\t7582\t3\n2021-10-08 19:00:00.000\t2021-10-08 19:10:00.000\tBob\t1102178.1900000055\t14919\t1\n2021-10-08 19:00:00.000\t2021-10-08 19:10:00.000\tCarol\t1098493.8700000008\t14852\t2\n2021-10-08 19:00:00.000\t2021-10-08 19:10:00.000\tAlice\t554150.9899999987\t7378\t3\n2021-10-08 19:10:00.000\t2021-10-08 19:20:00.000\tBob\t1103806.6199999955\t14809\t1\n2021-10-08 19:10:00.000\t2021-10-08 19:20:00.000\tCarol\t1088458.1699999983\t14683\t2\n2021-10-08 19:10:00.000\t2021-10-08 19:20:00.000\tAlice\t544843.0599999989\t7336\t3\n2021-10-08 19:20:00.000\t2021-10-08 19:30:00.000\tCarol\t1093159.9499999967\t14759\t1\n2021-10-08 19:20:00.000\t2021-10-08 19:30:00.000\tBob\t1087635.0400000073\t14696\t2\n2021-10-08 19:20:00.000\t2021-10-08 19:30:00.000\tJoe\t553843.6999999998\t7462\t3\n2021-10-08 19:30:00.000\t2021-10-08 19:40:00.000\tCarol\t1093125.8300000017\t14742\t1\n2021-10-08 19:30:00.000\t2021-10-08 19:40:00.000\tBob\t1074105.0200000014\t14396\t2\n2021-10-08 19:30:00.000\t2021-10-08 19:40:00.000\tAlice\t559675.6499999999\t7493\t3\n2021-10-08 19:40:00.000\t2021-10-08 19:50:00.000\tCarol\t1091421.090000004\t14723\t1\n2021-10-08 19:40:00.000\t2021-10-08 19:50:00.000\tBob\t1076533.5199999956\t14535\t2\n2021-10-08 19:40:00.000\t2021-10-08 19:50:00.000\tAlex\t557711.0000000038\t7514\t3\n2021-10-08 19:50:00.000\t2021-10-08 20:00:00.000\tCarol\t1108723.799999999\t14829\t1\n2021-10-08 19:50:00.000\t2021-10-08 20:00:00.000\tBob\t1097826.4499999944\t14722\t2\n2021-10-08 19:50:00.000\t2021-10-08 20:00:00.000\tAlex\t548880.6499999991\t7383\t3\n2021-10-08 20:00:00.000\t2021-10-08 20:10:00.000\tBob\t1096526.479999996\t14787\t1\n2021-10-08 20:00:00.000\t2021-10-08 20:10:00.000\tCarol\t1080394.8199999952\t14504\t2\n2021-10-08 20:00:00.000\t2021-10-08 20:10:00.000\tJoe\t560672.7600000009\t7580\t3\n2021-10-08 20:10:00.000\t2021-10-08 20:20:00.000\tBob\t1109709.79\t14896\t1\n2021-10-08 20:10:00.000\t2021-10-08 20:20:00.000\tCarol\t1090411.810000001\t14697\t2\n2021-10-08 20:10:00.000\t2021-10-08 20:20:00.000\tAlex\t545479.0499999997\t7417\t3\n2021-10-08 20:20:00.000\t2021-10-08 20:30:00.000\tCarol\t1105528.390000001\t14767\t1\n2021-10-08 20:20:00.000\t2021-10-08 20:30:00.000\tBob\t1100521.6900000025\t14837\t2\n2021-10-08 20:20:00.000\t2021-10-08 20:30:00.000\tAlex\t556988.9500000011\t7415\t3\n2021-10-08 20:30:00.000\t2021-10-08 20:40:00.000\tBob\t1091734.6500000006\t14680\t1\n2021-10-08 20:30:00.000\t2021-10-08 20:40:00.000\tCarol\t1087873.6899999988\t14778\t2\n2021-10-08 20:30:00.000\t2021-10-08 20:40:00.000\tAlex\t551564.7999999978\t7387\t3\n2021-10-08 20:40:00.000\t2021-10-08 20:50:00.000\tCarol\t1100025.4399999985\t14779\t1\n2021-10-08 20:40:00.000\t2021-10-08 20:50:00.000\tBob\t1083673.6700000041\t14772\t2\n2021-10-08 20:40:00.000\t2021-10-08 20:50:00.000\tJoe\t556872.6500000004\t7559\t3\n2021-10-08 20:50:00.000\t2021-10-08 21:00:00.000\tCarol\t1096689.7999999996\t14795\t1\n2021-10-08 20:50:00.000\t2021-10-08 21:00:00.000\tBob\t1094036.1400000032\t14699\t2\n2021-10-08 20:50:00.000\t2021-10-08 21:00:00.000\tAlex\t552916.0199999994\t7481\t3\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT *\n    FROM (\n        SELECT *, ROW_NUMBER() OVER (PARTITION BY window_start, window_end ORDER BY price DESC) as rownum\n        FROM (\n            SELECT window_start, window_end, supplier, SUM(price) as price, COUNT(*) as cnt\n            FROM TABLE(\n                TUMBLE(TABLE orders, DESCRIPTOR(bidtime), INTERVAL \u002710\u0027 MINUTES))\n            GROUP BY window_start, window_end, supplier\n        )\n    ) WHERE rownum \u003c\u003d 3\njava.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:177)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:86)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callSelect(FlinkSqlInterpreter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callCommand(FlinkSqlInterpreter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.runSqlList(FlinkSqlInterpreter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:109)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:849)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:741)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.client.deployment.application.UnsuccessfulExecutionException: Application Status: CANCELED\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:71)\n\tat org.apache.flink.client.deployment.application.EmbeddedJobClient.lambda$getJobExecutionResult$2(EmbeddedJobClient.java:136)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.deployment.application.JobStatusPollingUtils.lambda$null$2(JobStatusPollingUtils.java:101)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.rpc.akka.AkkaInvocationHandler.lambda$invokeRpc$0(AkkaInvocationHandler.java:250)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1389)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$1.onComplete(AkkaFutureUtils.java:47)\n\tat akka.dispatch.OnComplete.internal(Future.scala:300)\n\tat akka.dispatch.OnComplete.internal(Future.scala:297)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:224)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:221)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$DirectExecutionContext.execute(AkkaFutureUtils.java:65)\n\tat scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:68)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:284)\n\tat akka.pattern.PromiseActorRef.$bang(AskSupport.scala:621)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:24)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:23)\n\tat scala.concurrent.Future.$anonfun$andThen$1(Future.scala:532)\n\tat scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:29)\n\tat scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:29)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat akka.dispatch.BatchingExecutor$AbstractBatch.processBatch(BatchingExecutor.scala:63)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.$anonfun$run$1(BatchingExecutor.scala:100)\n\tat scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)\n\tat scala.concurrent.BlockContext$.withBlockContext(BlockContext.scala:81)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.run(BatchingExecutor.scala:100)\n\tat akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:49)\n\tat akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(ForkJoinExecutorConfigurator.scala:48)\n\tat java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)\n\tat java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)\n\tat java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)\n\tat java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:60)\n\t... 52 more\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1628498781174_4092/#/job/e5f53d851c1fbe8443a0b1b8ddc3797f"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666937556_1317949336",
+      "id": "paragraph_1633666937556_1317949336",
+      "dateCreated": "2021-10-08 12:22:17.557",
+      "dateStarted": "2021-10-08 12:23:09.331",
+      "dateFinished": "2021-10-08 16:01:54.969",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-08 12:23:09.330",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633666989330_572682801",
+      "id": "paragraph_1633666989330_572682801",
+      "dateCreated": "2021-10-08 12:23:09.330",
+      "status": "READY"
+    }
+  ],
+  "name": "11 Window Top-N",
+  "id": "2GM5RDCWG",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
