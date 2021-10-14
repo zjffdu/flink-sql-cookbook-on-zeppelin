@@ -89,7 +89,7 @@
     {
       "text": "%flink.ssql(type\u003dupdate)\n\nDROP TABLE IF EXISTS subscriptions;\n\nCREATE TABLE subscriptions ( \n    id STRING,\n    start_date INT,\n    end_date INT,\n    payment_expiration TIMESTAMP(3)\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027,\n  \u0027fields.id.expression\u0027 \u003d \u0027#{Internet.uuid}\u0027, \n  \u0027fields.start_date.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271576141834\u0027\u0027,\u0027\u00271607764234\u0027\u0027}\u0027,\n  \u0027fields.end_date.expression\u0027 \u003d \u0027#{number.numberBetween \u0027\u00271609060234\u0027\u0027,\u0027\u00271639300234\u0027\u0027}\u0027,\n  \u0027fields.payment_expiration.expression\u0027 \u003d \u0027#{date.future \u0027\u0027365\u0027\u0027,\u0027\u0027DAYS\u0027\u0027}\u0027\n);\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 10:17:36.350",
+      "dateUpdated": "2021-10-14 16:35:07.259",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -108,20 +108,29 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {},
       "progressUpdateIntervalMs": 500,
       "jobName": "paragraph_1614305834031_217311768",
       "id": "paragraph_1614305834031_217311768",
       "dateCreated": "2021-02-26 10:17:14.031",
-      "dateStarted": "2021-02-26 10:17:36.360",
-      "dateFinished": "2021-02-26 10:17:37.206",
+      "dateStarted": "2021-10-14 16:35:07.301",
+      "dateFinished": "2021-10-14 16:35:41.829",
       "status": "FINISHED"
     },
     {
-      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  id,\n  TO_TIMESTAMP(FROM_UNIXTIME(start_date)) AS start_date,\n  TO_TIMESTAMP(FROM_UNIXTIME(end_date)) AS end_date,\n  DATE_FORMAT(payment_expiration,\u0027YYYYww\u0027) AS exp_yweek,\n  EXTRACT(DAY FROM payment_expiration) AS exp_day,     --same as DAYOFMONTH(ts)\n  EXTRACT(MONTH FROM payment_expiration) AS exp_month, --same as MONTH(ts)\n  EXTRACT(YEAR FROM payment_expiration) AS exp_year    --same as YEAR(ts)\nFROM subscriptions\nWHERE \n  TIMESTAMPDIFF(DAY,CURRENT_TIMESTAMP,payment_expiration) \u003c 30\nORDER BY start_date DESC\nLIMIT 10;\n",
+      "text": "%flink.ssql(type\u003dupdate)\n\nSELECT \n  id,\n  TO_TIMESTAMP(FROM_UNIXTIME(start_date)) AS start_date,\n  TO_TIMESTAMP(FROM_UNIXTIME(end_date)) AS end_date,\n  DATE_FORMAT(payment_expiration,\u0027YYYYww\u0027) AS exp_yweek,\n  EXTRACT(DAY FROM payment_expiration) AS exp_day,     --same as DAYOFMONTH(ts)\n  EXTRACT(MONTH FROM payment_expiration) AS exp_month, --same as MONTH(ts)\n  EXTRACT(YEAR FROM payment_expiration) AS exp_year    --same as YEAR(ts)\nFROM subscriptions\nWHERE \n  TIMESTAMPDIFF(DAY,CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),payment_expiration) \u003c 30\nORDER BY start_date DESC\nLIMIT 10;\n",
       "user": "anonymous",
-      "dateUpdated": "2021-02-26 13:23:49.010",
+      "dateUpdated": "2021-10-14 16:35:46.806",
       "progress": 0,
       "config": {
         "editorSetting": {
@@ -174,6 +183,19 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "id\tstart_date\tend_date\texp_yweek\texp_day\texp_month\texp_year\n0acbada2-3314-4a44-bc86-e05b63d3e57b\t2020-12-12 12:25:33.000\t2021-01-25 01:08:05.000\t202145\t3\t11\t2021\n158e5dd1-682f-45ed-ae22-036f306af40a\t2020-12-12 11:06:42.000\t2021-09-09 16:25:35.000\t202143\t17\t10\t2021\n1f24aa88-551c-4e1e-ae16-816810e01d72\t2020-12-12 15:27:33.000\t2021-07-16 09:24:29.000\t202142\t16\t10\t2021\n4ec96a5f-c279-45e1-ac33-7876675db4f1\t2020-12-12 15:42:17.000\t2021-07-02 19:19:18.000\t202145\t4\t11\t2021\na4730ace-23a7-4795-9c5d-c3342d3c2db9\t2020-12-12 04:00:40.000\t2021-07-22 14:29:20.000\t202145\t1\t11\t2021\nbfadb932-f18e-4666-a2a1-660b16da4f8a\t2020-12-12 05:28:35.000\t2021-09-12 10:48:16.000\t202142\t15\t10\t2021\ncea5325d-8d93-4cd1-a460-9db0bb39d000\t2020-12-12 14:14:50.000\t2021-09-30 14:09:09.000\t202146\t13\t11\t2021\ncfc71d16-94d6-4fee-a5b7-a2fc9638dc95\t2020-12-12 05:06:46.000\t2021-08-09 12:37:07.000\t202145\t31\t10\t2021\nd3ca1440-c370-4b50-9b34-610dd821cc25\t2020-12-12 05:56:44.000\t2021-11-09 02:05:17.000\t202145\t2\t11\t2021\nf3094338-db5a-4eaf-8cfa-8f0a0e84bd34\t2020-12-12 08:43:32.000\t2021-09-26 23:59:08.000\t202143\t18\t10\t2021\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT \n  id,\n  TO_TIMESTAMP(FROM_UNIXTIME(start_date)) AS start_date,\n  TO_TIMESTAMP(FROM_UNIXTIME(end_date)) AS end_date,\n  DATE_FORMAT(payment_expiration,\u0027YYYYww\u0027) AS exp_yweek,\n  EXTRACT(DAY FROM payment_expiration) AS exp_day,     \n  EXTRACT(MONTH FROM payment_expiration) AS exp_month, \n  EXTRACT(YEAR FROM payment_expiration) AS exp_year    \nFROM subscriptions\nWHERE \n  TIMESTAMPDIFF(DAY,CAST(CURRENT_TIMESTAMP AS TIMESTAMP(3)),payment_expiration) \u003c 30\nORDER BY start_date DESC\nLIMIT 10\njava.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:177)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:86)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callSelect(FlinkSqlInterpreter.java:494)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.callCommand(FlinkSqlInterpreter.java:257)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.runSqlList(FlinkSqlInterpreter.java:151)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:109)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\nCaused by: org.apache.flink.client.deployment.application.UnsuccessfulExecutionException: Application Status: CANCELED\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:71)\n\tat org.apache.flink.client.deployment.application.EmbeddedJobClient.lambda$getJobExecutionResult$2(EmbeddedJobClient.java:136)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.deployment.application.JobStatusPollingUtils.lambda$null$2(JobStatusPollingUtils.java:101)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.rpc.akka.AkkaInvocationHandler.lambda$invokeRpc$0(AkkaInvocationHandler.java:250)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.util.concurrent.FutureUtils.doForward(FutureUtils.java:1389)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$null$1(ClassLoadingUtils.java:93)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:68)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.lambda$guardCompletionWithContextClassLoader$2(ClassLoadingUtils.java:92)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$1.onComplete(AkkaFutureUtils.java:47)\n\tat akka.dispatch.OnComplete.internal(Future.scala:300)\n\tat akka.dispatch.OnComplete.internal(Future.scala:297)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:224)\n\tat akka.dispatch.japi$CallbackBridge.apply(Future.scala:221)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat org.apache.flink.runtime.concurrent.akka.AkkaFutureUtils$DirectExecutionContext.execute(AkkaFutureUtils.java:65)\n\tat scala.concurrent.impl.CallbackRunnable.executeWithValue(Promise.scala:68)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.$anonfun$tryComplete$1$adapted(Promise.scala:284)\n\tat scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:284)\n\tat akka.pattern.PromiseActorRef.$bang(AskSupport.scala:621)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:24)\n\tat akka.pattern.PipeToSupport$PipeableFuture$$anonfun$pipeTo$1.applyOrElse(PipeToSupport.scala:23)\n\tat scala.concurrent.Future.$anonfun$andThen$1(Future.scala:532)\n\tat scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:29)\n\tat scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:29)\n\tat scala.concurrent.impl.CallbackRunnable.run(Promise.scala:60)\n\tat akka.dispatch.BatchingExecutor$AbstractBatch.processBatch(BatchingExecutor.scala:63)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.$anonfun$run$1(BatchingExecutor.scala:100)\n\tat scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)\n\tat scala.concurrent.BlockContext$.withBlockContext(BlockContext.scala:81)\n\tat akka.dispatch.BatchingExecutor$BlockableBatch.run(BatchingExecutor.scala:100)\n\tat akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:49)\n\tat akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(ForkJoinExecutorConfigurator.scala:48)\n\tat java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)\n\tat java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)\n\tat java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)\n\tat java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.application.UnsuccessfulExecutionException.fromJobResult(UnsuccessfulExecutionException.java:60)\n\t... 52 more\n\n"
+          }
+        ]
+      },
       "apps": [],
       "runtimeInfos": {
         "jobUrl": {
@@ -183,7 +205,7 @@
           "group": "flink",
           "values": [
             {
-              "jobUrl": "http://localhost:8081#/job/d42017645cd10393a87c40bc8412cf06"
+              "jobUrl": "https://knox.c-fa375384f1f481e0.cn-hongkong.emr.aliyuncs.com:8443/gateway/cluster-topo/yarn/proxy/application_1634098765008_0048/#/job/24383477fd5253c28ede0a27a03e1c46"
             }
           ],
           "interpreterSettingId": "flink"
@@ -193,8 +215,8 @@
       "jobName": "paragraph_1614305846680_805424590",
       "id": "paragraph_1614305846680_805424590",
       "dateCreated": "2021-02-26 10:17:26.680",
-      "dateStarted": "2021-02-26 10:18:22.682",
-      "dateFinished": "2021-02-26 10:18:40.880",
+      "dateStarted": "2021-10-14 16:35:46.815",
+      "dateFinished": "2021-10-14 16:35:59.539",
       "status": "ABORT"
     },
     {
