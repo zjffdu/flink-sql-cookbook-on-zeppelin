@@ -1,0 +1,207 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n# 12 Retrieve previous row value without self-join\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.15%2B-lightgrey)\n\n\u003e :bulb: This example will show how to retrieve the previous value and compute trends for a specific data partition.\n\nThe source table (`fake_stocks`) is backed by the [`faker` connector](https://flink-packages.org/packages/flink-faker), which continuously generates fake stock quotation in memory based on Java Faker expressions.\n\nIn this recipe we\u0027re going to create a table which contains stock ticker updates for which we want to determine if the new stock price has gone up or down compared to its previous value. \n\nFirst we create the table, then use a select statement including the [LAG](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/systemfunctions/#aggregate-functions) function to retrieve the previous stock value. Finally using the `case` statement in the final select we compare the current stock price against the previous value to determine the trend.\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:35:00.380",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003e12 Retrieve previous row value without self-join\u003c/h1\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.15%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 This example will show how to retrieve the previous value and compute trends for a specific data partition.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eThe source table (\u003ccode\u003efake_stocks\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://flink-packages.org/packages/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates fake stock quotation in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eIn this recipe we\u0026rsquo;re going to create a table which contains stock ticker updates for which we want to determine if the new stock price has gone up or down compared to its previous value.\u003c/p\u003e\n\u003cp\u003eFirst we create the table, then use a select statement including the \u003ca href\u003d\"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/systemfunctions/#aggregate-functions\"\u003eLAG\u003c/a\u003e function to retrieve the previous stock value. Finally using the \u003ccode\u003ecase\u003c/code\u003e statement in the final select we compare the current stock price against the previous value to determine the trend.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734474486_1581586129",
+      "id": "paragraph_1667734474486_1581586129",
+      "dateCreated": "2022-11-06 19:34:34.486",
+      "dateStarted": "2022-11-06 19:35:00.379",
+      "dateFinished": "2022-11-06 19:35:00.390",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nCREATE TABLE fake_stocks ( \n    stock_name STRING,\n    stock_value double, \n    log_time AS PROCTIME()\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.stock_name.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(Deja\\ Brew|Jurassic\\ Pork|Lawn\\ \\\u0026\\ Order|Pita\\ Pan|Bread\\ Pitt|Indiana\\ Jeans|Thai\\ Tanic){1}\u0027\u0027}\u0027,\n  \u0027fields.stock_value.expression\u0027 \u003d  \u0027#{number.randomDouble \u0027\u00272\u0027\u0027,\u0027\u002710\u0027\u0027,\u0027\u002720\u0027\u0027}\u0027,\n  \u0027fields.log_time.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027rows-per-second\u0027 \u003d \u002710\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:35:15.865",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734500378_1346926423",
+      "id": "paragraph_1667734500378_1346926423",
+      "dateCreated": "2022-11-06 19:35:00.378",
+      "dateStarted": "2022-11-06 19:35:15.868",
+      "dateFinished": "2022-11-06 19:35:16.428",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nWITH current_and_previous as (\n    select \n        stock_name,\n        log_time, \n        stock_value, \n        lag(stock_value, 1) over (partition by stock_name order by log_time) previous_value \n    from fake_stocks\n)\nselect *, \n    case \n        when stock_value \u003e previous_value then \u0027▲\u0027\n        when stock_value \u003c previous_value then \u0027▼\u0027\n        else \u0027\u003d\u0027 \n    end as trend \nfrom current_and_previous\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:38:00.844",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "stock_name": "string",
+                      "log_time": "string",
+                      "stock_value": "string",
+                      "previous_value": "string",
+                      "trend": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "stock_name\tlog_time\tstock_value\tprevious_value\ttrend\nBread Pitt\t2022-11-06 19:38:02.178\t16.6\t(NULL)\t\u003d\nBread Pitt\t2022-11-06 19:38:02.178\t19.17\t16.6\t▲\nBread Pitt\t2022-11-06 19:38:03.167\t12.57\t19.17\t▼\nBread Pitt\t2022-11-06 19:38:03.167\t11.26\t12.57\t▼\nBread Pitt\t2022-11-06 19:38:04.167\t15.49\t11.26\t▲\nBread Pitt\t2022-11-06 19:38:04.167\t10.24\t15.49\t▼\nBread Pitt\t2022-11-06 19:38:05.167\t11.14\t10.24\t▲\nBread Pitt\t2022-11-06 19:38:06.167\t15.79\t11.14\t▲\nBread Pitt\t2022-11-06 19:38:06.167\t18.9\t15.79\t▲\nBread Pitt\t2022-11-06 19:38:07.167\t17.24\t18.9\t▼\nBread Pitt\t2022-11-06 19:38:07.167\t17.58\t17.24\t▲\nBread Pitt\t2022-11-06 19:38:08.169\t14.15\t17.58\t▼\nBread Pitt\t2022-11-06 19:38:08.169\t17.3\t14.15\t▲\nBread Pitt\t2022-11-06 19:38:08.169\t17.88\t17.3\t▲\nBread Pitt\t2022-11-06 19:38:08.169\t10.1\t17.88\t▼\nBread Pitt\t2022-11-06 19:38:09.168\t19.05\t10.1\t▲\nBread Pitt\t2022-11-06 19:38:09.168\t19.42\t19.05\t▲\nBread Pitt\t2022-11-06 19:38:10.169\t13.94\t19.42\t▼\nBread Pitt\t2022-11-06 19:38:10.170\t15.16\t13.94\t▲\nBread Pitt\t2022-11-06 19:38:12.168\t15.48\t15.16\t▲\nBread Pitt\t2022-11-06 19:38:13.167\t12.85\t15.48\t▼\nBread Pitt\t2022-11-06 19:38:13.167\t16.7\t12.85\t▲\nBread Pitt\t2022-11-06 19:38:14.167\t18.42\t16.7\t▲\nBread Pitt\t2022-11-06 19:38:14.167\t12.36\t18.42\t▼\nDeja Brew\t2022-11-06 19:38:02.178\t18.87\t(NULL)\t\u003d\nDeja Brew\t2022-11-06 19:38:02.178\t10.43\t18.87\t▼\nDeja Brew\t2022-11-06 19:38:03.167\t13.89\t10.43\t▲\nDeja Brew\t2022-11-06 19:38:04.167\t17.11\t13.89\t▲\nDeja Brew\t2022-11-06 19:38:04.167\t12.3\t17.11\t▼\nDeja Brew\t2022-11-06 19:38:04.167\t15.93\t12.3\t▲\nDeja Brew\t2022-11-06 19:38:05.167\t18.87\t15.93\t▲\nDeja Brew\t2022-11-06 19:38:06.167\t10.91\t18.87\t▼\nDeja Brew\t2022-11-06 19:38:06.167\t18.17\t10.91\t▲\nDeja Brew\t2022-11-06 19:38:06.167\t12.46\t18.17\t▼\nDeja Brew\t2022-11-06 19:38:07.167\t17.97\t12.46\t▲\nDeja Brew\t2022-11-06 19:38:08.169\t11.67\t17.97\t▼\nDeja Brew\t2022-11-06 19:38:08.169\t13.39\t11.67\t▲\nDeja Brew\t2022-11-06 19:38:08.169\t18.73\t13.39\t▲\nDeja Brew\t2022-11-06 19:38:09.168\t10.01\t18.73\t▼\nDeja Brew\t2022-11-06 19:38:10.170\t12.61\t10.01\t▲\nDeja Brew\t2022-11-06 19:38:11.167\t13.65\t12.61\t▲\nDeja Brew\t2022-11-06 19:38:11.167\t13.06\t13.65\t▼\nDeja Brew\t2022-11-06 19:38:11.167\t16.16\t13.06\t▲\nDeja Brew\t2022-11-06 19:38:12.168\t11.88\t16.16\t▼\nDeja Brew\t2022-11-06 19:38:12.168\t19.94\t11.88\t▲\nDeja Brew\t2022-11-06 19:38:13.167\t11.76\t19.94\t▼\nDeja Brew\t2022-11-06 19:38:13.167\t12.31\t11.76\t▲\nDeja Brew\t2022-11-06 19:38:14.167\t12.12\t12.31\t▼\nIndiana Jeans\t2022-11-06 19:38:03.167\t18.98\t(NULL)\t\u003d\nIndiana Jeans\t2022-11-06 19:38:03.167\t16.46\t18.98\t▼\nIndiana Jeans\t2022-11-06 19:38:06.167\t11.98\t16.46\t▼\nIndiana Jeans\t2022-11-06 19:38:06.167\t13.38\t11.98\t▲\nIndiana Jeans\t2022-11-06 19:38:07.167\t19.7\t13.38\t▲\nIndiana Jeans\t2022-11-06 19:38:07.167\t17.11\t19.7\t▼\nIndiana Jeans\t2022-11-06 19:38:07.167\t14.11\t17.11\t▼\nIndiana Jeans\t2022-11-06 19:38:08.169\t20.0\t14.11\t▲\nIndiana Jeans\t2022-11-06 19:38:10.169\t12.26\t20.0\t▼\nIndiana Jeans\t2022-11-06 19:38:11.167\t10.53\t12.26\t▼\nIndiana Jeans\t2022-11-06 19:38:12.168\t16.75\t10.53\t▲\nIndiana Jeans\t2022-11-06 19:38:13.167\t12.77\t16.75\t▼\nJurassic Pork\t2022-11-06 19:38:03.167\t11.64\t(NULL)\t\u003d\nJurassic Pork\t2022-11-06 19:38:04.167\t10.7\t11.64\t▼\nJurassic Pork\t2022-11-06 19:38:04.167\t15.91\t10.7\t▲\nJurassic Pork\t2022-11-06 19:38:04.167\t12.08\t15.91\t▼\nJurassic Pork\t2022-11-06 19:38:05.166\t16.3\t12.08\t▲\nJurassic Pork\t2022-11-06 19:38:05.167\t12.38\t16.3\t▼\nJurassic Pork\t2022-11-06 19:38:05.167\t11.71\t12.38\t▼\nJurassic Pork\t2022-11-06 19:38:06.167\t13.85\t11.71\t▲\nJurassic Pork\t2022-11-06 19:38:07.167\t18.8\t13.85\t▲\nJurassic Pork\t2022-11-06 19:38:07.167\t11.86\t18.8\t▼\nJurassic Pork\t2022-11-06 19:38:09.167\t12.63\t11.86\t▲\nJurassic Pork\t2022-11-06 19:38:09.168\t19.93\t12.63\t▲\nJurassic Pork\t2022-11-06 19:38:09.168\t15.94\t19.93\t▼\nJurassic Pork\t2022-11-06 19:38:10.169\t11.21\t15.94\t▼\nJurassic Pork\t2022-11-06 19:38:12.168\t11.64\t11.21\t▲\nJurassic Pork\t2022-11-06 19:38:12.168\t12.91\t11.64\t▲\nJurassic Pork\t2022-11-06 19:38:13.167\t18.84\t12.91\t▲\nJurassic Pork\t2022-11-06 19:38:13.167\t12.33\t18.84\t▼\nJurassic Pork\t2022-11-06 19:38:13.167\t16.38\t12.33\t▲\nJurassic Pork\t2022-11-06 19:38:14.167\t13.05\t16.38\t▼\nJurassic Pork\t2022-11-06 19:38:14.167\t18.62\t13.05\t▲\nJurassic Pork\t2022-11-06 19:38:14.167\t14.69\t18.62\t▼\nLawn \u0026 Order\t2022-11-06 19:38:02.178\t12.53\t(NULL)\t\u003d\nLawn \u0026 Order\t2022-11-06 19:38:03.166\t14.96\t12.53\t▲\nLawn \u0026 Order\t2022-11-06 19:38:03.167\t16.59\t14.96\t▲\nLawn \u0026 Order\t2022-11-06 19:38:05.167\t14.64\t16.59\t▼\nLawn \u0026 Order\t2022-11-06 19:38:07.167\t12.13\t14.64\t▼\nLawn \u0026 Order\t2022-11-06 19:38:08.169\t19.82\t12.13\t▲\nLawn \u0026 Order\t2022-11-06 19:38:08.169\t16.14\t19.82\t▼\nLawn \u0026 Order\t2022-11-06 19:38:10.170\t16.13\t16.14\t▼\nLawn \u0026 Order\t2022-11-06 19:38:11.167\t10.4\t16.13\t▼\nLawn \u0026 Order\t2022-11-06 19:38:11.167\t13.22\t10.4\t▲\nLawn \u0026 Order\t2022-11-06 19:38:11.167\t11.43\t13.22\t▼\nLawn \u0026 Order\t2022-11-06 19:38:12.168\t13.4\t11.43\t▲\nLawn \u0026 Order\t2022-11-06 19:38:12.168\t13.49\t13.4\t▲\nLawn \u0026 Order\t2022-11-06 19:38:12.168\t16.83\t13.49\t▲\nLawn \u0026 Order\t2022-11-06 19:38:13.167\t16.14\t16.83\t▼\nLawn \u0026 Order\t2022-11-06 19:38:13.167\t18.44\t16.14\t▲\nLawn \u0026 Order\t2022-11-06 19:38:14.167\t13.84\t18.44\t▼\nPita Pan\t2022-11-06 19:38:02.178\t10.06\t(NULL)\t\u003d\nPita Pan\t2022-11-06 19:38:03.167\t15.65\t10.06\t▲\nPita Pan\t2022-11-06 19:38:04.167\t16.96\t15.65\t▲\nPita Pan\t2022-11-06 19:38:05.166\t19.68\t16.96\t▲\nPita Pan\t2022-11-06 19:38:05.167\t15.56\t19.68\t▼\nPita Pan\t2022-11-06 19:38:05.167\t10.6\t15.56\t▼\nPita Pan\t2022-11-06 19:38:07.166\t11.35\t10.6\t▲\nPita Pan\t2022-11-06 19:38:09.167\t18.45\t11.35\t▲\nPita Pan\t2022-11-06 19:38:09.168\t14.93\t18.45\t▼\nPita Pan\t2022-11-06 19:38:10.169\t10.06\t14.93\t▼\nPita Pan\t2022-11-06 19:38:10.170\t13.67\t10.06\t▲\nPita Pan\t2022-11-06 19:38:10.170\t12.4\t13.67\t▼\nPita Pan\t2022-11-06 19:38:11.167\t18.09\t12.4\t▲\nPita Pan\t2022-11-06 19:38:12.168\t12.88\t18.09\t▼\nPita Pan\t2022-11-06 19:38:14.167\t12.52\t12.88\t▼\nPita Pan\t2022-11-06 19:38:14.167\t12.62\t12.52\t▲\nThai Tanic\t2022-11-06 19:38:02.172\t11.86\t(NULL)\t\u003d\nThai Tanic\t2022-11-06 19:38:02.178\t11.48\t11.86\t▼\nThai Tanic\t2022-11-06 19:38:02.178\t15.92\t11.48\t▲\nThai Tanic\t2022-11-06 19:38:02.178\t19.13\t15.92\t▲\nThai Tanic\t2022-11-06 19:38:03.166\t12.38\t19.13\t▼\nThai Tanic\t2022-11-06 19:38:04.167\t18.96\t12.38\t▲\nThai Tanic\t2022-11-06 19:38:05.167\t14.72\t18.96\t▼\nThai Tanic\t2022-11-06 19:38:06.167\t14.83\t14.72\t▲\nThai Tanic\t2022-11-06 19:38:06.167\t10.31\t14.83\t▼\nThai Tanic\t2022-11-06 19:38:09.167\t12.52\t10.31\t▲\nThai Tanic\t2022-11-06 19:38:09.168\t13.94\t12.52\t▲\nThai Tanic\t2022-11-06 19:38:10.169\t10.48\t13.94\t▼\nThai Tanic\t2022-11-06 19:38:11.167\t11.75\t10.48\t▲\nThai Tanic\t2022-11-06 19:38:11.167\t17.67\t11.75\t▲\nThai Tanic\t2022-11-06 19:38:14.167\t19.83\t17.67\t▲\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: WITH current_and_previous as (\n    select \n        stock_name,\n        log_time, \n        stock_value, \n        lag(stock_value, 1) over (partition by stock_name order by log_time) previous_value \n    from fake_stocks\n)\nselect *, \n    case \n        when stock_value \u003e previous_value then \u0027▲\u0027\n        when stock_value \u003c previous_value then \u0027▼\u0027\n        else \u0027\u003d\u0027 \n    end as trend \nfrom current_and_previous\njava.lang.RuntimeException: Fail to run update type stream job\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:93)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.lambda$open$0(FlinkStreamSqlInterpreter.java:48)\n\tat org.apache.zeppelin.flink.Flink116SqlInterpreter.callStreamInnerSelect(Flink116SqlInterpreter.java:446)\n\tat org.apache.zeppelin.flink.Flink116SqlInterpreter.callSelect(Flink116SqlInterpreter.java:430)\n\tat org.apache.zeppelin.flink.Flink116SqlInterpreter.callOperation(Flink116SqlInterpreter.java:290)\n\tat org.apache.zeppelin.flink.Flink116SqlInterpreter.runSqlList(Flink116SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink116Shims.runSqlList(Flink116Shims.java:396)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:102)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:58)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:108)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:877)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:769)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:750)\nCaused by: java.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:165)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:91)\n\t... 18 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:357)\n\tat java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1908)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:154)\n\t... 20 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1640)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: c379bc1d3ada7bef06818007566be6ea)\n\tat java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:357)\n\tat java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1908)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: c379bc1d3ada7bef06818007566be6ea)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:130)\n\tat java.util.concurrent.CompletableFuture.uniApply(CompletableFuture.java:616)\n\tat java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:591)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$6(FutureUtils.java:301)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$31(RestClusterClient.java:772)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:1975)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$6(FutureUtils.java:301)\n\tat java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:774)\n\tat java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:750)\n\tat java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)\n\tat java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:575)\n\tat java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:943)\n\tat java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:456)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$null$6(ClusterClientJobClientAdapter.java:128)\n\t... 24 more\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "http://127.0.0.1:8081#/job/c379bc1d3ada7bef06818007566be6ea"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734515867_1503047657",
+      "id": "paragraph_1667734515867_1503047657",
+      "dateCreated": "2022-11-06 19:35:15.867",
+      "dateStarted": "2022-11-06 19:38:00.848",
+      "dateFinished": "2022-11-06 19:38:16.819",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:35:32.679",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734532679_656773828",
+      "id": "paragraph_1667734532679_656773828",
+      "dateCreated": "2022-11-06 19:35:32.679",
+      "status": "READY"
+    }
+  ],
+  "name": "12 Retrieve previous row value without self-join",
+  "id": "2HGWZS5C6",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.11.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}

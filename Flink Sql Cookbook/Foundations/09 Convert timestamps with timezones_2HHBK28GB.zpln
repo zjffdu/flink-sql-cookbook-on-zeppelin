@@ -1,0 +1,181 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n\n\n# 09 Convert timestamps with timezones\n\n![Twitter Badge](https://img.shields.io/badge/Flink%20Version-1.15%2B-lightgrey)\n\n\u003e :bulb: In this recipe, you will learn how to consolidate timestamps with different time zones to UTC. \n\nTimestamps in incoming data can refer to different time zones and consolidating them to the same time zone (e.g. UTC) is a prerequisite to ensure correctness in temporal analysis.\n\nThe source table (`iot_status`) is backed by the [`faker` connector](https://flink-packages.org/packages/flink-faker), which continuously generates fake IoT status messages in memory based on Java Faker expressions.\n\nIn this recipe we create a table which contains IoT devices status updates including timestamp and device time zone, which we\u0027ll convert to UTC. \n\nWe create the table first, then use the [`CONVERT_TZ`](https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/systemfunctions/#temporal-functions) function to convert the timestamp to UTC. The `CONVERT_TZ` function requires the input timestamp to be passed as string, thus we apply the cast function to `iot_timestamp`.",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:33:48.416",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9.0,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003e09 Convert timestamps with timezones\u003c/h1\u003e\n\u003cp\u003e\u003cimg src\u003d\"https://img.shields.io/badge/Flink%20Version-1.15%2B-lightgrey\" alt\u003d\"Twitter Badge\" /\u003e\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e💡 In this recipe, you will learn how to consolidate timestamps with different time zones to UTC.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eTimestamps in incoming data can refer to different time zones and consolidating them to the same time zone (e.g. UTC) is a prerequisite to ensure correctness in temporal analysis.\u003c/p\u003e\n\u003cp\u003eThe source table (\u003ccode\u003eiot_status\u003c/code\u003e) is backed by the \u003ca href\u003d\"https://flink-packages.org/packages/flink-faker\"\u003e\u003ccode\u003efaker\u003c/code\u003e connector\u003c/a\u003e, which continuously generates fake IoT status messages in memory based on Java Faker expressions.\u003c/p\u003e\n\u003cp\u003eIn this recipe we create a table which contains IoT devices status updates including timestamp and device time zone, which we\u0026rsquo;ll convert to UTC.\u003c/p\u003e\n\u003cp\u003eWe create the table first, then use the \u003ca href\u003d\"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/systemfunctions/#temporal-functions\"\u003e\u003ccode\u003eCONVERT_TZ\u003c/code\u003e\u003c/a\u003e function to convert the timestamp to UTC. The \u003ccode\u003eCONVERT_TZ\u003c/code\u003e function requires the input timestamp to be passed as string, thus we apply the cast function to \u003ccode\u003eiot_timestamp\u003c/code\u003e.\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734218713_107345213",
+      "id": "paragraph_1667734218713_107345213",
+      "dateCreated": "2022-11-06 19:30:18.713",
+      "dateStarted": "2022-11-06 19:33:48.416",
+      "dateFinished": "2022-11-06 19:33:48.428",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nCREATE TABLE iot_status ( \n    device_ip       STRING,\n    device_timezone STRING,\n    iot_timestamp   TIMESTAMP(3),\n    status_code     STRING\n) WITH (\n  \u0027connector\u0027 \u003d \u0027faker\u0027, \n  \u0027fields.device_ip.expression\u0027 \u003d \u0027#{Internet.publicIpV4Address}\u0027,\n  \u0027fields.device_timezone.expression\u0027 \u003d  \u0027#{regexify \u0027\u0027(America\\/Los_Angeles|Europe\\/Rome|Europe\\/London|Australia\\/Sydney){1}\u0027\u0027}\u0027,\n  \u0027fields.iot_timestamp.expression\u0027 \u003d  \u0027#{date.past \u0027\u002715\u0027\u0027,\u0027\u00275\u0027\u0027,\u0027\u0027SECONDS\u0027\u0027}\u0027,\n  \u0027fields.status_code.expression\u0027 \u003d \u0027#{regexify \u0027\u0027(OK|KO|WARNING){1}\u0027\u0027}\u0027,\n  \u0027rows-per-second\u0027 \u003d \u00273\u0027\n);\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:31:41.867",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734238536_868089923",
+      "id": "paragraph_1667734238536_868089923",
+      "dateCreated": "2022-11-06 19:30:38.536",
+      "dateStarted": "2022-11-06 19:31:41.879",
+      "dateFinished": "2022-11-06 19:31:56.405",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%flink.ssql\n\nSELECT \n  device_ip, \n  device_timezone,\n  iot_timestamp,\n  convert_tz(cast(iot_timestamp as string), device_timezone, \u0027UTC\u0027) iot_timestamp_utc,\n  status_code\nFROM iot_status order by iot_timestamp desc limit 10;\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:32:48.642",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "device_ip": "string",
+                      "device_timezone": "string",
+                      "iot_timestamp": "string",
+                      "iot_timestamp_utc": "string",
+                      "status_code": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734263336_1919898471",
+      "id": "paragraph_1667734263336_1919898471",
+      "dateCreated": "2022-11-06 19:31:03.336",
+      "dateStarted": "2022-11-06 19:32:29.497",
+      "dateFinished": "2022-11-06 19:32:45.417",
+      "status": "ABORT"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2022-11-06 19:31:57.713",
+      "progress": 0,
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1667734317713_1294235244",
+      "id": "paragraph_1667734317713_1294235244",
+      "dateCreated": "2022-11-06 19:31:57.713",
+      "status": "READY"
+    }
+  ],
+  "name": "09 Convert timestamps with timezones",
+  "id": "2HHBK28GB",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.11.0-SNAPSHOT",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
